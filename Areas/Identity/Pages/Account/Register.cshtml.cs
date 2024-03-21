@@ -78,7 +78,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
         public class InputModel
         {
             public string Role { get; set; }
-            public string FacultyID { get; set; }
+            public string Faculty { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -127,7 +127,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                 user.FirstName = "";
                 user.LastName = "";
                 user.EmailConfirmed = true;
-                user.FacultyId = Input.FacultyID;
+                user.FacultyId = Input.Faculty;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

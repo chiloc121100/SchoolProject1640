@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<SchoolProject1640.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Index";
+    var getFacultyOfStudent = ViewBag.getFacultyOfStudent;
+}
+@if (User.IsInRole("Student") && getFacultyOfStudent == "Medicine")
+{
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Faculty)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AcademicYear)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClosureDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinalClosureDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedAt)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UpdatedAt)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.Faculty == "6")
+                {
+                    <tr>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Faculty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AcademicYear)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClosureDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedAt)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
