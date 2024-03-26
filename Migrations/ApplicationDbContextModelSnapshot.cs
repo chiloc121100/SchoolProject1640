@@ -216,6 +216,9 @@ namespace SchoolProject1640.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -228,6 +231,12 @@ namespace SchoolProject1640.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -261,6 +270,9 @@ namespace SchoolProject1640.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UpdateById")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -275,7 +287,49 @@ namespace SchoolProject1640.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("UpdateById");
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("SchoolProject1640.Models.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ContributionId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("State")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Article");
                 });
 
             modelBuilder.Entity("SchoolProject1640.Models.Contribution", b =>
@@ -340,51 +394,107 @@ namespace SchoolProject1640.Migrations
                         new
                         {
                             Id = "1",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6104),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6889),
                             Description = "Faculty of Arts",
                             Name = "Arts",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6118)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6899)
                         },
                         new
                         {
                             Id = "2",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6121),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6901),
                             Description = "Faculty of Business",
                             Name = "Business",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6122)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6902)
                         },
                         new
                         {
                             Id = "3",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6123),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6903),
                             Description = "Faculty of Engineering",
                             Name = "Engineering",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6124)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6904)
                         },
                         new
                         {
                             Id = "4",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6126),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6905),
                             Description = "Faculty of Information Technology",
                             Name = "Information Technology",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6127)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6905)
                         },
                         new
                         {
                             Id = "5",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6128),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6907),
                             Description = "Faculty of Law",
                             Name = "Law",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6129)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6907)
                         },
                         new
                         {
                             Id = "6",
-                            CreatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6131),
+                            CreatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6908),
                             Description = "Faculty of Medicine",
                             Name = "Medicine",
-                            UpdatedAt = new DateTime(2024, 3, 21, 10, 21, 37, 659, DateTimeKind.Local).AddTicks(6131)
+                            UpdatedAt = new DateTime(2024, 3, 26, 9, 51, 27, 112, DateTimeKind.Local).AddTicks(6909)
                         });
+                });
+
+            modelBuilder.Entity("SchoolProject1640.Models.FileEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Idtest")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("SchoolProject1640.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FacultyId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("isRead")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -436,6 +546,15 @@ namespace SchoolProject1640.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolProject1640.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("SchoolProject1640.Models.ApplicationUser", "UpdateBy")
+                        .WithMany()
+                        .HasForeignKey("UpdateById");
+
+                    b.Navigation("UpdateBy");
                 });
 #pragma warning restore 612, 618
         }

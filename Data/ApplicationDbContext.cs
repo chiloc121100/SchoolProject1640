@@ -14,6 +14,10 @@ namespace SchoolProject1640.Data
         public DbSet<ApplicationUser> User { get; set; } 
         public DbSet<Faculty> Faculty { get; set; }
         public DbSet<Contribution> Contribution { get; set; }
+        public DbSet<FileEntry> Files { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<Article> Article { get; set; }
+        // public DbSet<Submission> Submission { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

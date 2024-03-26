@@ -9,5 +9,9 @@ namespace SchoolProject1640.Models
         public string? FacultyId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? Image { get; set; }
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? LastModifiedDate { get; set; }
+        public ApplicationUser? UpdateBy { get; set; }
     }
 }

@@ -1,0 +1,62 @@
+﻿@model SchoolProject1640.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "PersonalPage";
+}
+
+<style>
+    .avatar-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 200px; /* Adjust height as needed */
+    }
+
+    .avatar-label {
+        display: block;
+        position: relative;
+        width: 150px; /* Adjust width of the avatar */
+        height: 150px; /* Adjust height of the avatar */
+        overflow: hidden;
+        border-radius: 50%; /* Ensures the avatar is circular */
+    }
+
+        .avatar-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+</style>
+<div class="avatar-container">
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="files" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
+        <label for="avatar-input" class="avatar-label">
+            <img id="avatar-preview" src="/imageUser/@Model.Image" alt="Avatar">
+        </label>
+        <button type="submit" class="w-60 btn btn-sm btn-primary">Change avatar</button>
+    </form>
+</div>
+<!--add event change image when selected new-->
+<script>
+    function loadAvatar(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('avatar-preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        // show the avatar preview after selecting an image
+        document.getElementById('avatar-preview').style.display = 'block';
+    }
+</script>

@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewData["Title"] = "Edit User";
+    var listUserWithRoleAndFaculty = ViewData.Model as IEnumerable<dynamic>;
+    var listFaculty = ViewBag.ListFaculty;
+    var listRole = ViewBag.ListRole;
+}
+<style>
+    .avatar-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 200px; /* Adjust height as needed */
+    }
+
+    .avatar-label {
+        display: block;
+        position: relative;
+        width: 150px; /* Adjust width of the avatar */
+        height: 150px; /* Adjust height of the avatar */
+        overflow: hidden;
+        border-radius: 50%; /* Ensures the avatar is circular */
+    }
+
+        .avatar-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+</style>
+<h1>Update information of student</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        @foreach (var thisUser in listUserWithRoleAndFaculty)
+        {
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" value="@thisUser.User.Id" />
+
+                <div class="avatar-container">
+                    <input type="file" name="files" id="Image" onchange="loadAvatar(this)" class="form-control visually-hidden" aria-required="true" />
+                    <label for="Image" class="avatar-label">
+                        <img id="avatar-preview" src="/imageUser/@thisUser.User.Image" alt="Avatar">
+                    </label>
+                </div>
+                <!--add event change image when selected new-->
+                <script>
+                    function loadAvatar(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                $('#avatar-preview').attr('src', e.target.result);
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+                </script>
+
+
+                <div class="form-group">
+                    <label value ="@thisUser.User.Email" class="control-label">Email</label>
+                    <input id="email" name="email" value ="@thisUser.User.Email" class="form-control" readonly/>
+                </div>
+                <div class="form-group">
+                    <label value="@thisUser.User.FirstName" class="control-label">First Name</label>
+                    <input id="firstname" name="firstname" value="@thisUser.User.FirstName" class="form-control" />
+
+                </div>
+                <div class="form-group">
+                    <label value="@thisUser.User.LastName" class="control-label">Last Name</label>
+                    <input id="lastname" name="lastname" value="@thisUser.User.LastName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Faculty</label>
+                    <select id="faculty" name="faculty" class="form-control">
+                        @foreach (var faculty in listFaculty)
+                        {
+                            if (faculty.Name == thisUser.FacultyName)
+                            {
+                                <option value="@faculty.Id" selected>@faculty.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@faculty.Id">@faculty.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="control-label">Role</label>
+                    <select id="role" name="role" class="form-control">
+                        @foreach (var role in listRole)
+                        {
+                            if (role.Name == thisUser.RoleName)
+                            {
+                                <option value="@role.Id" selected>@role.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+
+
+            </form>
+        }
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

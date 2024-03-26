@@ -3,15 +3,99 @@
 @{
     ViewData["Title"] = "Register";
 }
+<style>
+    .avatar-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 200px; /* Adjust height as needed */
+    }
 
+    .avatar-label {
+        display: block;
+        position: relative;
+        width: 150px; /* Adjust width of the avatar */
+        height: 150px; /* Adjust height of the avatar */
+        overflow: hidden;
+        border-radius: 50%; /* Ensures the avatar is circular */
+    }
+     .avatar-label img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+     }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+</style>
 <h1>@ViewData["Title"]</h1>
-
 <div class="row">
     <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="avatar-container">
+                <input type="file" name="files" asp-for="Input.Image1" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
+                <label for="avatar-input" class="avatar-label" asp-for="Input.Image1">
+                    <img id="avatar-preview" src="/imageUser/ImageDefaultUser.png" alt="Avatar">
+                </label>
+                <span asp-validation-for="Input.Image1" class="text-danger"></span>
+            </div>
+            <!--add event change image when selected new-->
+            <script>
+                function loadAvatar(event) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        var output = document.getElementById('avatar-preview');
+                        output.src = reader.result;
+                    };
+                    reader.readAsDataURL(event.target.files[0]);
+                    // show the avatar preview after selecting an image
+                    document.getElementById('avatar-preview').style.display = 'block';
+                }
+            </script>
+
+@*             <div class="form-floating mb-3">
+                <input asp-for="Input.Image1" type="file" name="files" class="form-control" autocomplete="username" aria-required="true" onchange="displayFileName(this)" />
+                <label asp-for="Input.Image1">Image1</label>
+                <span asp-validation-for="Input.Image1" class="text-danger"></span>
+            </div>
+            <div id="selectedFileName"></div>
+
+            <script>
+                function displayFileName(input) {
+                    if (input.files && input.files[0]) {
+                        var fileName = input.files[0].name;
+                        document.getElementById('selectedFileName').innerText = 'Selected File: ' + fileName;
+                    } else {
+                        document.getElementById('selectedFileName').innerText = '';
+                    }
+                }
+            </script> *@
+
+            <div class="form-floating mb-3"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="John" />
+                <label asp-for="Input.FirstName">First Name</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Doe" />
+                <label asp-for="Input.LastName">Last Name</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>

@@ -5,12 +5,60 @@
       "PackagePath": "staticwebassets\\SchoolProject1640.bundle.scp.css"
     },
     {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\SubmitDocx\\COMP1786 Individual Coursework_CW1_23_24_81df6c63-8e3d-461f-b612-e633d1ba5141.pdf",
+      "PackagePath": "staticwebassets\\SubmitDocx\\COMP1786 Individual Coursework_CW1_23_24_81df6c63-8e3d-461f-b612-e633d1ba5141.pdf"
+    },
+    {
       "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240325150426.png",
+      "PackagePath": "staticwebassets\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240325150426.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326014454.png",
+      "PackagePath": "staticwebassets\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326014454.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326014600.png",
+      "PackagePath": "staticwebassets\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326014600.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326031513.png",
+      "PackagePath": "staticwebassets\\imageUser\\09ca3ae2-9bd3-43ef-9e01-09dd7dcbf5bf-profile_image-300x300_20240326031513.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\Hello_20240326014258.png",
+      "PackagePath": "staticwebassets\\imageUser\\Hello_20240326014258.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\ImageDefaultUser.png",
+      "PackagePath": "staticwebassets\\imageUser\\ImageDefaultUser.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\luon_20240326012654.jpg",
+      "PackagePath": "staticwebassets\\imageUser\\luon_20240326012654.jpg"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240325153853.png",
+      "PackagePath": "staticwebassets\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240325153853.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240326015114.png",
+      "PackagePath": "staticwebassets\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240326015114.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240326095622.png",
+      "PackagePath": "staticwebassets\\imageUser\\png-clipart-miss-kobayashi-s-dragon-maid-discord-anime-maid-miss-kobayashi-s-dragon-maid-discord-thumbnail_20240326095622.png"
+    },
+    {
+      "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\imageWebsite\\notification_24px.png",
+      "PackagePath": "staticwebassets\\imageWebsite\\notification_24px.png"
     },
     {
       "Id": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\wwwroot\\js\\site.js",

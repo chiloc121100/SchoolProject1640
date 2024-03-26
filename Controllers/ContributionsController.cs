@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
+
 
 namespace SchoolProject1640.Controllers
 {
@@ -36,12 +39,13 @@ namespace SchoolProject1640.Controllers
             var tempListFaculty = await _context.Faculty.FirstOrDefaultAsync(m => m.Id == author.FacultyId);
             if (tempListFaculty != null)
             {
-                ViewBag.getFacultyOfStudent = tempListFaculty.Name;
+                ViewBag.getFacultyOfStudent = tempListFaculty.Id;
             } 
             else
             {
                 ViewBag.getFacultyOfStudent = "";
             }
+            ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id);
             return _context.Contribution != null ?
                         View(await _context.Contribution.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Contribution'  is null.");
@@ -81,11 +85,58 @@ namespace SchoolProject1640.Controllers
         {
             if (ModelState.IsValid)
             {
+                ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+                var listUserNotification = _context.User.Where(m => m.FacultyId == contribution.Faculty).ToList();
+                foreach(var user in listUserNotification)
+                {
+                    var notification = new SchoolProject1640.Models.Notification();
+                    notification.SendBy = author.Email;
+                    notification.FacultyId = contribution.Faculty;
+                    notification.isRead = false;
+                    notification.UserID = user.Id;
+                    notification.RoleId = "2";
+                    notification.Message = $"{contribution.Title} has been created please join this.";
+                    _context.Add(notification);
+                    SendGmailAsync(author.Email, user.Email);
+                }
                 _context.Add(contribution);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(contribution);
+        }
+        public async Task SendGmailAsync(string? user, string? userrec)
+        {
+            if (user == null)
+            { return; }
+            try
+            {
+                // Create a new MailMessage
+                using (var message = new MailMessage())
+                {
+                    message.From = new MailAddress("duongchilocmail@gmail.com");
+                    message.To.Add(userrec);
+                    message.Subject = "New Contribution";
+                    message.Body = $"{user}: has been created please join this";
+
+                    // Create a new SMTP client
+                    using (var smtpClient = new SmtpClient())
+                    {
+                        smtpClient.Host = "smtp.gmail.com";
+                        smtpClient.Port = 587;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = new NetworkCredential("duongchilocmail@gmail.com", "sallqsnernrfmxkw");
+
+                        // Send the email
+                        await smtpClient.SendMailAsync(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
 
         // GET: Contributions/Edit/5

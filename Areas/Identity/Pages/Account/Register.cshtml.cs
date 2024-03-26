@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
 
@@ -32,6 +33,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private IWebHostEnvironment Environment;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -39,7 +41,9 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext context)
+            ApplicationDbContext context
+            ,
+            IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,6 +52,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            Environment = environment;
         }
 
         /// <summary>
@@ -77,6 +82,9 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
         public List<Faculty> Faculties { get; set; }
         public class InputModel
         {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Image1 { get; set; }
             public string Role { get; set; }
             public string Faculty { get; set; }
             /// <summary>
@@ -117,17 +125,53 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, List<IFormFile> files = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                user.FirstName = "";
-                user.LastName = "";
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
                 user.EmailConfirmed = true;
                 user.FacultyId = Input.Faculty;
+
+                // userimage
+                string wwwPath = this.Environment.WebRootPath;
+                string contentPath = this.Environment.ContentRootPath;
+                // kiem tra size
+                long size = files.Sum(f => f.Length);
+                // duong dan den thu muc + file -> wwwPath se dan den file wwwroot
+                var folderPath = Path.Combine(wwwPath, "imageUser");
+
+                string defaultImagePath = "ImageDefaultUser.png";
+
+                if (files != null && files.Any())
+                {
+                    // Process uploaded files
+                    foreach (var formFile in files)
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(formFile.FileName);
+                            var fileExtension = Path.GetExtension(formFile.FileName);
+                            var newFileName = $"{fileNameWithoutExtension}_{timestamp}{fileExtension}";
+                            var filePath = Path.Combine(folderPath, newFileName);
+                            user.Image = newFileName;
+                            using (var stream = System.IO.File.Create(filePath))
+                            {
+                                await formFile.CopyToAsync(stream);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    user.Image = defaultImagePath;
+                }
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
