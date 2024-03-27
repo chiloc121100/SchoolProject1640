@@ -7,6 +7,7 @@ using SchoolProject1640.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SchoolProject1640.Controllers
 {
@@ -23,6 +24,7 @@ namespace SchoolProject1640.Controllers
             _userManager = userManager;
             _environment = environment;
         }
+        [Authorize(Roles = "Administrator")]
         public IActionResult Index()
         {
             return View();
@@ -115,6 +117,7 @@ namespace SchoolProject1640.Controllers
                 return Json(listUserWithRoleAndFaculty);
             }
         }
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -188,6 +191,7 @@ namespace SchoolProject1640.Controllers
             }
             
         }
+
         public void DeleteImage(string fileName)
         {
 
@@ -237,6 +241,7 @@ namespace SchoolProject1640.Controllers
                 return BadRequest($"Error updating user: {ex.Message}");
             }
         }*/
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Edit(string id, string firstName, string email, string lastName, string role, string faculty, List<IFormFile> files)
         {
@@ -327,6 +332,7 @@ namespace SchoolProject1640.Controllers
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

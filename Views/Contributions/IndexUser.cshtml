@@ -7,6 +7,7 @@
     ViewData["Title"] = "Index";
     var getFacultyOfStudent = ViewBag.getFacultyOfStudent;
     var articles = ViewBag.listArt as IEnumerable<Article>;
+    var getId = ViewBag.idUser;
 
 }
 <h1>Index</h1>
@@ -17,7 +18,90 @@
 
 @foreach (var item in Model)
 {
-    @if (item.Faculty == getFacultyOfStudent)
+    @if (User.IsInRole("Student"))
+    {
+        @if (item.Faculty == getFacultyOfStudent)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Faculty)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AcademicYear)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ClosureDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FinalClosureDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedAt)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UpdatedAt)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Faculty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AcademicYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ClosureDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedAt)
+
+                            <td>
+                                <form asp-action="Create" asp-controller="Articles" method="get">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-link">Add article</button>
+                                </form>
+
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                }
+                            </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    }
+    else
     {
         <table class="table">
             <thead>
@@ -97,7 +181,7 @@
             </tbody>
         </table>
     }
-    @if (articles != null)
+    @if (articles != null && articles.Any())
     {
         <table>
             <thead>
@@ -110,56 +194,112 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var art in articles)
+                @if (User.IsInRole("Student"))
                 {
-                    if (art.ContributionId == item.Id)
+                    @foreach (var art in articles)
                     {
-                        <tr>
-                            <td>@art.Title</td>
-                            <td>
-                                @{
-                                    string stateText;
-                                    switch (art.State)
-                                    {
-                                        case 0:
-                                            stateText = "Pending";
-                                            break;
-                                        case 1:
-                                            stateText = "Accepted";
-                                            break;
-                                        case 2:
-                                            stateText = "Rejected";
-                                            break;
-                                        default:
-                                            stateText = "Unknown";
-                                            break;
+                        if (art.ContributionId == item.Id)
+                        {
+                            if (getId == art.AccountId)
+                            {
+                                <tr>
+                                    <td>@art.Title</td>
+                                    <td>
+                                        @{
+                                            string stateText;
+                                            switch (art.State)
+                                            {
+                                                case 0:
+                                                    stateText = "Pending";
+                                                    break;
+                                                case 1:
+                                                    stateText = "Accepted";
+                                                    break;
+                                                case 2:
+                                                    stateText = "Rejected";
+                                                    break;
+                                                default:
+                                                    stateText = "Unknown";
+                                                    break;
+                                            }
+                                        }
+                                        @stateText
+                                    </td>
+                                    <td>
+                                        <!-- Form to download the file -->
+                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit">Download</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <!-- Form to view the content of the file -->
+                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit">View</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
+                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    @foreach (var art in articles)
+                    {
+                        if (art.ContributionId == item.Id)
+                        {
+                            <tr>
+                                <td>@art.Title</td>
+                                <td>
+                                    @{
+                                        string stateText;
+                                        switch (art.State)
+                                        {
+                                            case 0:
+                                                stateText = "Pending";
+                                                break;
+                                            case 1:
+                                                stateText = "Accepted";
+                                                break;
+                                            case 2:
+                                                stateText = "Rejected";
+                                                break;
+                                            default:
+                                                stateText = "Unknown";
+                                                break;
+                                        }
                                     }
-                                }
-                                @stateText
-                            </td>
-                        <td>
-                            <!-- Form to download the file -->
-                            <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                <input type="hidden" name="fileName" value="@art.FileName" />
-                                <button type="submit">Download</button>
-                            </form>
-                        </td>
-                        <td>
-                            <!-- Form to view the content of the file -->
-                            <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                <input type="hidden" name="fileName" value="@art.FileName" />
-                                <button type="submit">View</button>
-                            </form>
-                        </td>
-                        <td>
-                                <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
-                                <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                        </td>
-                    </tr>
+                                    @stateText
+                                </td>
+                                <td>
+                                    <!-- Form to download the file -->
+                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">Download</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <!-- Form to view the content of the file -->
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
+                                    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
                     }
                 }
             </tbody>
         </table>
-
     }
 }

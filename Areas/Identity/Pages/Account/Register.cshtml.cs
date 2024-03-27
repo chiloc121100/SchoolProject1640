@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using SchoolProject1640.Data;
@@ -82,36 +83,36 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
         public List<Faculty> Faculties { get; set; }
         public class InputModel
         {
+            [Required(ErrorMessage = "First name is required")]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "Last name is required")]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
+
+            [Display(Name = "Image")]
             public string Image1 { get; set; }
+
+            [Required(ErrorMessage = "Role is required")]
             public string Role { get; set; }
+
+            [Required(ErrorMessage = "Faculty is required")]
             public string Faculty { get; set; }
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
-            [EmailAddress]
+
+            [Required(ErrorMessage = "Email is required")]
+            [EmailAddress(ErrorMessage = "Invalid email format")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Password is required")]
             [DataType(DataType.Password)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Confirm Password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
@@ -119,8 +120,8 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            Roles = _context.Roles.ToList();
-            Faculties = _context.Faculty.ToList();
+            Roles = await _context.Roles.ToListAsync();
+            Faculties = await _context.Faculty.ToListAsync();
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -129,6 +130,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -137,19 +139,13 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                 user.EmailConfirmed = true;
                 user.FacultyId = Input.Faculty;
 
-                // userimage
-                string wwwPath = this.Environment.WebRootPath;
-                string contentPath = this.Environment.ContentRootPath;
-                // kiem tra size
-                long size = files.Sum(f => f.Length);
-                // duong dan den thu muc + file -> wwwPath se dan den file wwwroot
-                var folderPath = Path.Combine(wwwPath, "imageUser");
-
                 string defaultImagePath = "ImageDefaultUser.png";
 
                 if (files != null && files.Any())
                 {
-                    // Process uploaded files
+                    string wwwPath = this.Environment.WebRootPath;
+                    string folderPath = Path.Combine(wwwPath, "imageUser");
+
                     foreach (var formFile in files)
                     {
                         if (formFile.Length > 0)
@@ -160,6 +156,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                             var newFileName = $"{fileNameWithoutExtension}_{timestamp}{fileExtension}";
                             var filePath = Path.Combine(folderPath, newFileName);
                             user.Image = newFileName;
+
                             using (var stream = System.IO.File.Create(filePath))
                             {
                                 await formFile.CopyToAsync(stream);
@@ -174,16 +171,24 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Input.Role);
+                    var tempUserRole = new IdentityUserRole<string>();
+                    tempUserRole.UserId = user.Id;
+                    tempUserRole.RoleId = Input.Role;
+
+                    await _context.UserRoles.AddAsync(tempUserRole);
+                    await _context.SaveChangesAsync();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -203,13 +208,19 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
             }
 
             // If we got this far, something failed, redisplay form
+            // Populate required data again for re-displaying the form
+            Roles = await _context.Roles.ToListAsync();
+            Faculties = await _context.Faculty.ToListAsync();
             return Page();
         }
 

@@ -1,0 +1,215 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = SchoolProject1640
+build_property.RootNamespace = SchoolProject1640
+build_property.ProjectDir = D:\GreenWich\1640\aspnetschoolproject\SchoolProject1640\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\GreenWich\1640\aspnetschoolproject\SchoolProject1640
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/ExternalLogin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxFeHRlcm5hbExvZ2luLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Manage/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX01hbmFnZU5hdi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Manage/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Areas/Identity/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Admins/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5zXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Admins/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Articles/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWNsZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Articles/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWNsZXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Articles/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWNsZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Articles/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWNsZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Articles/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXJ0aWNsZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Contributions/IndexUser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJpYnV0aW9uc1xJbmRleFVzZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/FileEntries/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZUVudHJpZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/FileEntries/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZUVudHJpZXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/FileEntries/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZUVudHJpZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/FileEntries/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZUVudHJpZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/FileEntries/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZUVudHJpZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Administrator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBZG1pbmlzdHJhdG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Coordinator.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb29yZGluYXRvci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Guest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHdWVzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Manager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNYW5hZ2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Payment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQYXltZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Home/StudentPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdHVkZW50UGFnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Notifications/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Notifications/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Notifications/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Notifications/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Notifications/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GreenWich/1640/aspnetschoolproject/SchoolProject1640/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-j0335v5uqa

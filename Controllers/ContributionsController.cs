@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace SchoolProject1640.Controllers
@@ -27,12 +28,14 @@ namespace SchoolProject1640.Controllers
             _userManager = userManager;
         }
         // GET: Contributions
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Index()
         {
               return _context.Contribution != null ? 
                           View(await _context.Contribution.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Contribution'  is null.");
         }
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> IndexUser()
         {
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
@@ -45,12 +48,15 @@ namespace SchoolProject1640.Controllers
             {
                 ViewBag.getFacultyOfStudent = "";
             }
-            ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id);
+            //ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id).ToList();
+            ViewBag.listArt = _context.Article.ToList();
+            ViewBag.idUser = author.Id;
             return _context.Contribution != null ?
                         View(await _context.Contribution.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Contribution'  is null.");
         }
         // GET: Contributions/Details/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Contribution == null)
@@ -69,6 +75,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Contributions/Create
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public IActionResult Create()
         {
             var listFaculty = _context.Faculty.ToList();
@@ -81,6 +88,7 @@ namespace SchoolProject1640.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Create([Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
         {
             if (ModelState.IsValid)
@@ -140,6 +148,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Contributions/Edit/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contribution == null)
@@ -160,6 +169,7 @@ namespace SchoolProject1640.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
         {
             if (id != contribution.Id)
@@ -191,6 +201,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Contributions/Delete/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contribution == null)
@@ -210,6 +221,7 @@ namespace SchoolProject1640.Controllers
 
         // POST: Contributions/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

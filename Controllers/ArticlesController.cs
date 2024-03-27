@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,6 +26,7 @@ namespace SchoolProject1640.Controllers
             _environment = environment;
         }
         // GET: Articles
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Index()
         {
               return _context.Article != null ? 
@@ -33,6 +35,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Articles/Details/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Article == null)
@@ -51,6 +54,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Articles/Create
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [HttpGet]
         public IActionResult Create(int id)
         {
@@ -61,12 +65,11 @@ namespace SchoolProject1640.Controllers
         // POST: Articles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [HttpPost]
         public async Task<IActionResult> Create(Article article, int idContri, List<IFormFile> files)
         {
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
-            article.ContributionId = idContri;
-            article.AccountId = author.Id;
 
             if (files == null || files.Count == 0)
                 return Content("No files selected");
@@ -88,23 +91,31 @@ namespace SchoolProject1640.Controllers
                         await file.CopyToAsync(stream);
                     }
                     // Assign the file name and path to the article properties
-                    article.FileName = fileName;
-                    article.FilePath = path;
+                    var newArticle = new Article
+                    {
+                        Title = article.Title,
+                        State = article.State,
+                        Description = article.Description,
+                        ContributionId = idContri,
+                        AccountId = author.Id,
+                        FileName = fileName,
+                        FilePath = path
+                    };
+                    newArticle.ContributionId = idContri;
+                    newArticle.AccountId = author.Id;
+                    newArticle.FileName = fileName;
+                    newArticle.FilePath = path;
+                    _context.Add(newArticle);
                 }
             }
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(article);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(article);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("IndexUser", "Contributions");
+            //return View(article);
         }
 
 
         // GET: Articles/Edit/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Article == null)
@@ -125,9 +136,12 @@ namespace SchoolProject1640.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,FileName,FilePath,ContributionId,AccountId,State,CreatedAt,UpdatedAt")] Article article)
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Article article, List<IFormFile> files)
         {
-            if (id != article.Id)
+            var tempArti = _context.Article.Where(m => m.Id == article.Id).FirstOrDefault();
+
+            if (id != tempArti.Id)
             {
                 return NotFound();
             }
@@ -136,7 +150,37 @@ namespace SchoolProject1640.Controllers
             {
                 try
                 {
-                    _context.Update(article);
+                    ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            // Generate a unique identifier
+                            var uniqueIdentifier = Guid.NewGuid().ToString();
+
+                            // Construct the new file name with the unique identifier appended
+                            var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{uniqueIdentifier}{Path.GetExtension(file.FileName)}";
+
+                            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+
+                            using (var stream = new FileStream(path, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            if (System.IO.File.Exists(tempArti.FilePath))
+                            {
+                                System.IO.File.Delete(tempArti.FilePath);
+                            }
+
+                            tempArti.FileName = fileName;
+                            tempArti.FilePath = path;
+                            _context.Update(tempArti);
+                        }
+                    }
+                    tempArti.Title = article.Title;
+                    tempArti.Description = article.Description;
+                    tempArti.UpdatedAt = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -156,6 +200,7 @@ namespace SchoolProject1640.Controllers
         }
 
         // GET: Articles/Delete/5
+        [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Article == null)
@@ -180,17 +225,34 @@ namespace SchoolProject1640.Controllers
         {
             if (_context.Article == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Article'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Article' is null.");
             }
+
             var article = await _context.Article.FindAsync(id);
-            if (article != null)
+
+            if (article == null)
             {
-                _context.Article.Remove(article);
+                return NotFound();
             }
-            
+
+            // Get the path of the file associated with the article
+            var filePath = article.FilePath;
+
+            // Remove the article from the context
+            _context.Article.Remove(article);
+
+            // Save changes to the database
             await _context.SaveChangesAsync();
+
+            // Delete the associated file from the wwwroot directory
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool ArticleExists(int id)
         {
