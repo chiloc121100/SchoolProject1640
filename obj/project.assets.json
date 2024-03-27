@@ -12008,11 +12008,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\SchoolProject1640.csproj",
+      "projectUniqueName": "D:\\GreenWich\\1640\\push1640\\SchoolProject1640\\SchoolProject1640.csproj",
       "projectName": "SchoolProject1640",
-      "projectPath": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\SchoolProject1640.csproj",
+      "projectPath": "D:\\GreenWich\\1640\\push1640\\SchoolProject1640\\SchoolProject1640.csproj",
       "packagesPath": "C:\\Users\\Das\\.nuget\\packages\\",
-      "outputPath": "D:\\GreenWich\\1640\\aspnetschoolproject\\SchoolProject1640\\obj\\",
+      "outputPath": "D:\\GreenWich\\1640\\push1640\\SchoolProject1640\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
