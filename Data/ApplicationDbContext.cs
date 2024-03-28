@@ -11,7 +11,7 @@ namespace SchoolProject1640.Data
             : base(options)
         {
         }
-        public DbSet<ApplicationUser> User { get; set; }
+        public DbSet<ApplicationUser> User { get; set; } 
         public DbSet<Faculty> Faculty { get; set; }
         public DbSet<Contribution> Contribution { get; set; }
         public DbSet<FileEntry> Files { get; set; }
@@ -31,15 +31,13 @@ namespace SchoolProject1640.Data
             );
 
             modelBuilder.Entity<Faculty>().HasData(
-                 new Faculty { Id = "1", Name = "Arts", Description = "Faculty of Arts", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "2", Name = "Business", Description = "Faculty of Business", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "3", Name = "Engineering", Description = "Faculty of Engineering", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "4", Name = "Information Technology", Description = "Faculty of Information Technology", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "5", Name = "Law", Description = "Faculty of Law", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "6", Name = "Medicine", Description = "Faculty of Medicine", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                 new Faculty { Id = "7", Name = "Admin", Description = "Faculty of Admin", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }, // Added Admin faculty
-                 new Faculty { Id = "8", Name = "Manager", Description = "Faculty of Manager", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now } // Added Manager faculty
-             );
+                new Faculty { Id = "1", Name = "Arts", Description = "Faculty of Arts", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Faculty { Id = "2", Name = "Business", Description = "Faculty of Business", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Faculty { Id = "3", Name = "Engineering", Description = "Faculty of Engineering", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Faculty { Id = "4", Name = "Information Technology", Description = "Faculty of Information Technology", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Faculty { Id = "5", Name = "Law", Description = "Faculty of Law", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Faculty { Id = "6", Name = "Medicine", Description = "Faculty of Medicine", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+            );
         }
 
     }

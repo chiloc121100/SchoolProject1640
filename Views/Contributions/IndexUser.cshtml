@@ -8,16 +8,17 @@
     var getFacultyOfStudent = ViewBag.getFacultyOfStudent;
     var articles = ViewBag.listArt as IEnumerable<Article>;
     var getId = ViewBag.idUser;
-    var listNameUser = ViewBag.listNameUSer as IEnumerable<ApplicationUser>;
 
 }
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 
-
-@if (User.IsInRole("Student"))
+@foreach (var item in Model)
 {
-    <h1>Student</h1>
-    @foreach (var item in Model)
+    @if (User.IsInRole("Student"))
     {
         @if (item.Faculty == getFacultyOfStudent)
         {
@@ -83,91 +84,25 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.UpdatedAt)
 
-                        <td>
-                            <form asp-action="Create" asp-controller="Articles" method="get">
-                                <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-link">Add article</button>
-                            </form>                      
-                        </td>
+                            <td>
+                                <form asp-action="Create" asp-controller="Articles" method="get">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-link">Add article</button>
+                                </form>
+
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                }
+                            </td>
                     </tr>
                 </tbody>
             </table>
-            @if (articles != null)
-            {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>State</th>
-                            <th>Dowload</th>
-                            <th>View</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    @foreach (var art in articles)
-                    {
-                        if (art.ContributionId == item.Id)
-                        {
-                            if (getId == art.AccountId)
-                            {
-                                <tr>
-                                    <td>@art.Title</td>
-                                    <td>
-                                        @{
-                                            string stateText;
-                                            switch (art.State)
-                                            {
-                                                case 0:
-                                                    stateText = "Pending";
-                                                    break;
-                                                case 1:
-                                                    stateText = "Accepted";
-                                                    break;
-                                                case 2:
-                                                    stateText = "Rejected";
-                                                    break;
-                                                default:
-                                                    stateText = "Unknown";
-                                                    break;
-                                            }
-                                        }
-                                        @stateText
-                                    </td>
-                                    <td>
-                                        <!-- Form to download the file -->
-                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">Download</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <!-- Form to view the content of the file -->
-                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">View</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a>
-                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    }
-                </table>
-            }
         }
     }
-}
-
-@if (User.IsInRole("Administrator"))
-{
-    <h1>Administrator</h1>
-    @foreach (var item in Model)
+    else
     {
-
         <table class="table">
             <thead>
                 <tr>
@@ -245,84 +180,126 @@
                 </tr>
             </tbody>
         </table>
-        @if (articles != null)
-        {
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>State</th>
-                        <th>Author</th>
-                        <th>Dowload</th>
-                        <th>View</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                @foreach (var art in articles)
+    }
+    @if (articles != null && articles.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>State</th>
+                    <th>Dowload</th>
+                    <th>View</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (User.IsInRole("Student"))
                 {
-                    if (art.ContributionId == item.Id)
+                    @foreach (var art in articles)
                     {
-
-                        <tr>
-                            <td>@art.Title</td>
-                            <td>
-                                @{
-                                    string stateText;
-                                    switch (art.State)
-                                    {
-                                        case 0:
-                                            stateText = "Pending";
-                                            break;
-                                        case 1:
-                                            stateText = "Accepted";
-                                            break;
-                                        case 2:
-                                            stateText = "Rejected";
-                                            break;
-                                        default:
-                                            stateText = "Unknown";
-                                            break;
-                                    }
-                                }
-                                @stateText
-                            </td>
-                            <td>
-                                @foreach (var name in listNameUser)
-                                {
-                                    @if (name.Id == art.AccountId)
-                                    {
-                                        @name.Email
-                                    }
-                                }
-
-
-                            </td>
-                            <td>
-                                <!-- Form to download the file -->
-                                <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                    <button type="submit">Download</button>
-                                </form>
-                            </td>
-                            <td>
-                                <!-- Form to view the content of the file -->
-                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                    <button type="submit">View</button>
-                                </form>
-                            </td>
-                            <td>
-                                <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
-                                <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                            </td>
-                        </tr>
-
+                        if (art.ContributionId == item.Id)
+                        {
+                            if (getId == art.AccountId)
+                            {
+                                <tr>
+                                    <td>@art.Title</td>
+                                    <td>
+                                        @{
+                                            string stateText;
+                                            switch (art.State)
+                                            {
+                                                case 0:
+                                                    stateText = "Pending";
+                                                    break;
+                                                case 1:
+                                                    stateText = "Accepted";
+                                                    break;
+                                                case 2:
+                                                    stateText = "Rejected";
+                                                    break;
+                                                default:
+                                                    stateText = "Unknown";
+                                                    break;
+                                            }
+                                        }
+                                        @stateText
+                                    </td>
+                                    <td>
+                                        <!-- Form to download the file -->
+                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit">Download</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <!-- Form to view the content of the file -->
+                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit">View</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
+                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     }
                 }
-            </table>
-        }
-
+                else
+                {
+                    @foreach (var art in articles)
+                    {
+                        if (art.ContributionId == item.Id)
+                        {
+                            <tr>
+                                <td>@art.Title</td>
+                                <td>
+                                    @{
+                                        string stateText;
+                                        switch (art.State)
+                                        {
+                                            case 0:
+                                                stateText = "Pending";
+                                                break;
+                                            case 1:
+                                                stateText = "Accepted";
+                                                break;
+                                            case 2:
+                                                stateText = "Rejected";
+                                                break;
+                                            default:
+                                                stateText = "Unknown";
+                                                break;
+                                        }
+                                    }
+                                    @stateText
+                                </td>
+                                <td>
+                                    <!-- Form to download the file -->
+                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">Download</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <!-- Form to view the content of the file -->
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
+                                    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
     }
 }
-

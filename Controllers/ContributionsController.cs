@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
 
 
 namespace SchoolProject1640.Controllers
@@ -49,37 +48,8 @@ namespace SchoolProject1640.Controllers
             {
                 ViewBag.getFacultyOfStudent = "";
             }
-            var roles = await _userManager.GetRolesAsync(author);
-            foreach (var role in roles)
-            {
-                switch (role)
-                {
-                    case "Student":
-                        // Handle the role Student
-                        ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id).ToList();
-                        break;
-                    case "Guest":
-                        // Handle the role Guest
-                        break;
-                    case "Manager":
-                        // Handle the role Manager
-                        break;
-                    case "Administrator":
-                        // Handle the role Administrator
-                        ViewBag.listArt = _context.Article.ToList();
-                        break;
-                    case "Coordinator":
-                        // Handle the role Coordinator
-                        break;
-                    default:
-                        // Handle any other roles if needed
-                        break;
-                }
-            }
-
-            //ViewBag.listArt = _context.Article.ToList();
-
-            ViewBag.listNameUSer = _context.User.ToList();
+            //ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id).ToList();
+            ViewBag.listArt = _context.Article.ToList();
             ViewBag.idUser = author.Id;
             return _context.Contribution != null ?
                         View(await _context.Contribution.ToListAsync()) :
