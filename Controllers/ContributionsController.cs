@@ -147,9 +147,10 @@ namespace SchoolProject1640.Controllers
             }
         }
 
-        // GET: Contributions/Edit/5
+        // GET: Contributions/Update/5
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Update(int? id)
         {
             if (id == null || _context.Contribution == null)
             {
@@ -164,13 +165,13 @@ namespace SchoolProject1640.Controllers
             return View(contribution);
         }
 
-        // POST: Contributions/Edit/5
+        // POST: Contributions/Update/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, [Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
         {
             if (id != contribution.Id)
             {
@@ -237,6 +238,47 @@ namespace SchoolProject1640.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public IActionResult SearchContribution(string title)
+        {
+            if (!string.IsNullOrEmpty(title))
+            {
+                var contributions = _context.Contribution
+                    .Join(_context.Faculty,
+                        contribution => contribution.Faculty,
+                        faculty => faculty.Id,
+                        (contribution, faculty) => new { Contribution = contribution, FacultyName = faculty.Name })
+                    .Where(contribution => contribution.Contribution.Title.Contains(title))
+                    .OrderByDescending(contribution => contribution.Contribution.Title)
+                    .Select(contribution => new
+                    {
+                        Contribution = contribution.Contribution,
+                        FacultyName = contribution.FacultyName,
+                    })
+                    .ToList();
+
+                return Json(contributions);
+            }
+            else
+            {
+                var contributions = _context.Contribution
+                    .Join(_context.Faculty,
+                        contribution => contribution.Faculty,
+                        faculty => faculty.Id,
+                        (contribution, faculty) => new { Contribution = contribution, FacultyName = faculty.Name })
+                    .OrderByDescending(contribution => contribution.Contribution.Title)
+                    .Select(contribution => new
+                    {
+                        Contribution = contribution.Contribution,
+                        FacultyName = contribution.FacultyName,
+                    })
+                    .ToList();
+
+                return Json(contributions);
+            }
         }
 
         private bool ContributionExists(int id)

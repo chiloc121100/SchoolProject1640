@@ -40,16 +40,6 @@ namespace SchoolProject1640.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        [HttpGet]
-        [Authorize(Roles = "Student")]
-        public IActionResult StudentPage()
-        {
-            return View();
-        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -21,12 +21,7 @@ Bỏ comment xong thì Tailwind CSS sẽ được áp dụng vào project mà m�
 <head>
     ...
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    ...
-</head>
-
-<body>
-    ...
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     ...
-</body>
+</head>
 ```

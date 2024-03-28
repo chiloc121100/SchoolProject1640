@@ -24,45 +24,16 @@ namespace SchoolProject1640.Controllers
             _userManager = userManager;
             _environment = environment;
         }
+
         [Authorize(Roles = "Administrator")]
         public IActionResult Index()
         {
             return View();
         }
-/*        public IActionResult DataStudent(string email)
-        {
-            if (email != null)
-            {
-                var listUserWithRoleAndFaculty = _context.User
-                    .Join(_context.UserRoles,
-                        user => user.Id,
-                        userRole => userRole.UserId,
-                        (user, userRole) => new { User = user, UserRole = userRole })
-                    .Join(_context.Roles,
-                        userRole => userRole.UserRole.RoleId,
-                        role => role.Id,
-                        (userRole, role) => new { User = userRole.User, RoleName = role.Name })
-                    .Join(_context.Faculty, // Assuming UserFaculty is the entity representing the relationship between User and Faculty
-                        userRole => userRole.User.FacultyId,
-                        userFaculty => userFaculty.Id,
-                        (userRole, userFaculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = userFaculty.Name })
-                    .Where(u => u.RoleName != "Administrator")
-                    .Select(u => new
-                    {
-                        User = u.User,
-                        RoleName = u.RoleName,
-                        FacultyName = u.FacultyName
-                    })
-                    .ToList();
 
-                return Json(listUserWithRoleAndFaculty);
-            }
-            else
-            {
-                return Json("");
-            }
-        }*/
-        public IActionResult DataStudent(string email)
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public IActionResult SearchAcount(string email)
         {
             if (!string.IsNullOrEmpty(email))
             {
@@ -80,6 +51,7 @@ namespace SchoolProject1640.Controllers
                         faculty => faculty.Id,
                         (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
                     .Where(u => u.RoleName != "Administrator" && u.User.Email.Contains(email))
+                    .OrderByDescending(u => u.User.Email)
                     .Select(u => new
                     {
                         User = u.User,
@@ -106,6 +78,7 @@ namespace SchoolProject1640.Controllers
                          faculty => faculty.Id,
                          (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
                      .Where(u => u.RoleName != "Administrator")
+                     .OrderByDescending(u => u.User.Email)
                      .Select(u => new
                      {
                          User = u.User,
@@ -117,9 +90,10 @@ namespace SchoolProject1640.Controllers
                 return Json(listUserWithRoleAndFaculty);
             }
         }
+
         [Authorize(Roles = "Administrator")]
         [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Update(string id)
         {
             if (id == null || _context.Files == null)
             {
@@ -153,6 +127,7 @@ namespace SchoolProject1640.Controllers
             }
             return View(User);
         }
+
         public async Task AddImage(ApplicationUser user, List<IFormFile> files)
         {
             string wwwPath = this._environment.WebRootPath;
@@ -241,9 +216,11 @@ namespace SchoolProject1640.Controllers
                 return BadRequest($"Error updating user: {ex.Message}");
             }
         }*/
+
         [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, string firstName, string email, string lastName, string role, string faculty, List<IFormFile> files)
+        public async Task<IActionResult> Update(string id, string firstName, string email, string lastName, string role, string faculty, List<IFormFile> files)
         {
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
             try
@@ -299,6 +276,7 @@ namespace SchoolProject1640.Controllers
                 return BadRequest($"Error updating user: {ex.Message}");
             }
         }
+
         public async Task SendGmailAsync(string? user, string? userrec)
         {
             if (user == null)
@@ -332,6 +310,7 @@ namespace SchoolProject1640.Controllers
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
+
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)

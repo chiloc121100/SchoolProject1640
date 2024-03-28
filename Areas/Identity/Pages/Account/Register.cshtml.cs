@@ -42,8 +42,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext context
-            ,
+            ApplicationDbContext context,
             IWebHostEnvironment environment)
         {
             _userManager = userManager;
