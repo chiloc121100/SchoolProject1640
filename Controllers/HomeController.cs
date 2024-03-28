@@ -50,32 +50,8 @@ namespace SchoolProject1640.Controllers
                 ViewBag.getFacultyOfStudent = "";
             }
             var roles = await _userManager.GetRolesAsync(author);
-            foreach (var role in roles)
-            {
-                switch (role)
-                {
-                    case "Student":
-                        // Handle the role Student
-                        ViewBag.listArt = _context.Article.Where(m => m.AccountId == author.Id && m.State == 1).ToList();
-                        break;
-                    case "Guest":
-                        // Handle the role Guest
-                        break;
-                    case "Manager":
-                        // Handle the role Manager
-                        break;
-                    case "Administrator":
-                        // Handle the role Administrator
-                        ViewBag.listArt = _context.Article.Where(m => m.State == 1).ToList();
-                        break;
-                    case "Coordinator":
-                        // Handle the role Coordinator
-                        break;
-                    default:
-                        // Handle any other roles if needed
-                        break;
-                }
-            }
+
+            ViewBag.listArt = _context.Article.Where(m => m.State == 1).ToList();
 
             //ViewBag.listArt = _context.Article.ToList();
 

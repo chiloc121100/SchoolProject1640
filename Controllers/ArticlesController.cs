@@ -73,6 +73,7 @@ namespace SchoolProject1640.Controllers
 
             if (files == null || files.Count == 0)
             {
+                // xu ly loi nay nha
                 ViewBag.MessErro = "You need to choose at least 1 file to upload.";
                 return View();
             }
@@ -110,6 +111,7 @@ namespace SchoolProject1640.Controllers
                     _context.Add(newArticle);
                 }
             }
+            ViewBag.Success = "Upload Sucessfully!.";
             await _context.SaveChangesAsync();
             return RedirectToAction("IndexUser", "Contributions");
             //return View(article);

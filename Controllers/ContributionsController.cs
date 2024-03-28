@@ -63,6 +63,7 @@ namespace SchoolProject1640.Controllers
                         break;
                     case "Manager":
                         // Handle the role Manager
+                        ViewBag.listArt = _context.Article.ToList();
                         break;
                     case "Administrator":
                         // Handle the role Administrator
@@ -70,6 +71,7 @@ namespace SchoolProject1640.Controllers
                         break;
                     case "Coordinator":
                         // Handle the role Coordinator
+                        ViewBag.listArt = _context.Article.ToList();
                         break;
                     default:
                         // Handle any other roles if needed
