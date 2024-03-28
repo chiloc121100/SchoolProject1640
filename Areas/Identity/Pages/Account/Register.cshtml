@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Register";
 }
+
 <style>
     .avatar-container {
         display: flex;
@@ -19,11 +20,12 @@
         overflow: hidden;
         border-radius: 50%; /* Ensures the avatar is circular */
     }
-     .avatar-label img {
-         width: 100%;
-         height: 100%;
-         object-fit: cover;
-     }
+
+        .avatar-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     .visually-hidden {
         position: absolute;
@@ -37,6 +39,34 @@
     }
 
 </style>
+
+<script>
+    // Prevent choosing faculty when creating Administrator and Manager
+    $(document).ready(function () {
+        $("#role").change(function () {
+            var selectedRole = $(this).val();
+            if (selectedRole === "4" || selectedRole === "3") {
+                $('#faculty').prop('disabled', true);
+                $('#facultyDiv').hide();
+            } else {
+                $('#faculty').prop('disabled', false);
+                $('#facultyDiv').show();
+            }
+        });
+    })
+
+    // Preview avatar when selected
+    function loadAvatar(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            $('#avatar-preview').attr('src', reader.result);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        // Show the avatar preview after selecting an image
+        $('#avatar-preview').show();
+    }
+</script>
+
 <h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
@@ -45,6 +75,7 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
+            @* Image *@
             <div class="avatar-container">
                 <input type="file" name="files" asp-for="Input.Image1" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
                 <label for="avatar-input" class="avatar-label" asp-for="Input.Image1">
@@ -52,55 +83,50 @@
                 </label>
                 <span asp-validation-for="Input.Image1" class="text-danger"></span>
             </div>
-            <!--add event change image when selected new-->
-            <script>
-                function loadAvatar(event) {
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        var output = document.getElementById('avatar-preview');
-                        output.src = reader.result;
-                    };
-                    reader.readAsDataURL(event.target.files[0]);
-                    // show the avatar preview after selecting an image
-                    document.getElementById('avatar-preview').style.display = 'block';
-                }
-            </script>
+            <div class="form-floating mb-3"></div>
 
-@*             <div class="form-floating mb-3">
-                <input asp-for="Input.Image1" type="file" name="files" class="form-control" autocomplete="username" aria-required="true" onchange="displayFileName(this)" />
-                <label asp-for="Input.Image1">Image1</label>
-                <span asp-validation-for="Input.Image1" class="text-danger"></span>
+            @*
+            <div class="form-floating mb-3">
+            <input asp-for="Input.Image1" type="file" name="files" class="form-control" autocomplete="username" aria-required="true" onchange="displayFileName(this)" />
+            <label asp-for="Input.Image1">Image1</label>
+            <span asp-validation-for="Input.Image1" class="text-danger"></span>
             </div>
             <div id="selectedFileName"></div>
 
             <script>
-                function displayFileName(input) {
-                    if (input.files && input.files[0]) {
-                        var fileName = input.files[0].name;
-                        document.getElementById('selectedFileName').innerText = 'Selected File: ' + fileName;
-                    } else {
-                        document.getElementById('selectedFileName').innerText = '';
-                    }
-                }
-            </script> *@
+            function displayFileName(input) {
+            if (input.files && input.files[0]) {
+            var fileName = input.files[0].name;
+            document.getElementById('selectedFileName').innerText = 'Selected File: ' + fileName;
+            } else {
+            document.getElementById('selectedFileName').innerText = '';
+            }
+            }
+            </script>
+            *@
 
-            <div class="form-floating mb-3"></div>
+            @* First Name *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" placeholder="John" />
                 <label asp-for="Input.FirstName">First Name</label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
 
+            @* Last Name *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" placeholder="Doe" />
                 <label asp-for="Input.LastName">Last Name</label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
+
+            @* Email *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
+
+            @* Password *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" id="passwordInput" />
                 <label asp-for="Input.Password">Password</label>
@@ -108,21 +134,18 @@
                 <span id="passwordError" class="text-danger" style="display: none;">Password must contain at least one special character (!@@#$%^&amp;*), at least one capital letter, be at least 6 characters long, and have a maximum length of 100 characters.</span>
 
             </div>
+
+            @* Confirm Password *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-@*             <div class="form-floating mb-3">
-                @{
-                    var rolesWithoutAdmin = Model.Roles.Where(role => role.Name != "Administrator").ToList();
-                }
-                @Html.DropDownList("Input.Role", new SelectList(Model.Roles, "Name", "Name"), new { @class = "form-control", id = "roleDropdown" })
-                <label asp-for="Input.Role"> Role </label>
-                <span asp-validation-for="Input.Role" class="text-danger"></span>
-            </div> *@
-            <div class="form-floating mb-3" >
-                <select asp-for="Input.Role" class="form-control" >
+
+            @* Role *@
+            <div class="form-floating mb-3">
+                <select id="role" asp-for="Input.Role" class="form-control">
+                    <option value="">Select a role</option>
                     @foreach (var Role in Model.Roles)
                     {
                         <option value="@Role.Id">@Role.Name</option>
@@ -131,9 +154,11 @@
                 <label asp-for="Input.Role"></label>
                 <span asp-validation-for="Input.Role" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-3" id="facultyDropdownDiv">
-                
-                <select asp-for="Input.Faculty" class="form-control" id="selectedFac">
+
+            @* Faculty *@
+            <div id="facultyDiv" class="form-floating mb-3" style="display:none;">
+                <select id="faculty" asp-for="Input.Faculty" class="form-control">
+                    <option value="">Select a faculty</option>
                     @foreach (var faculty in Model.Faculties)
                     {
                         <option value="@faculty.Id">@faculty.Name</option>
@@ -142,9 +167,13 @@
                 <label asp-for="Input.Faculty"></label>
                 <span asp-validation-for="Input.Faculty" class="text-danger"></span>
             </div>
+
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
+
+    @* External stuffs*@
     <div class="col-md-6 col-md-offset-2">
         <section>
             <h3>Use another service to register.</h3>
@@ -152,25 +181,27 @@
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
-                        <div>
-                            <p>
-                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                                about setting up this ASP.NET application to support logging in via external services</a>.
-                            </p>
-                        </div>
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                article
+                                about setting up this ASP.NET application to support logging in via external services
+                            </a>.
+                        </p>
+                    </div>
                 }
                 else
                 {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div>
-                                <p>
-                                    @foreach (var provider in Model.ExternalLogins!)
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
                                 {
-                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
-                                </p>
-                            </div>
-                        </form>
+                            </p>
+                        </div>
+                    </form>
                 }
             }
         </section>
@@ -180,30 +211,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-<script>
-        document.getElementById('roleDropdown').addEventListener('change', function () {
-            var role = this.value;
-            var facultyDropdownDiv = document.getElementById('facultyDropdownDiv');
-            var selectFac = document.getElementById('selectedFac');
-            if (role === 'Manager') {
-                facultyDropdownDiv.style.display = 'none';
-                selectFac.value = '';
-            } else {
-                facultyDropdownDiv.style.display = 'block';
-            }
-        });
-</script>
-@* <script>
-    document.getElementById('passwordInput').addEventListener('input', function () {
-        var password = this.value;
-        var passwordError = document.getElementById('passwordError');
-        var specialCharacters = /[@@#$%^&*!]/;
-        
-        if (!specialCharacters.test(password)) {
-            passwordError.style.display = 'block';
-        } else {
-            passwordError.style.display = 'none';
-        }
-    });
-</script> *@
-

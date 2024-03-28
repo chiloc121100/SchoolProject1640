@@ -1,78 +1,103 @@
-﻿@model IEnumerable<SchoolProject1640.Models.Contribution>
-
-@{
-    ViewData["Title"] = "Index";
-
+﻿@{
+    ViewData["Title"] = "Contributions Management";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between align-items-center">
+    <h1>Contributions</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+    <a asp-action="Create">
+        <button type="button" class="btn btn-success py-2">Create contribution</button>
+    </a>
+</div>
+
+<br />
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" id="searchBar" placeholder="Search by Email">
+    <button class="btn btn-outline-secondary" id="searchButton">Search</button>
+</div>
+
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Faculty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AcademicYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosureDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FinalClosureDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th></th>
+            <th> Title </th>
+            <th> Faculty </th>
+            <th> Academic Year </th>
+            <th> Start Date </th>
+            <th> Closure Date </th>
+            <th> Final Closure Date </th>
+            <th> Actions </th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Faculty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AcademicYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosureDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinalClosureDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+    <tbody id="table">
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Get all accounts data from database on page starts
+            loadData();
+
+            // Update data when search input is changed
+            $('#searchBar').on("input", function () {
+                loadData();
+            });
+
+            // Update data when search button is clicked
+            $("#searchButton").on("click", function () {
+                loadData();
+            });
+
+            // Fetch data from database
+            function loadData() {
+                var title = $('#searchBar').val();
+                $.ajax({
+                    url: '@Url.Action("SearchContribution", "Contributions")',
+                    type: 'GET',
+                    data: { title: title },
+                    success: function (data) {
+                        populateTale(data, title);
+                    },
+                    error: function () {
+                        $('#table').empty();
+                        $('#table').append('<tr><td colspan="7" class="text-center text-danger">Error searching contributions. Please try again later.</td></tr>');
+                    }
+                });
+            }
+
+            // Populate table with data from database
+            function populateTale(data, title) {
+                $('#table').empty();
+
+                if (data && data.length > 0) {
+                    $.each(data, function (index, contribution) {
+                        var updateUrl = `/Contributions/Update/${contribution.contribution.id}`;
+                        var deleteUrl = `/Contributions/Delete/${contribution.contribution.id}`;
+                        var row =
+                            `<tr>
+                                <td>${contribution.contribution.title}</td>
+                                <td>${contribution.facultyName}</td>
+                                <td>${contribution.contribution.academicYear}</td>
+                                <td>${contribution.contribution.startDate}</td>
+                                <td>${contribution.contribution.closureDate}</td>
+                                <td>${contribution.contribution.finalClosureDate}</td>
+                                <td>
+                                    <a href="${updateUrl}" class="text-decoration-none">
+                                        <button type="button" class="btn btn-primary py-2">Update</button>
+                                    </a>
+                                    <form id="deleteForm" action="/Admins/Delete" method="post">
+                                        <input type="hidden" id="id" name="id" value="${contribution.contribution.id}">
+                                        <button type="submit" class="btn btn-danger py-2" onclick="return confirm('Are you sure you want to delete ${contribution.contribution.title} account?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>`;
+                        $('#table').append(row);
+                    });
+                } else {
+                    $('#table').append(`<tr><td colspan="7" class="text-center">No data found for ${title}.</td></tr>`);
+                }
+            }
+        })
+    </script>
+}
