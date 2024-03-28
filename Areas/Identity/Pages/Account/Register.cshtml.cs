@@ -96,6 +96,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "Role is required")]
             public string Role { get; set; }
 
+            [Required(ErrorMessage = "Faculty is required")]
             public string Faculty { get; set; }
 
             [Required(ErrorMessage = "Email is required")]
@@ -124,20 +125,10 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(InputModel model, string returnUrl = null, List<IFormFile> files = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, List<IFormFile> files = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            // Validation for role and faculty
-            if (Input.Role != "3" && string.IsNullOrEmpty(Input.Faculty))
-            {
-                ModelState.AddModelError("Faculty", "Faculty is required for this role.");
-            }
-            if (Input.Role != "4" && string.IsNullOrEmpty(Input.Faculty))
-            {
-                ModelState.AddModelError("Faculty", "Faculty is required for this role.");
-            }
 
             if (ModelState.IsValid)
             {
