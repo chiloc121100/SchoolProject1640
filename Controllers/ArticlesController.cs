@@ -287,7 +287,48 @@ namespace SchoolProject1640.Controllers
             }
             return File(System.IO.File.OpenRead(filePath), "application/pdf", null);
         }
+        [HttpPost]
+        public async Task<IActionResult> AcceptArt(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            Article tempArt = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (tempArt == null)
+            {
+                return NotFound();
+            }
+
+            tempArt.State = 1;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("IndexUser", "Contributions");
+        }
+        [HttpPost]
+        public async Task<IActionResult> RejectArt(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Article tempArt = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (tempArt == null)
+            {
+                return NotFound();
+            }
+
+            tempArt.State = 2;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("IndexUser", "Contributions");
+        }
 
     }
 }
