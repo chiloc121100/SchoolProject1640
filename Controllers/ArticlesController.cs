@@ -72,8 +72,10 @@ namespace SchoolProject1640.Controllers
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
 
             if (files == null || files.Count == 0)
-                return Content("No files selected");
-
+            {
+                ViewBag.MessErro = "You need to choose at least 1 file to upload.";
+                return View();
+            }
             foreach (var file in files)
             {
                 if (file.Length > 0)
