@@ -22,7 +22,7 @@
         {
             @if (item.Faculty == getFacultyOfStudent)
             {
-                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5">
+                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5 ">
                     <div class="flex justify-between items-center">
                         <div class="text-2xl font-bold px-3">
                             @foreach (var name in listNameFacuties)
@@ -34,79 +34,81 @@
                             }
                             - Top
                         </div>
-                        <div class="text-xl px-3">
+                        <div class="text-xl px-3 text-[#F20000]">
                             <a>
                                 @Html.DisplayFor(modelItem => item.FinalClosureDate)
                             </a>
                         </div>
-                        <div class="text-xl font-bold px-5">View All</div>
+                       
                     </div>
                     @if (articles != null)
                     {
-                        <table class="w-full">
-                            <thead>
-                                <tr class="w-full">
-                                    <th class="w-[20%] text-left">Title</th>
-                                    <th class="w-[20%] text-left">Author</th>
-                                    <th class="w-[20%] text-left">State</th>
-                                    <th class="w-[10%] text-left">View</th>
-                                </tr>
-                            </thead>
-                            @foreach (var art in articles)
-                            {
-                                if (art.ContributionId == item.Id)
-                                {
-                                    <tr>
-                                        <td>@art.Title</td>
-                                        <td>
-                                            @foreach (var name in listNameUser)
-                                            {
-                                                @if (name.Id == art.AccountId)
-                                                {
-                                                    @name.Email
-                                                }
-                                            }
-
-
-                                        </td>
-                                        <td>
-                                            @{
-                                                string stateText;
-                                                switch (art.State)
-                                                {
-                                                    case 0:
-                                                        stateText = "Pending";
-                                                        break;
-                                                    case 1:
-                                                        stateText = "Accepted";
-                                                        break;
-                                                    case 2:
-                                                        stateText = "Rejected";
-                                                        break;
-                                                    default:
-                                                        stateText = "Unknown";
-                                                        break;
-                                                }
-                                            }
-                                            @stateText
-                                        </td>
-                                        
-                                        
-                                        <td>
-                                            <!-- Form to view the content of the file -->
-                                            <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                                <input type="hidden" name="fileName" value="@art.FileName" />
-                                                <button type="submit">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                        
+                        <div class="px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <table class="w-full ">
+                                <thead>
+                                    <tr class="w-full">
+                                        <th class="w-[20%] text-left">Title</th>
+                                        <th class="w-[20%] text-left">Author</th>
+                                        <th class="w-[20%] text-left">State</th>
+                                        <th class="w-[10%] text-left">View</th>
                                     </tr>
+                                </thead>
+                                @foreach (var art in articles)
+                                {
+                                    if (art.ContributionId == item.Id)
+                                    {
+                                        <tr>
+                                            <td>@art.Title</td>
+                                            <td>
+                                                @foreach (var name in listNameUser)
+                                                {
+                                                    @if (name.Id == art.AccountId)
+                                                    {
+                                                        @name.Email
+                                                    }
+                                                }
 
+
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string stateText;
+                                                    switch (art.State)
+                                                    {
+                                                        case 0:
+                                                            stateText = "Pending";
+                                                            break;
+                                                        case 1:
+                                                            stateText = "Accepted";
+                                                            break;
+                                                        case 2:
+                                                            stateText = "Rejected";
+                                                            break;
+                                                        default:
+                                                            stateText = "Unknown";
+                                                            break;
+                                                    }
+                                                }
+                                                @stateText
+                                            </td>
+
+
+                                            <td>
+                                                <!-- Form to view the content of the file -->
+                                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                    <input type="hidden" name="fileName" value="@art.FileName" />
+                                                    <button type="submit">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+
+                                        </tr>
+
+                                    }
                                 }
-                            }
-                        </table>
+                            </table>
+                        </div>
                     }
                 </div>
             }
