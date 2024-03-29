@@ -4,35 +4,41 @@
 @{
     string firstName = User.Identity?.Name?.Split(' ')?.FirstOrDefault();
 }
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    var currentUser = await UserManager.GetUserAsync(User);
-    if(currentUser != null)
+<ul class="sm:hidden text-amber-600 flex items-center space-x-2 pr-5">
+    @if (SignInManager.IsSignedIn(User))
     {
-            <li class="nav-item">
-                <button id="notificationIcon" class="nav-link btn btn-link text-dark" title="Notifications">
-                    <img src="/imageWebsite/notification_24px.png" alt="Notification Icon">
+        var currentUser = await UserManager.GetUserAsync(User);
+
+
+
+        <li class="">
+            <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3" asp-action="Index" asp-controller="Users" title="Manage">
+                <img width="50px" height="50px" src="/imageUser/ImageDefaultUser.png" />
+                <div class="flex flex-col items-center justify-center">
+                    <div class="te"> @User.Identity?.Name</div>
+                    <div class="text-[12px]">Thay role vào đây</div>
+                </div>
+            </a>
+            <!-- <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a> -->
+        </li>
+
+        <li class="px-4">
+            <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">
+                    <i class="fa fa-sign-out fa-2xl" aria-hidden="true"></i>
                 </button>
-            </li>
+            </form>
+        </li>
+
+
     }
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-action="Index" asp-controller="Users" title="Manage">Hello @User.Identity?.Name!</a>
-        <!-- <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a> -->
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    else
+    {
+        <li class="">
+            <a class="" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="">
+            <a class="" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>
