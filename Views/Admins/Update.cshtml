@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Update User";
     var listUserWithRoleAndFaculty = ViewData.Model as IEnumerable<dynamic>;
     var listFaculty = ViewBag.ListFaculty;
     var listRole = ViewBag.ListRole;
@@ -46,7 +46,7 @@
     <div class="col-md-4">
         @foreach (var thisUser in listUserWithRoleAndFaculty)
         {
-            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <form asp-action="Update" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" value="@thisUser.User.Id" />
 

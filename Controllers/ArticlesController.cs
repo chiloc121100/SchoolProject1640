@@ -29,9 +29,9 @@ namespace SchoolProject1640.Controllers
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Index()
         {
-              return _context.Article != null ? 
-                          View(await _context.Article.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Article'  is null.");
+            return _context.Article != null ?
+                        View(await _context.Article.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Article'  is null.");
         }
 
         // GET: Articles/Details/5
@@ -43,14 +43,45 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
 
-            var article = await _context.Article
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var article = _context.Article
+                .Where(article => article.Id == id)
+                .Join(_context.User,
+                        article => article.AccountId,
+                        account => account.Id,
+                        (article, account) => new { Article = article, Account = account })
+                .Join(_context.Contribution,
+                        article => article.Article.ContributionId,
+                        contribution => contribution.Id,
+                        (article, contribution) => new { Article = article, Contribution = contribution })
+                .Join(_context.Faculty,
+                        article => article.Contribution.Faculty,
+                        faculty => faculty.Id,
+                        (article, faculty) => new { article.Article, FacultyName = faculty.Name })
+                .Select(article => new
+                {
+                    Article = article.Article.Article,
+                    Account = article.Article.Account,
+                    FacultyName = article.FacultyName
+                })
+                .FirstOrDefault();
+
             if (article == null)
             {
                 return NotFound();
             }
 
-            return View(article);
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            //TODO: Check validation for coordinator and manager as well
+            //if (currentUser == null || currentUser.Id != article.Account.Id)
+            //{
+            //    return Unauthorized();
+            //}
+
+            ViewBag.Article = article;
+            ViewBag.User = currentUser.Id;
+
+            return View();
         }
 
         // GET: Articles/Create
@@ -260,7 +291,7 @@ namespace SchoolProject1640.Controllers
 
         private bool ArticleExists(int id)
         {
-          return (_context.Article?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Article?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         public IActionResult DownloadFile(string fileName)
         {
