@@ -9,167 +9,109 @@
     var articles = ViewBag.listArt as IEnumerable<Article>;
     var getId = ViewBag.idUser;
     var listNameUser = ViewBag.listNameUSer as IEnumerable<ApplicationUser>;
+    var listNameFacuties = ViewBag.listNameFaculty as IEnumerable<Faculty>;
 
 }
 
 
-
+@* STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT *@
 @if (User.IsInRole("Student") || User.IsInRole("Coordinator"))
 {
-    <h1>Student</h1>
-    @foreach (var item in Model)
-    {
-        @if (item.Faculty == getFacultyOfStudent)
+    <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
+        @foreach (var item in Model)
         {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Id)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Faculty)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AcademicYear)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.StartDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ClosureDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FinalClosureDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreatedAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdatedAt)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Faculty)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AcademicYear)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ClosureDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedAt)
-
-                        <td>
-                            <form asp-action="Create" asp-controller="Articles" method="get">
-                                <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-link">Add article</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            @if (articles != null)
+            @if (item.Faculty == getFacultyOfStudent)
             {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>State</th>
-                            <th>Author</th>
-                            <th>Dowload</th>
-                            <th>View</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    @foreach (var art in articles)
+                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5">
+                    <div class="flex justify-between items-center">
+                        <div class="text-3xl font-bold px-3">
+                            @foreach (var name in listNameFacuties)
+                            {
+                                @if (@name.Id == item.Faculty)
+                                {
+                                    @name.Name
+                                }
+                            }
+                            - Top
+                        </div>
+                        <div class="text-2xl px-3">
+                            <a>
+                                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                            </a>
+                        </div>
+                    </div>
+                    @if (articles != null)
                     {
-                        if (art.ContributionId == item.Id)
-                        {
-                                <tr>
-                                    <td>@art.Title</td>
-                                    <td>
-                                        @{
-                                            string stateText;
-                                            switch (art.State)
-                                            {
-                                                case 0:
-                                                    stateText = "Pending";
-                                                    break;
-                                                case 1:
-                                                    stateText = "Accepted";
-                                                    break;
-                                                case 2:
-                                                    stateText = "Rejected";
-                                                    break;
-                                                default:
-                                                    stateText = "Unknown";
-                                                    break;
-                                            }
-                                        }
-                                        @stateText
-                                    </td>
-                                <td>
-                                    @foreach (var name in listNameUser)
-                                    {
-                                        @if (name.Id == art.AccountId)
-                                        {
-                                            @name.Email
-                                        }
-                                    }
-
-
-                                </td>
-                                    <td>
-                                        <!-- Form to download the file -->
-                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">Download</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <!-- Form to view the content of the file -->
-                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">View</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a>
-                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                                    </td>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="w-full">
+                                    <th class="w-[20%] text-left">Title</th>
+                                    <th class="w-[20%] text-left">Author</th>
+                                    <th class="w-[20%] text-left">State</th>
+                                    <th class="w-[10%] text-left">View</th>
                                 </tr>
-                            
-                        }
+                            </thead>
+                            @foreach (var art in articles)
+                            {
+                                if (art.ContributionId == item.Id)
+                                {
+                                    <tr>
+                                        <td>@art.Title</td>
+                                        <td>
+                                            @foreach (var name in listNameUser)
+                                            {
+                                                @if (name.Id == art.AccountId)
+                                                {
+                                                    @name.Email
+                                                }
+                                            }
+
+
+                                        </td>
+                                        <td>
+                                            @{
+                                                string stateText;
+                                                switch (art.State)
+                                                {
+                                                    case 0:
+                                                        stateText = "Pending";
+                                                        break;
+                                                    case 1:
+                                                        stateText = "Accepted";
+                                                        break;
+                                                    case 2:
+                                                        stateText = "Rejected";
+                                                        break;
+                                                    default:
+                                                        stateText = "Unknown";
+                                                        break;
+                                                }
+                                            }
+                                            @stateText
+                                        </td>
+                                        
+                                        
+                                        <td>
+                                            <!-- Form to view the content of the file -->
+                                            <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                <input type="hidden" name="fileName" value="@art.FileName" />
+                                                <button type="submit">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        
+                                    </tr>
+
+                                }
+                            }
+                        </table>
                     }
-                </table>
+                </div>
             }
         }
-    }
+    </div>
+    
 }
 
 @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))

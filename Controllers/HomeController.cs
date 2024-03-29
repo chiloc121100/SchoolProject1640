@@ -50,6 +50,7 @@ namespace SchoolProject1640.Controllers
                 ViewBag.getFacultyOfStudent = "";
             }
             var roles = await _userManager.GetRolesAsync(author);
+            ViewBag.listNameFaculty = _context.Faculty.ToList();
 
             ViewBag.listArt = _context.Article.Where(m => m.State == 1).ToList();
 

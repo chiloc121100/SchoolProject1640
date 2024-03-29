@@ -13,10 +13,31 @@
 
         <li class="">
             <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3" asp-action="Index" asp-controller="Users" title="Manage">
-                <img width="50px" height="50px" src="/imageUser/ImageDefaultUser.png" />
+                <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/@currentUser.Image" />
                 <div class="flex flex-col items-center justify-center">
                     <div class="te"> @User.Identity?.Name</div>
-                    <div class="text-[12px]">Thay role vào đây</div>
+                    <div class="text-[12px]">
+                        @if (User.IsInRole("Guest"))
+                        {
+                            <div>Guest</div>
+                        }
+                        @if (User.IsInRole("Student")) 
+                        {
+                            <div>Student</div>
+                        }
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <div>Manager</div>
+                        }
+                        @if (User.IsInRole("Coordinator"))
+                        {
+                            <div>Coordinator</div>
+                        }
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <div>Administrator</div>
+                        }
+                    </div>
                 </div>
             </a>
             <!-- <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a> -->

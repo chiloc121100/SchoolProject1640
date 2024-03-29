@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <link rel="stylesheet" href="path/to/notyf.min.css">
+     <link rel="stylesheet" href="path/to/notyf.min.css"> 
     <script src="path/to/notyf.min.js"></script>
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
      <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" /> 
-    <link rel="stylesheet" href="~/SchoolProject1640.styles.css" asp-append-version="true" />
+     <link rel="stylesheet" href="~/SchoolProject1640.styles.css" asp-append-version="true" /> 
     <script src="https://kit.fontawesome.com/1c6258baf1.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-[#EBDFD7]">
@@ -37,28 +37,32 @@
 
                     <div class="text-white">
                         <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 sm:hidden  ">
-                            <li class="hover:text-[#FD7401]">
-                                <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
-                            </li>
                             @if (User.IsInRole("Guest"))
                             {
-
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
                             }
                             else if (User.IsInRole("Student"))
                             {
-
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Your Student</a>
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Your Articles</a>
                                 </li>
                             }
                             else if (User.IsInRole("Manager"))
                             {
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-action="">Contribution</a>
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
                                 </li>
                             }
-                            else if (User.IsInRole("Coordinator"))
+                            else if (User.IsInRole("Coordinator")) 
                             {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                </li>
                                 <li class="hover:text-[#FD7401]">
                                     <a class="" asp-area="" asp-controller="" asp-action="">Mark</a>
                                 </li>
@@ -66,14 +70,14 @@
                             else if (User.IsInRole("Administrator"))
                             {
                                 <li class="hover:text-[#FD7401]">
-                                    <span class="">Hello: Administrator</span>
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contribution</a>
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Facuties</a>
                                 </li>
 
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Article</a>
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Userss</a>
                                 </li>
                             }
                         </ul>
