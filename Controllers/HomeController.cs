@@ -58,6 +58,21 @@ namespace SchoolProject1640.Controllers
 
             ViewBag.listNameUSer = _context.User.ToList();
             ViewBag.idUser = author.Id;
+
+            if (HttpContext.Session.GetString("NewLogin") == "true")
+            {
+                var notifications = _context.Notification
+                    .Where(noti => noti.UserID == author.Id)
+                    .ToList();
+
+                HttpContext.Session.SetString("NewLogin", "false");
+                ViewBag.notifications = notifications;
+            }
+            else
+            {
+                ViewBag.notifications = null;
+            }
+
             return _context.Contribution != null ?
                         View(await _context.Contribution.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Contribution'  is null.");

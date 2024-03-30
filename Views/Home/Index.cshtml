@@ -39,7 +39,7 @@
                                 @Html.DisplayFor(modelItem => item.FinalClosureDate)
                             </a>
                         </div>
-                       
+
                     </div>
                     @if (articles != null)
                     {
@@ -114,7 +114,7 @@
             }
         }
     </div>
-    
+
 }
 
 @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
@@ -281,3 +281,30 @@
     }
 }
 
+@if (ViewBag.notifications != null)
+{
+    @if (ViewBag.notifications.Count > 0)
+    {
+        <script type="text/javascript">
+            var notifications = @Html.Raw(Json.Serialize(ViewBag.notifications));
+            const notyf = new Notyf({
+                duration: 5000,
+                dismissible: true,
+                types: [
+                    {
+                        type: 'info',
+                        background: 'blue',
+                        icon: false
+                    }
+                ]
+            });
+            notifications.forEach((noti) => {
+                console.log("noti", noti);
+                notyf.open({
+                    type: 'info',
+                    message: noti.message
+                });
+            })
+        </script>
+    }
+}
