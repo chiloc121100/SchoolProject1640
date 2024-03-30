@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.SignalR;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace SchoolProject1640.Hubs
 {
@@ -18,6 +14,16 @@ namespace SchoolProject1640.Hubs
         {
             _userManager = userManager;
             _context = context;
+        }
+
+        public async Task JoinGroup(string articleId)
+        {
+           await Groups.AddToGroupAsync(Context.ConnectionId, articleId);
+        }
+
+        public async Task LeaveGroup(string articleId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, articleId);
         }
 
         public async Task SendMessage(string articleId, string message)
@@ -33,7 +39,7 @@ namespace SchoolProject1640.Hubs
             _context.Add(newMessage);
             await _context.SaveChangesAsync();
 
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.Group(articleId).SendAsync("ReceiveMessage", user, message);
         }
     }
 }

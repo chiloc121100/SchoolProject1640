@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").configureLogging(signalR.LogLevel.None).build();
 
 // Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
@@ -35,10 +35,15 @@ connection.on("ReceiveMessage", function (user, message) {
     li.appendChild(chatBody);
 
     document.getElementById("messagesList").appendChild(li);
+
+    document.getElementById("messageInput").value = "";
 });
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
+    connection.invoke("JoinGroup", articleId).catch(function (err) {
+        return console.error(err);
+    });
 }).catch(function (err) {
     return console.error(err.toString());
 });
@@ -50,3 +55,9 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     });
     event.preventDefault();
 });
+
+window.onunload = function () {
+    connection.invoke("LeaveGroup", articleId).catch(function (err) {
+        return console.error(err);
+    });
+}
