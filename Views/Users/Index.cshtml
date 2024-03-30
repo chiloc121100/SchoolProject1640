@@ -1,4 +1,4 @@
-﻿@model SchoolProject1640.Models.ApplicationUser
+@model SchoolProject1640.Models.ApplicationUser
 
 @{
     ViewData["Title"] = "PersonalPage";
@@ -38,15 +38,6 @@
         border: 0;
     }
 </style>
-@*<div class="avatar-container">
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="files" id="avatar-input" onchange="loadAvatar(event)" class="form-control visually-hidden" aria-required="true" />
-        <label for="avatar-input" class="avatar-label">
-            <img id="avatar-preview" src="/imageUser/@Model.Image" alt="Avatar">
-        </label>
-        <button type="submit" class="w-60 btn btn-sm btn-primary">Change avatar</button>
-    </form>
-</div>*@
 
 <div class="row">
     <div class="px-16 py-8 w-full h-[900px] flex text-black 2xl:px-5 lg:px-5 sm:px-1">
@@ -62,40 +53,38 @@
                         <div class="form-floating mb-3"></div>
                         <div class="text-[16px] space-y-1 sm:text-[14px]">
                             <div class="text-[#828181]">
-                                @Html.DisplayNameFor(model => model.FirstName)
+                                Email:
                             </div>
                             <div class="flex items-center h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black">
-                                    @Html.DisplayFor(model => model.FirstName)
+                                @Model.Email
                             </div>
                         </div>
                         <div class="text-[16px] space-y-1 sm:text-[14px]">
                             <div class="text-[#828181]">
-                                @Html.DisplayNameFor(model => model.LastName)
+                                Faculty ID:
                             </div>
                             <div class="flex items-center h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black">
-                                    @Html.DisplayFor(model => model.LastName)
+                                @Model.FacultyId
                             </div>
                         </div>
                         <div class="text-[16px] space-y-1 sm:text-[14px]">
                             <div class="text-[#828181]">
-                                @Html.DisplayNameFor(model => model.Email)
+                                First Name:
                             </div>
                             <div class="flex items-center h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black">
-                                    @Html.DisplayFor(model => model.Email)
+                                @Model.FirstName
                             </div>
                         </div>
                         <div class="text-[16px] space-y-1 sm:text-[14px]">
                             <div class="text-[#828181]">
-                                @Html.DisplayNameFor(model => model.FacultyId)
+                                Last Name:
                             </div>
                             <div class="flex items-center h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black">
-                                @Html.DisplayFor(model => model.FacultyId)
+                                @Model.LastName
                             </div>
                         </div>
                         <button type="submit" class="space-x-2 pt-3" type="submit">
-                            <div class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
-                                Edit Profile
-                            </div>
+                            <a class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
                         </button>
                         <button type="submit" class="space-x-2 pt-3" type="submit">
                             <div class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
@@ -107,16 +96,3 @@
             </div>
         </div>
     </div>
-<!--add event change image when selected new-->
-<script>
-    function loadAvatar(event) {
-        var reader = new FileReader();
-        reader.onload = function () {
-            var output = document.getElementById('avatar-preview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-        // show the avatar preview after selecting an image
-        document.getElementById('avatar-preview').style.display = 'block';
-    }
-</script>
