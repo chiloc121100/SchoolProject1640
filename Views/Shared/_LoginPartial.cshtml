@@ -12,8 +12,17 @@
 
 
         <li class="">
+
             <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3" asp-action="Index" asp-controller="Users" title="Manage">
-                <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/@currentUser.Image" />
+                @if (@currentUser != null)
+                {
+                    <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/@currentUser.Image" />
+                }
+                else
+                {
+                    <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/ImageDefaultUser.png" />
+                }
+                
                 <div class="flex flex-col items-center justify-center">
                     <div class="te"> @User.Identity?.Name</div>
                     <div class="text-[12px]">

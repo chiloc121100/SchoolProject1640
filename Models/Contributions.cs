@@ -11,7 +11,9 @@ namespace SchoolProject1640.Models
         public string? Faculty { get; set; }
         public string? AcademicYear { get; set; }
         public DateTime StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MMMM dd yyyy}")]
         public DateTime ClosureDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MMMM dd yyyy}")]
         public DateTime FinalClosureDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
