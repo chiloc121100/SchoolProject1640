@@ -118,10 +118,11 @@ namespace SchoolProject1640.Controllers
 
             if (files == null || files.Count == 0)
             {
-                // xu ly loi nay nha
+                // Handle this error
                 ViewBag.MessErro = "You need to choose at least 1 file to upload.";
-                return View();
+               
             }
+
             foreach (var file in files)
             {
                 if (file.Length > 0)
