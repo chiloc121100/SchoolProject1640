@@ -244,9 +244,9 @@ namespace SchoolProject1640.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("IndexUser", "Contributions");
             }
-            return View(article);
+            return RedirectToAction("IndexUser", "Contributions");
         }
 
         // GET: Articles/Delete/5

@@ -204,17 +204,18 @@ namespace SchoolProject1640.Controllers
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Update(int id, [Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
+        public async Task<IActionResult> Update(int id)
         {
-            if (id != contribution.Id)
+            var contribution = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == id);
+            if(contribution == null)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    contribution.UpdatedAt = DateTime.Now;
                     _context.Update(contribution);
                     await _context.SaveChangesAsync();
                 }

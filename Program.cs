@@ -3,6 +3,7 @@ using SchoolProject1640.Data;
 using SchoolProject1640.Models;
 using SchoolProject1640.Hubs;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

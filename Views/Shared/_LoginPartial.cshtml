@@ -24,7 +24,7 @@
                 }
                 
                 <div class="flex flex-col items-center justify-center">
-                    <div class="te"> @User.Identity?.Name</div>
+                    <div class="te"> @currentUser.FirstName</div>
                     <div class="text-[12px]">
                         @if (User.IsInRole("Guest"))
                         {
