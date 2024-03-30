@@ -91,7 +91,8 @@
     <form asp-action="RejectArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
         <button type="submit">Reject</button>
     </form>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a> |
+    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">Edit</a> 
 </div>
 
 <div class="container content">
