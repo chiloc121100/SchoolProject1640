@@ -21,8 +21,111 @@
 
 @if (User.IsInRole("Student"))
 {
-    <h1>Student</h1>
+     <div class="p-10 text-black sm:px-0">
+
     @foreach (var item in Model)
+    {
+        @if (item.Faculty == getFacultyOfStudent)
+        {
+                <div class="px-5 sm:px-0">
+                    <div 
+                         class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                        <div class="flex items-center justify-between space-y-2">
+                            <div class="font-bold text-[20px]">
+                                @Html.DisplayFor(modelItem => item.Faculty) (Juno quên Cách đổi tên ngành ở đây rồi hì :)) =>)
+                            </div>
+                            <form class="bg-[#FD7401] font-bold flex justify-center items-center w-[130px] text-white px-3 py-2 rounded-xl" asp-action="Create" asp-controller="Articles" method="get">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-link">
+                                    Add Articles
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Deadline : @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </div>
+                        @if (articles != null)
+                        {
+                            <div class="py-3">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="w-full">
+                                            <th class="w-[30%] text-left">Title</th>
+                                            <th class="w-[20%] text-left">State</th>
+                                            <th class="w-[10%] text-left">View</th>
+                                            <th class="w-[10%] text-left">Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var art in articles)
+                                    {
+                                        if (art.ContributionId == item.Id)
+                                        {
+                                            if (getId == art.AccountId)
+                                            {
+                                                <tr>
+                                                    <td>@art.Title</td>
+                                                    <td>
+                                                        @{
+                                                            string stateText;
+                                                            string colorCode;
+                                                            switch (art.State)
+                                                            {
+                                                                case 0:
+                                                                    stateText = "Pending";
+                                                                    colorCode = "orange"; // You can change this to any color you want
+                                                                    break;
+                                                                case 1:
+                                                                    stateText = "Accepted";
+                                                                    colorCode = "green"; // You can change this to any color you want
+                                                                    break;
+                                                                case 2:
+                                                                    stateText = "Rejected";
+                                                                    colorCode = "red"; // You can change this to any color you want
+                                                                    break;
+                                                                default:
+                                                                    stateText = "Unknown";
+                                                                    colorCode = "black"; // You can change this to any color you want
+                                                                    break;
+                                                            }
+                                                        }
+                                                        <span style="color: @colorCode;">@stateText</span>
+                                                    </td>
+@*                                                     <td>
+                                                        <!-- Form to download the file -->
+                                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                                            <button type="submit">Download</button>
+                                                        </form>
+                                                    </td> *@
+                                                    <td>
+                                                        <!-- Form to view the content of the file -->
+                                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                                            <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
+                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
+                                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </table>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            
+        }
+        
+    }
+
+    @* @foreach (var item in Model)
     {
         @if (item.Faculty == getFacultyOfStudent)
         {
@@ -92,7 +195,7 @@
                             <form asp-action="Create" asp-controller="Articles" method="get">
                                 <input type="hidden" name="id" value="@item.Id" />
                                 <button type="submit" class="btn btn-link">Add article</button>
-                            </form>                      
+                            </form>
                         </td>
                     </tr>
                 </tbody>
@@ -120,23 +223,28 @@
                                     <td>
                                         @{
                                             string stateText;
+                                            string colorCode;
                                             switch (art.State)
                                             {
                                                 case 0:
                                                     stateText = "Pending";
+                                                    colorCode = "orange"; // You can change this to any color you want
                                                     break;
                                                 case 1:
                                                     stateText = "Accepted";
+                                                    colorCode = "green"; // You can change this to any color you want
                                                     break;
                                                 case 2:
                                                     stateText = "Rejected";
+                                                    colorCode = "red"; // You can change this to any color you want
                                                     break;
                                                 default:
                                                     stateText = "Unknown";
+                                                    colorCode = "black"; // You can change this to any color you want
                                                     break;
                                             }
                                         }
-                                        @stateText
+                                        <span style="color: @colorCode;">@stateText</span>
                                     </td>
                                     <td>
                                         <!-- Form to download the file -->
@@ -164,7 +272,8 @@
                 </table>
             }
         }
-    }
+    } *@
+    </div>
 }
 
 @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
@@ -425,51 +534,51 @@
                     {
                         if (art.ContributionId == item.Id)
                         {
-                          
-                                <tr>
-                                    <td>@art.Title</td>
-                                    <td>
-                                        @{
-                                            string stateText;
-                                            switch (art.State)
-                                            {
-                                                case 0:
-                                                    stateText = "Pending";
-                                                    break;
-                                                case 1:
-                                                    stateText = "Accepted";
-                                                    break;
-                                                case 2:
-                                                    stateText = "Rejected";
-                                                    break;
-                                                default:
-                                                    stateText = "Unknown";
-                                                    break;
-                                            }
+
+                            <tr>
+                                <td>@art.Title</td>
+                                <td>
+                                    @{
+                                        string stateText;
+                                        switch (art.State)
+                                        {
+                                            case 0:
+                                                stateText = "Pending";
+                                                break;
+                                            case 1:
+                                                stateText = "Accepted";
+                                                break;
+                                            case 2:
+                                                stateText = "Rejected";
+                                                break;
+                                            default:
+                                                stateText = "Unknown";
+                                                break;
                                         }
-                                        @stateText
-                                    </td>
-                                    <td>
-                                        <!-- Form to download the file -->
-                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">Download</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <!-- Form to view the content of the file -->
-                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                            <button type="submit">View</button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a>
-                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                                    </td>
-                                </tr>
-                            
+                                    }
+                                    @stateText
+                                </td>
+                                <td>
+                                    <!-- Form to download the file -->
+                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">Download</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <!-- Form to view the content of the file -->
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a>
+                                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
+                                    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                </td>
+                            </tr>
+
                         }
                     }
                 </table>
