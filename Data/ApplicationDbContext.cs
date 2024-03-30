@@ -17,6 +17,7 @@ namespace SchoolProject1640.Data
         public DbSet<FileEntry> Files { get; set; }
         public DbSet<Notification> Notification { get; set; }
         public DbSet<Article> Article { get; set; }
+        public DbSet<Message> Message { get; set; }
         // public DbSet<Submission> Submission { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -70,6 +70,19 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
 
+            var messages = _context.Message
+                .Where(message => message.ArtID == id)
+                .Join(_context.User,
+                        message => message.AccountID,
+                        account => account.Id,
+                        (message, account) => new { Message = message, Account = account })
+                .Select(message => new
+                {
+                    Message = message.Message,
+                    Account = message.Account
+                })
+                .ToList();
+
             var currentUser = await _userManager.GetUserAsync(User);
 
             //TODO: Check validation for coordinator and manager as well
@@ -80,6 +93,7 @@ namespace SchoolProject1640.Controllers
 
             ViewBag.Article = article;
             ViewBag.User = currentUser.Id;
+            ViewBag.Messages = messages;
 
             return View();
         }

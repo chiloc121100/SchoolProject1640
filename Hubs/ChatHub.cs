@@ -20,9 +20,19 @@ namespace SchoolProject1640.Hubs
             _context = context;
         }
 
-        public async Task SendMessage(string message)
+        public async Task SendMessage(string articleId, string message)
         {
             var user = await _userManager.GetUserAsync(Context.User);
+
+            var newMessage = new Message
+            {
+                AccountID = user.Id,
+                ArtID = int.Parse(articleId),
+                Mess = message
+            };
+            _context.Add(newMessage);
+            await _context.SaveChangesAsync();
+
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
     }

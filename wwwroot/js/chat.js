@@ -45,7 +45,7 @@ connection.start().then(function () {
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
     var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", message).catch(function (err) {
+    connection.invoke("SendMessage", articleId, message).catch(function (err) {
         return console.error(err);
     });
     event.preventDefault();
