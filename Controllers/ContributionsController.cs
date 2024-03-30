@@ -83,6 +83,7 @@ namespace SchoolProject1640.Controllers
 
             ViewBag.listNameUSer = _context.User.ToList();
             ViewBag.idUser = author.Id;
+            ViewBag.listNameFaculty = _context.Faculty.ToList();
             return _context.Contribution != null ?
                         View(await _context.Contribution.ToListAsync()) :
                         Problem("Entity set 'ApplicationDbContext.Contribution'  is null.");

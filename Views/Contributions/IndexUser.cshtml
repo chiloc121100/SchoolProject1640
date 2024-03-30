@@ -9,6 +9,7 @@
     var articles = ViewBag.listArt as IEnumerable<Article>;
     var getId = ViewBag.idUser;
     var listNameUser = ViewBag.listNameUSer as IEnumerable<ApplicationUser>;
+    var listNameFac = ViewBag.listNameFaculty as IEnumerable<Faculty>;
 
 }
 
@@ -29,10 +30,20 @@
         {
                 <div class="px-5 sm:px-0">
                     <div 
-                         class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                    class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
                         <div class="flex items-center justify-between space-y-2">
                             <div class="font-bold text-[20px]">
-                                @Html.DisplayFor(modelItem => item.Faculty) (Juno quên Cách đổi tên ngành ở đây rồi hì :)) =>)
+                                @if (listNameFac != null)
+                                {
+                                    foreach (var tempName in listNameFac)
+                                    {
+                                        @if (tempName.Id == item.Faculty)
+                                        {
+                                            @tempName.Name;
+                                        }
+                                    }
+                                    //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
+                                }
                             </div>
                             <form class="bg-[#FD7401] font-bold flex justify-center items-center w-[130px] text-white px-3 py-2 rounded-xl" asp-action="Create" asp-controller="Articles" method="get">
                                 <input type="hidden" name="id" value="@item.Id" />

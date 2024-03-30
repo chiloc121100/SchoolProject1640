@@ -15,7 +15,7 @@ namespace SchoolProject1640.Models
         public DateTime ClosureDate { get; set; }
         [DisplayFormat(DataFormatString = "{0:MMMM dd yyyy}")]
         public DateTime FinalClosureDate { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
     }
 }
