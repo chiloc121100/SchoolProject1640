@@ -101,9 +101,21 @@ namespace SchoolProject1640.Controllers
         // GET: Articles/Create
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [HttpGet]
-        public IActionResult Create(int id)
+        public async Task<IActionResult> Create(int id)
         {
             ViewBag.ContributionId = id;
+            var checkCloseContri = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (checkCloseContri != null && checkCloseContri.FinalClosureDate < DateTime.Now)
+            {
+                ViewBag.MessErroClose = checkCloseContri.FinalClosureDate;
+                ViewBag.DatetimeNow = DateTime.Now;
+            }
+            else
+            {
+                ViewBag.MessErroClose = DateTime.Now;
+                ViewBag.DatetimeNow = DateTime.Now;
+            }
             return View();
         }
 

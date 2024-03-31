@@ -3,18 +3,15 @@
 @{
     ViewData["Title"] = "Create";
     var contriId = ViewBag.ContributionId;
+    var timeEnd = ViewBag.MessErroClose;
+    var timeNow = ViewBag.DatetimeNow;
 }
 
 <h1>Create</h1>
 
 <h4>Article</h4>
 <hr />
-@if (ViewBag.MessErro != null && ViewBag.MessErro != "")
-{
-    <div class="alert alert-danger">
-        @ViewBag.MessErro
-    </div>
-}
+
 <div class="row">
     <div class="col-md-4">
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
@@ -46,36 +43,24 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
 }
 <script>
     document.getElementById("createForm").addEventListener("submit", function (event) {
         var fileInput = document.getElementById("fileInput");
+        var timeEnd = new Date('@timeEnd'); 
+        var timeNow = new Date('@timeNow'); 
+
         if (fileInput.files.length === 0) {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault(); 
             alert("Please select a file before submitting.");
+        } else if (timeEnd < timeNow) {
+            event.preventDefault(); // Prevent form submission
+            alert("The time to submit the article has ended.");
         }
     });
 </script>
-@* <script>
-    function validateForm() {
-        var fileInput = document.querySelector('input[type="file"]');
-        var files = fileInput.files;
 
-        // Check if at least one file is selected
-        if (files.length === 0) 
-            return false;
-        }
-
-        // Check if each selected file is a PDF
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
-            if (file.type !== "application/pdf") {
-                return false;
-            }
-        }
-
-        return true;
-    }
-</script>
- *@
