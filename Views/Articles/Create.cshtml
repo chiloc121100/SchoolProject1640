@@ -91,11 +91,11 @@
 <script>
     document.getElementById("createForm").addEventListener("submit", function (event) {
         var fileInput = document.getElementById("fileInput");
-        var timeEnd = new Date('@timeEnd'); 
-        var timeNow = new Date('@timeNow'); 
+        var timeEnd = new Date('@timeEnd');
+        var timeNow = new Date('@timeNow');
 
         if (fileInput.files.length === 0) {
-            event.preventDefault(); 
+            event.preventDefault();
             alert("Please select a file before submitting.");
         } else if (timeEnd < timeNow) {
             event.preventDefault(); // Prevent form submission
