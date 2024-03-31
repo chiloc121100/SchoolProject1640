@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
+using System.Linq;
 
 namespace SchoolProject1640.Hubs
 {
@@ -42,9 +44,15 @@ namespace SchoolProject1640.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendNotification(string userId, string message)
+        public async Task DismissNotification(int messageId)
         {
-            await Clients.Group($"user_{userId}").SendAsync("ReceiveNotification", message);
+            var notification = await _context.Notification.FirstOrDefaultAsync(notification => notification.Id == messageId);
+            if (notification != null)
+            {
+                notification.isRead = true;
+                _context.Notification.Update(notification);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

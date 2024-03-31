@@ -286,7 +286,6 @@
     @if (ViewBag.notifications.Count > 0)
     {
         <script type="text/javascript">
-            var notifications = @Html.Raw(Json.Serialize(ViewBag.notifications));
             const notyf = new Notyf({
                 duration: 5000,
                 dismissible: true,
@@ -296,13 +295,19 @@
                         background: 'blue',
                         icon: false
                     }
-                ]
+                ],
             });
+
+            var notifications = @Html.Raw(Json.Serialize(ViewBag.notifications));
             notifications.forEach((noti) => {
-                console.log("noti", noti);
+                if (noti.isRead == false)
                 notyf.open({
                     type: 'info',
                     message: noti.message
+                }).on('dismiss', ({ target, event }) => {
+                    connection.invoke("DismissNotification", noti.id).catch(function (err) {
+                        return console.error(err);
+                    });
                 });
             })
         </script>

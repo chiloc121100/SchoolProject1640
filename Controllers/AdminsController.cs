@@ -8,6 +8,8 @@ using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using SchoolProject1640.Hubs;
 
 namespace SchoolProject1640.Controllers
 {
@@ -16,12 +18,14 @@ namespace SchoolProject1640.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IHubContext<NotificationHub> _hubContext;
         IWebHostEnvironment _environment;
-        public AdminsController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IWebHostEnvironment environment)
+        public AdminsController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IHubContext<NotificationHub> hubContext, IWebHostEnvironment environment)
         {
             _context = context;
             _logger = logger;
             _userManager = userManager;
+            _hubContext = hubContext;
             _environment = environment;
         }
 
@@ -266,7 +270,9 @@ namespace SchoolProject1640.Controllers
                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-               
+                // Show notification to FE
+                _hubContext.Clients.Group($"user_{id}").SendAsync("ReceiveNotification", tempNoti, "info");
+
                 // Redirect to the Admins index action
                 return RedirectToAction("Index", "Admins");
             }
