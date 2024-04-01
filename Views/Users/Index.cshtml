@@ -84,12 +84,10 @@
                             </div>
                         </div>
                         <button type="submit" class="space-x-2 pt-3" type="submit">
-                            <a class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                            <a class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]" asp-action="Edit" asp-route-id="@Model.Id">Edit Profile</a>
                         </button>
                         <button type="submit" class="space-x-2 pt-3" type="submit">
-                            <div class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
-                                Edit Password
-                            </div>
+                            <a class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Change Password</a>
                         </button>
                     </div>
                 </div>
