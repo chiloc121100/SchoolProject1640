@@ -16,14 +16,21 @@ connection.on("ReceiveNotification", function (message, type) {
     });
 
     if (type === 'info') {
-        notyf.open({
+        var notification = notyf.open({
             type: 'info',
             message: message.message
-        }).on('dismiss', () => {
+        });
+        notification.on('dismiss', () => {
             connection.invoke("DismissNotification", message.id).catch(function (err) {
                 return console.error(err);
             });
-        });;
+        });
+        notification.on('click', () => {
+            connection.invoke("DismissNotification", message.id).catch(function (err) {
+                return console.error(err);
+            });
+            window.location.href = '/Notifications/Index';
+        });
     } else if (type === 'success') {
         notyf.success(message.message);
     } else if (type === 'error') {

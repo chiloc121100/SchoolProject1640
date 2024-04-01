@@ -9,7 +9,11 @@
     {
         var currentUser = await UserManager.GetUserAsync(User);
 
-
+        <li class="px-4">
+            <a class="nav-link btn btn-link text-dark" asp-controller="Notifications" asp-action="Index">
+                <i class="fa-regular fa-bell fa-2xl" style="color: #d47711;"></i>
+            </a>
+        </li>
 
         <li class="">
 

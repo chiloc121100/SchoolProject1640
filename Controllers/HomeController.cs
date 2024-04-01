@@ -62,7 +62,7 @@ namespace SchoolProject1640.Controllers
             if (HttpContext.Session.GetString("NewLogin") == "true")
             {
                 var notifications = _context.Notification
-                    .Where(noti => noti.UserID == author.Id)
+                    .Where(noti => noti.UserID == author.Id && noti.isRead == false)
                     .ToList();
 
                 HttpContext.Session.SetString("NewLogin", "false");

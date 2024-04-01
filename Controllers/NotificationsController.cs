@@ -28,8 +28,9 @@ namespace SchoolProject1640.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
               return _context.Notification != null ? 
-                          View(await _context.Notification.ToListAsync()) :
+                          View(await _context.Notification.Where(n => n.UserID == currentUser.Id).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Notification'  is null.");
         }
 

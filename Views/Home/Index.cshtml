@@ -300,15 +300,23 @@
 
             var notifications = @Html.Raw(Json.Serialize(ViewBag.notifications));
             notifications.forEach((noti) => {
-                if (noti.isRead == false)
-                notyf.open({
-                    type: 'info',
-                    message: noti.message
-                }).on('dismiss', ({ target, event }) => {
-                    connection.invoke("DismissNotification", noti.id).catch(function (err) {
-                        return console.error(err);
+                if (noti.isRead == false) {
+                    var notification = notyf.open({
+                        type: 'info',
+                        message: noti.message
                     });
-                });
+                    notification.on('dismiss', () => {
+                        connection.invoke("DismissNotification", noti.id).catch(function (err) {
+                            return console.error(err);
+                        });
+                    });
+                    notification.on('click', () => {
+                        window.location.href = '/Notifications/Index'
+                        connection.invoke("DismissNotification", noti.id).catch(function (err) {
+                            return console.error(err);
+                        });
+                    });
+                }
             })
         </script>
     }
