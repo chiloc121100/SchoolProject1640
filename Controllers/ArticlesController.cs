@@ -94,6 +94,8 @@ namespace SchoolProject1640.Controllers
             ViewBag.Article = article;
             ViewBag.User = currentUser.Id;
             ViewBag.Messages = messages;
+            var filename = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+            ViewBag.FileName = filename.FileName;
 
             return View();
         }
@@ -330,7 +332,7 @@ namespace SchoolProject1640.Controllers
                 System.IO.File.Delete(filePath);
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("IndexUser", "Contributions");
         }
 
 

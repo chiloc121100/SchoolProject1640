@@ -120,9 +120,12 @@
                                                         <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
                                                             <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
                                                         </a> |
-                                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">
-                                                            <i class="fa fa-trash text-red-500" aria-hidden="true"></i>
-                                                        </a>
+                                                        <form asp-controller="Articles" method="post" asp-action="Delete">
+                                                            <input type="hidden" name ="id" id ="id" value="@art.Id"/>
+                                                            <input type="submit" value="Delete" class="btn btn-danger" /> |
+                                                            <a asp-action="Index">Back to List</a>
+                                                        </form>
+   
                                                     </td>
                                                 </tr>
                                             }
