@@ -117,9 +117,12 @@
                                                         </form>
                                                     </td>
                                                     <td>
-                                                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
-                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
+                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                            <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                        </a> |
+                                                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">
+                                                            <i class="fa fa-trash text-red-500" aria-hidden="true"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             }
@@ -453,147 +456,112 @@
 
 @if (User.IsInRole("Coordinator"))
 {
-    <h1>Coordinator</h1>
+    
+    <div class="p-10 text-black sm:px-0">
     @foreach (var item in Model)
     {
+        
         @if (item.Faculty == getFacultyOfStudent)
         {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Id)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Faculty)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.AcademicYear)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.StartDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ClosureDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.FinalClosureDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreatedAt)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdatedAt)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Faculty)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AcademicYear)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ClosureDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedAt)
-
-                        <td>
-                            <form asp-action="Create" asp-controller="Articles" method="get">
-                                <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-link">Add article</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            @if (articles != null)
-            {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>State</th>
-                            <th>Dowload</th>
-                            <th>View</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    @foreach (var art in articles)
-                    {
-                        if (art.ContributionId == item.Id)
-                        {
-
-                            <tr>
-                                <td>@art.Title</td>
-                                <td>
-                                    @{
-                                        string stateText;
-                                        switch (art.State)
+                <div class="px-5 sm:px-0">
+                    <div class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                        <div class="flex items-center justify-between space-y-2">
+                            <div class="font-bold text-[20px]">
+                                @if (listNameFac != null)
+                                {
+                                    foreach (var tempName in listNameFac)
+                                    {
+                                        @if (tempName.Id == item.Faculty)
                                         {
-                                            case 0:
-                                                stateText = "Pending";
-                                                break;
-                                            case 1:
-                                                stateText = "Accepted";
-                                                break;
-                                            case 2:
-                                                stateText = "Rejected";
-                                                break;
-                                            default:
-                                                stateText = "Unknown";
-                                                break;
+                                            @tempName.Name
+                                            ;
                                         }
                                     }
-                                    @stateText
-                                </td>
-                                <td>
-                                    <!-- Form to download the file -->
-                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                        <input type="hidden" name="fileName" value="@art.FileName" />
-                                        <button type="submit">Download</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <!-- Form to view the content of the file -->
-                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                        <input type="hidden" name="fileName" value="@art.FileName" />
-                                        <button type="submit">View</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a>
-                                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                                </td>
-                            </tr>
+                                    //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
+                                }
+                            </div>
+                           
+                        </div>
 
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Deadline : @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </div>
+                        @if (articles != null)
+                        {
+                            <div class="py-3">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="w-full">
+                                            <th class="w-[30%] text-left">Title</th>
+                                            <th class="w-[20%] text-left">State</th>
+                                            <th class="w-[10%] text-left">View</th>
+                                            <th class="w-[10%] text-left">Action</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach (var art in articles)
+                                    {
+                                        if (art.ContributionId == item.Id)
+                                        {
+                                            
+                                                <tr>
+                                                    <td>@art.Title</td>
+                                                    <td>
+                                                        @{
+                                                            string stateText;
+                                                            string colorCode;
+                                                            switch (art.State)
+                                                            {
+                                                                case 0:
+                                                                    stateText = "Pending";
+                                                                    colorCode = "orange"; // You can change this to any color you want
+                                                                    break;
+                                                                case 1:
+                                                                    stateText = "Accepted";
+                                                                    colorCode = "green"; // You can change this to any color you want
+                                                                    break;
+                                                                case 2:
+                                                                    stateText = "Rejected";
+                                                                    colorCode = "red"; // You can change this to any color you want
+                                                                    break;
+                                                                default:
+                                                                    stateText = "Unknown";
+                                                                    colorCode = "black"; // You can change this to any color you want
+                                                                    break;
+                                                            }
+                                                        }
+                                                        <span style="color: @colorCode;">@stateText</span>
+                                                    </td>
+                                                    @*                                                     <td>
+                        <!-- Form to download the file -->
+                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                        <input type="hidden" name="fileName" value="@art.FileName" />
+                        <button type="submit">Download</button>
+                        </form>
+                        </td> *@
+                                                    <td>
+                                                        <!-- Form to view the content of the file -->
+                                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                                            <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                            <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                        </a> 
+                                                    </td>
+                                                </tr>
+                                            
+                                        }
+                                    }
+                                </table>
+
+                            </div>
                         }
-                    }
-                </table>
-            }
+                    </div>
+                </div>
         }
+       
     }
+        </div>
 }
