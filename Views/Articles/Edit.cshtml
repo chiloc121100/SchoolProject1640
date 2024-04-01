@@ -2,8 +2,9 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var timeEnd = ViewBag.MessErroClose;
+    var timeNow = ViewBag.DatetimeNow;
 }
-
 <div class="flex justify-center">
     <div class="w-[70%] text-center py-10 2xl:w-[85%] lg:w-[90%] sm:w-[100%] ">
         <div class="flex w-full">
@@ -17,7 +18,7 @@
                         </div>
                         <div class="flex items-center w-[75%] h-[650px] text-left py-10 2xl: lg: sm:py-3 sm:w-full">
 
-                            <form asp-action="Edit" enctype="multipart/form-data"
+                            <form id="editForm" asp-action="Edit" method="post" enctype="multipart/form-data"
                                   class="w-full flex flex-col items-center space-y-4">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="Id" />
@@ -36,7 +37,7 @@
                                            class="text-black font-medium text-[18px]">File</label>
 
                                     <div class="flex items-center justify-end">
-                                        <input type="file" name="files" multiple accept=".pdf" class="bg-[#B0B0B0] w-[600px] rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.50rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-[#FD7401] focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
+                                        <input asp-for="FileName" value="default_filename.pdf" id="fileInput" type="file" name="files" multiple accept=".pdf" class="bg-[#B0B0B0] w-[600px] rounded-lg border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.50rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-[#FD7401] focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
                                         <div class="absolute w-[40px] h-[40px] flex items-center justify-center rounded-lg">
                                             <Icon class="w-7 h-7" name="bxs:file" />
                                         </div>
@@ -82,3 +83,13 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.getElementById("editForm").addEventListener("submit", function (event) {
+        var timeEnd = new Date('@timeEnd');
+        var timeNow = new Date('@timeNow');
+        if (timeEnd < timeNow) {
+            event.preventDefault(); // Prevent form submission
+            alert("The time to submit the article has ended.");
+        }
+    });
+</script>

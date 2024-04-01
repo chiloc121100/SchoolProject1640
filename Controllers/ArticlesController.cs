@@ -106,9 +106,9 @@ namespace SchoolProject1640.Controllers
             ViewBag.ContributionId = id;
             var checkCloseContri = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (checkCloseContri != null && checkCloseContri.FinalClosureDate < DateTime.Now)
+            if (checkCloseContri != null && checkCloseContri.ClosureDate < DateTime.Now)
             {
-                ViewBag.MessErroClose = checkCloseContri.FinalClosureDate;
+                ViewBag.MessErroClose = checkCloseContri.ClosureDate;
                 ViewBag.DatetimeNow = DateTime.Now;
             }
             else
@@ -180,12 +180,30 @@ namespace SchoolProject1640.Controllers
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
+           
+
             if (id == null || _context.Article == null)
             {
                 return NotFound();
             }
 
             var article = await _context.Article.FindAsync(id);
+            if (article != null)
+            {
+                var checkCloseContri = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == article.ContributionId);
+
+
+                if (checkCloseContri != null && checkCloseContri.ClosureDate < DateTime.Now)
+                {
+                    ViewBag.MessErroClose = checkCloseContri.FinalClosureDate;
+                    ViewBag.DatetimeNow = DateTime.Now;
+                }
+                else
+                {
+                    ViewBag.MessErroClose = DateTime.Now;
+                    ViewBag.DatetimeNow = DateTime.Now;
+                }
+            }
             if (article == null)
             {
                 return NotFound();
