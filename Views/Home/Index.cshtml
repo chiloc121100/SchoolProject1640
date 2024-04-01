@@ -15,7 +15,7 @@
 
 
 @* STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT *@
-@if (User.IsInRole("Student") || User.IsInRole("Coordinator") || User.IsInRole("Guest"))
+@if (User.IsInRole("Student") || User.IsInRole("Guest"))
 {
     <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
         @foreach (var item in Model)
@@ -320,4 +320,10 @@
             })
         </script>
     }
+}
+
+
+@if (User.IsInRole("Coordinator"))
+{
+    
 }

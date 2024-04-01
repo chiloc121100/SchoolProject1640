@@ -5,6 +5,7 @@
         .Replace("'", "\\'");
 
     var articleId = ViewBag.Article.Article.Id;
+    var idArticle = ViewBag.FileName;
 }
 @if (User.IsInRole("Student") )
 {
@@ -108,9 +109,10 @@
                         <div class="hidden sm:block">
                             <div class="text-[50px] mb-10 font-bold">Mark</div>
                             <div class="flex items-center justify-center">
-                                
-                                <form asp-action="" asp-route-id="" method="post">
-                                    <button class="bg-[#F0D1C4] text-[#E65F2B] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">View</button>
+
+                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                    <input type="hidden" name="fileName" value="@idArticle" />
+                                    <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
                                 </form>
                                 <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
                                     <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
@@ -174,8 +176,9 @@
                             <div class="w-[30%] sm:hidden">
                                 <div class="text-[50px] mb-10 font-bold">Update</div>
                                 <div class="flex items-center justify-center">
-                                    <form asp-action="" asp-route-id="" method="post">
-                                        <button class="bg-[#F0D1C4] text-[#E65F2B] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">View</button>
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@idArticle" />
+                                        <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
                                     </form>
                                     <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
                                         <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
