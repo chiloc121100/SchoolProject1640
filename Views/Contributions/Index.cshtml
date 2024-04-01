@@ -86,9 +86,9 @@
                                     <a href="${updateUrl}" class="text-decoration-none">
                                         <button type="button" class="btn btn-primary py-2">Update</button>
                                     </a>
-                                    <form id="deleteForm" action="/Admins/Delete" method="post">
+                                                                    <form id="deleteForm" action="/Contributions/DeleteConfirmed/id=${contribution.contribution.id}" method="post">
                                         <input type="hidden" id="id" name="id" value="${contribution.contribution.id}">
-                                        <button type="submit" class="btn btn-danger py-2" onclick="return confirm('Are you sure you want to delete ${contribution.contribution.title} account?')">Delete</button>
+                                        <button type="submit" class="btn btn-danger py-2" onclick="return confirm('Are you sure you want to delete ${contribution.contribution.title} contribution?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>`;

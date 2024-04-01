@@ -204,13 +204,13 @@ namespace SchoolProject1640.Controllers
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Update(int id, [Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate")] Contribution contribution)
         {
-            var contribution = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == id);
-            if(contribution == null)
+            if (id != contribution.Id)
             {
                 return NotFound();
             }
+
             if (ModelState.IsValid)
             {
                 try
@@ -218,6 +218,7 @@ namespace SchoolProject1640.Controllers
                     contribution.UpdatedAt = DateTime.Now;
                     _context.Update(contribution);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -230,13 +231,14 @@ namespace SchoolProject1640.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(contribution);
         }
 
+
         // GET: Contributions/Delete/5
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contribution == null)
@@ -255,9 +257,8 @@ namespace SchoolProject1640.Controllers
         }
 
         // POST: Contributions/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Contribution == null)
