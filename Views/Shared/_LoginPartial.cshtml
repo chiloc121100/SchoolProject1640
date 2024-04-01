@@ -20,7 +20,7 @@
             <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3" asp-action="Index" asp-controller="Users" title="Manage">
                 @if (@currentUser != null)
                 {
-                    <img width="50px" height="50px" class="rounded-2xl" src="/imageUser/@currentUser.Image" />
+                    <img width="50px" height="50px" class="rounded-full" src="/imageUser/@currentUser.Image" />
                 }
                 else
                 {
