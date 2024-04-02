@@ -173,7 +173,10 @@
                                     <option value="">Select a role</option>
                                     @foreach (var Role in Model.Roles)
                                     {
-                                        <option value="@Role.Id">@Role.Name</option>
+                                        @if (Role.Name != "Administrator")
+                                        {
+                                            <option value="@Role.Id">@Role.Name</option>
+                                        }
                                     }
                                 </select>
                                 <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
@@ -195,7 +198,14 @@
                                     <option value="">Select a faculty</option>
                                     @foreach (var faculty in Model.Faculties)
                                     {
-                                        <option value="@faculty.Id">@faculty.Name</option>
+                                        if (faculty.Name != "Admin" && faculty.Name != "Manager")
+                                        {
+                                            <option value="@faculty.Id">@faculty.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@faculty.Id" style="display: none;">@faculty.Name</option>
+                                        }
                                     }
                                 </select>
                                 <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
