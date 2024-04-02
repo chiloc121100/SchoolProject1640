@@ -14,11 +14,18 @@
             <div class="flex w-full">
                 <div class="w-full text-black space-y-5">
                     <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
-                        <div class="hidden sm:block">
+                        <div class="w-full hidden sm:block">
                             <div class="text-[50px] mb-10 font-bold">Update</div>
-                            <a class="bg-[#FD7401] px-7 py-2 text-xl mb-10 rounded-2xl" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
-                                Edit
-                            </a>
+
+                            <div class="w-full flex justify-center items-center space-x-3">
+                                <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                    <input type="hidden" name="fileName" value="@idArticle" />
+                                    <button type="submit" class="text-[#E65F2B]">View</button>
+                                </form>
+                                <a class="bg-[#CBDAC4] px-7 py-2 text-xl mb-10 rounded-2xl text-[#1A932E]" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
+                                    Edit
+                                </a>
+                            </div>
                         </div>
                         <div class="w-full h-[650px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
                             <div class="w-[70%] h-[650px] text-left bg-[#474341] rounded-l-xl px-6 py-8 sm:rounded-lg sm:w-[100%] sm:h-[680px]">
@@ -73,9 +80,15 @@
                             </div>
                             <div class="w-[30%] sm:hidden">
                                 <div class="text-[50px] mb-10 font-bold">Update</div>
-                                <a class="bg-[#FD7401] px-7 py-2 text-xl mt-10 rounded-2xl" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
-                                    Edit
-                                </a>
+                                <div class="w-full flex justify-center items-center space-x-3">
+                                    <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@idArticle" />
+                                        <button type="submit" class="text-[#E65F2B]">View</button>
+                                    </form>
+                                    <a class="bg-[#CBDAC4] px-7 py-2 text-xl mb-10 rounded-2xl text-[#1A932E]" asp-controller="Articles" asp-action="Edit" asp-route-id="@ViewBag.Article.Article.Id">
+                                        Edit
+                                    </a>
+                                </div>
                             </div>
 
 
@@ -83,11 +96,37 @@
 
                         </div>
 
-                        <div class="w-full h-[100px] bg-[#F0D1C4] flex items-center justify-center">
-                            <div class=" ">
-                                <div class="text-[50px] font-bold text-[#E65F2B]">
-                                    Pending
-                                </div>
+                        <div>
+                            @{
+                                string stateText;
+                                string colorCode;
+                                string bgCode;
+                                switch (ViewBag.Article.Article.State)
+                                {
+                                    case 0:
+                                        stateText = "Pending";
+                                        colorCode = "#E65F2B";
+                                        bgCode = "#F0D1C4";// You can change this to any color you want
+                                        break;
+                                    case 1:
+                                        stateText = "Accepted";
+                                        colorCode = "#1A932E";
+                                        bgCode = "#CBDAC4";// You can change this to any color you want
+                                        break;
+                                    case 2:
+                                        stateText = "Rejected";
+                                        colorCode = "#EE201C";
+                                        bgCode = "#F1C6C1";// You can change this to any color you want
+                                        break;
+                                    default:
+                                        stateText = "Unknown";
+                                        colorCode = "black";
+                                        bgCode = "#";// You can change this to any color you want
+                                        break;
+                                }
+                            }
+                            <div class="w-full h-[100px] flex bg-[@bgCode] items-center justify-center">
+                                <span style="color: @colorCode;" class="text-[50px] font-bold">@stateText</span>
                             </div>
                         </div>
                     </div>
@@ -108,11 +147,11 @@
                     <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
                         <div class="hidden sm:block">
                             <div class="text-[50px] mb-10 font-bold">Mark</div>
-                            <div class="flex items-center justify-center">
+                            <div class="flex items-center justify-center space-x-3">
 
-                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
                                     <input type="hidden" name="fileName" value="@idArticle" />
-                                    <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                    <button type="submit" class="text-[#E65F2B]">View</button>
                                 </form>
                                 <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
                                     <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
@@ -175,10 +214,10 @@
                             </div>
                             <div class="w-[30%] sm:hidden">
                                 <div class="text-[50px] mb-10 font-bold">Update</div>
-                                <div class="flex items-center justify-center">
-                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                <div class="flex flex-col items-center justify-center space-x-3 ">
+                                    <form class="bg-[#F0D1C4] px-7 py-2 text-xl mb-10 rounded-2xl " asp-action="ViewFile" asp-controller="Articles" method="post">
                                         <input type="hidden" name="fileName" value="@idArticle" />
-                                        <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                        <button type="submit" class="text-[#E65F2B]">View</button>
                                     </form>
                                     <form asp-action="AcceptArt" asp-route-id="@ViewBag.Article.Article.Id" method="post">
                                         <button class="bg-[#CBDAC4] text-[#1A932E] px-7 py-2 text-xl mb-10 rounded-2xl" type="submit">Accept</button>
@@ -204,7 +243,7 @@
                                         case 0:
                                             stateText = "Pending";
                                             colorCode = "#E65F2B";
-                                            bgCode = "#";// You can change this to any color you want
+                                    bgCode = "#F0D1C4";// You can change this to any color you want
                                             break;
                                         case 1:
                                             stateText = "Accepted";

@@ -15,7 +15,7 @@
 
 
 @* STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT *@
-@if (User.IsInRole("Student") || User.IsInRole("Guest"))
+@if (User.IsInRole("Student") || User.IsInRole("Guest") || User.IsInRole("Coordinator"))
 {
     <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
         @foreach (var item in Model)
@@ -117,169 +117,217 @@
 
 }
 
-@if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+@if (User.IsInRole("Administrator") )
 {
-    <h1>Administrator</h1>
-    @foreach (var item in Model)
-    {
+    <div class="px-16 py-8 w-full h-[900px] flex text-black  sm:px-1">
+        
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 ">
+            
+            <div class="w-full h-[90%] space-y-10 ">
+                <div class="px-5 py-5 w-full h-[200px] grid grid-cols-4 text-black  lg:grid-cols-2 lg:h-[400px] gap-4 ">
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#D398E7] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="mdi:file-outline" />
+                        </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Id)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Title)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Faculty)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AcademicYear)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StartDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ClosureDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FinalClosureDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreatedAt)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UpdatedAt)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Faculty)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AcademicYear)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ClosureDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FinalClosureDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedAt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UpdatedAt)
-
-                    <td>
-                        <form asp-action="Create" asp-controller="Articles" method="get">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-link">Add article</button>
-                        </form>
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            }
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        @if (articles != null)
-        {
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>State</th>
-                        <th>Author</th>
-                        <th>Dowload</th>
-                        <th>View</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                @foreach (var art in articles)
-                {
-                    if (art.ContributionId == item.Id)
-                    {
-
-                        <tr>
-                            <td>@art.Title</td>
-                            <td>
-                                @{
-                                    string stateText;
-                                    switch (art.State)
-                                    {
-                                        case 0:
-                                            stateText = "Pending";
-                                            break;
-                                        case 1:
-                                            stateText = "Accepted";
-                                            break;
-                                        case 2:
-                                            stateText = "Rejected";
-                                            break;
-                                        default:
-                                            stateText = "Unknown";
-                                            break;
-                                    }
-                                }
-                                @stateText
-                            </td>
-                            <td>
-                                @foreach (var name in listNameUser)
-                                {
-                                    @if (name.Id == art.AccountId)
-                                    {
-                                        @name.Email
-                                    }
-                                }
-
-
-                            </td>
-                            <td>
-                                <!-- Form to download the file -->
-                                <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                    <button type="submit">Download</button>
-                                </form>
-                            </td>
-                            <td>
-                                <!-- Form to view the content of the file -->
-                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                    <button type="submit">View</button>
-                                </form>
-                            </td>
-                            <td>
-                                <a asp-controller="Articles" asp-action="Edit" asp-route-id="@art.Id">Edit</a> |
-                                <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">Details</a> |
-                                <a asp-controller="Articles" asp-action="Delete" asp-route-id="@art.Id">Delete</a>
-                            </td>
-                        </tr>
-
-                    }
-                }
-            </table>
-        }
-
-    }
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total articles
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#E89271] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="ph:bag-bold" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Facuties
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#70A1E5] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Student
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                    <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
+                        <div class="bg-[#70A1E5] rounded-full w-14 h-14 flex items-center justify-center">
+                            <Icon class="w-10 h-10" name="icon-park-outline:peoples" />
+                        </div>
+                        <div class="text-[#797979] font-medium text-[18px]">
+                            Total Student
+                        </div>
+                        <div class="text-[40px] font-bold">500</div>
+                    </div>
+                </div>
+                <div class="px-5 w-full  flex space-x-5 lg:flex-col lg:space-y-5 lg:space-x-0">
+                    <div class="bg-[#F2EAE5] w-[45%] h-[400px] p-5 rounded-xl space-y-4 text-center lg:w-[100%] ">
+                        <div class="font-bold text-[20px] text-center">
+                            Bảng Xếp Hạng Bé Khỏe Bé Ngoan
+                        </div>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="w-full">
+                                    <th class="w-[20%] text-center">Top</th>
+                                    <th class="w-[35%] text-center">Name Author</th>
+                                    <th class="w-[35%] text-center">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr >
+                                    <td>{{ key + 1 }}</td>
+                                    <td>{{ a.nameAuthor }}</td>
+                                    <td>{{ a.email }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                         class="bg-[#F2EAE5] w-[45%] h-[400px] p-5 rounded-xl space-y-4 text-center lg:w-[100%]  ">
+                        <div class="font-bold text-[20px] text-center">
+                            Bảng Xếp Hạng Giáo Viên Chăm Ngoan
+                        </div>
+                        <table class="w-full">
+                            <thead>
+                                <tr class="w-full">
+                                    <th class="w-[30%] text-center">Top</th>
+                                    <th class="w-[35%] text-center">Name Author</th>
+                                    <th class="w-[35%] text-center">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(a, key) in x.datas.slice(0, 10)">
+                                    <td>{{ key + 1 }}</td>
+                                    <td>{{ a.nameAuthor }}</td>
+                                    <td>{{ a.email }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
+
+
+
+
+@if (User.IsInRole("Manager"))
+{
+    <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
+        @foreach (var item in Model)
+        {
+            
+                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5 ">
+                    <div class="flex justify-between items-center">
+                        <div class="text-2xl font-bold px-3">
+                            @foreach (var name in listNameFacuties)
+                            {
+                                @if (@name.Id == item.Faculty)
+                                {
+                                    @name.Name
+                                }
+                            }
+                            - Top
+                        </div>
+                        <div class="text-xl px-3 text-[#F20000]">
+                            <a>
+                                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                            </a>
+                        </div>
+
+                    </div>
+                    @if (articles != null)
+                    {
+                        <div class="px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <table class="w-full ">
+                                <thead>
+                                    <tr class="w-full">
+                                        <th class="w-[20%] text-left">Title</th>
+                                        <th class="w-[20%] text-left">Author</th>
+                                        <th class="w-[20%] text-left">State</th>
+                                        <th class="w-[20%] text-left">Dowload</th>
+                                        <th class="w-[10%] text-left">View</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var art in articles)
+                                {
+                                    if (art.ContributionId == item.Id)
+                                    {
+                                        <tr>
+                                            <td>@art.Title</td>
+                                            <td>
+                                                @foreach (var name in listNameUser)
+                                                {
+                                                    @if (name.Id == art.AccountId)
+                                                    {
+                                                        @name.Email
+                                                    }
+                                                }
+
+
+                                            </td>
+                                            <td>
+                                                @{
+                                                    string stateText;
+                                                    switch (art.State)
+                                                    {
+                                                        case 0:
+                                                            stateText = "Pending";
+                                                            break;
+                                                        case 1:
+                                                            stateText = "Accepted";
+                                                            break;
+                                                        case 2:
+                                                            stateText = "Rejected";
+                                                            break;
+                                                        default:
+                                                            stateText = "Unknown";
+                                                            break;
+                                                    }
+                                                }
+                                                @stateText
+                                            </td>
+                                        <td>
+                                            <!-- Form to download the file -->
+                                            <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                                <input type="hidden" name="fileName" value="@art.FileName" />
+                                                <button type="submit">
+                                                    <i class="fa fa-download text-[#F20000]" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+
+                                        <td>
+                                                <!-- Form to view the content of the file -->
+                                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                    <input type="hidden" name="fileName" value="@art.FileName" />
+                                                    <button type="submit">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </form>
+                                        </td>
+
+                                        </tr>
+
+                                    }
+                                }
+                            </table>
+                        </div>
+                    }
+                </div>
+            
+        }
+    </div>
+}
+
+
 
 @if (ViewBag.notifications != null)
 {
@@ -320,10 +368,4 @@
             })
         </script>
     }
-}
-
-
-@if (User.IsInRole("Coordinator"))
-{
-    
 }

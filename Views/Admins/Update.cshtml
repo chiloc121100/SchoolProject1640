@@ -40,95 +40,159 @@
     }
 
 </style>
-<h1>Update information of student</h1>
-
 <div class="row">
-    <div class="col-md-4">
-        @foreach (var thisUser in listUserWithRoleAndFaculty)
+     @foreach (var thisUser in listUserWithRoleAndFaculty)
         {
-            <form asp-action="Update" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" value="@thisUser.User.Id" />
+    <div class="px-16 py-8 w-full h-[900px] flex text-black 2xl:px-5 lg:px-5 sm:px-1">
+        <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 sm:w-[100%] sm:px-1">
+            <div class="w-full h-[90%]">
+                <div class="w-full flex items-center justify-center py-10 ">
+                        <form asp-action="Update" method="post" enctype="multipart/form-data" class="flex flex-col items-center justify-center space-y-7 bg-[#F2EAE5] p-10 rounded-2xl">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" value="@thisUser.User.Id" />
 
-                <div class="avatar-container">
-                    <input type="file" name="files" id="Image" onchange="loadAvatar(this)" class="form-control visually-hidden" aria-required="true" />
-                    <label for="Image" class="avatar-label">
-                        <img id="avatar-preview" src="/imageUser/@thisUser.User.Image" alt="Avatar">
-                    </label>
+                        @* IMAGE *@
+
+                            <div class="avatar-container">
+                                <input type="file" name="files" id="Image" onchange="loadAvatar(this)" class="form-control visually-hidden" aria-required="true" />
+                                <label for="Image" class="avatar-label">
+                                    <img id="avatar-preview" src="/imageUser/@thisUser.User.Image" alt="Avatar">
+                                </label>
+                            </div>
+                            <!--add event change image when selected new-->
+                            <script>
+                                function loadAvatar(input) {
+                                    if (input.files && input.files[0]) {
+                                        var reader = new FileReader();
+                                        reader.onload = function (e) {
+                                            $('#avatar-preview').attr('src', e.target.result);
+                                        };
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                }
+                            </script>
+
+                        @* FIRST NAME *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label value="@thisUser.User.FirstName" class="">First Name</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                    <input id="firstname" name="firstname" value="@thisUser.User.FirstName" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                        />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                            </div>
+                        </div>
+                           
+
+                        @* LAST NAME *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                    <label value="@thisUser.User.LastName">Last Name</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                    <input id="lastname" name="lastname" value="@thisUser.User.LastName" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        @* EMAIL *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                    <label value="@thisUser.User.Email" class="label">Email</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                    <input class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black" id="email" name="email" value="@thisUser.User.Email" />
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                </div>
+                               
+                            </div>
+                        </div>
+
+
+                        @* ROLE *@
+                        <div class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label class="label">Role</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                    <select id="role" name="role" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                        v-model="form.roleId">
+                                    <option value="">Select a role</option>
+                                        @foreach (var role in listRole)
+                                        {
+                                            if (role.Name == thisUser.RoleName)
+                                            {
+                                                <option value="@role.Id" selected>@role.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@role.Id">@role.Name</option>
+                                            }
+                                        }
+                                </select>
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                            
+
+
+                        @* FACULTY *@
+                        <div id="facultyDiv" class="text-[16px] space-y-1 sm:text-[14px]">
+                            <div class="text-[#828181]">
+                                <label class="label">Faculty</label>
+                            </div>
+                            <div class="flex items-center justify-end">
+                                    <select id="faculty" name="faculty" class="h-[40px] w-[380px] bg-[#F1F3F6] px-5 rounded-lg sm:w-[280px] text-black"
+                                        v-model="form.facultyId">
+                                    <option value="">Select a faculty</option>
+                                        @foreach (var faculty in listFaculty)
+                                        {
+                                            if (faculty.Name == thisUser.FacultyName)
+                                            {
+                                                <option value="@faculty.Id" selected>@faculty.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@faculty.Id">@faculty.Name</option>
+                                            }
+                                        }
+                                </select>
+                                <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">
+                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                            
+
+
+                            <button id="registerSubmit" type="submit" value="Save" class="space-x-2 pt-3" type="submit">
+                            <div class="w-[380px] text-[#FD7401] border-2 border-[#FD7401] text-[20px] font-bold rounded-[10px] h-[45px] flex items-center justify-center sm:w-[280px]">
+                                Update Users
+                            </div>
+                        </button>
+                    </form>
                 </div>
-                <!--add event change image when selected new-->
-                <script>
-                    function loadAvatar(input) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                $('#avatar-preview').attr('src', e.target.result);
-                            };
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
-                </script>
-
-
-                <div class="form-group">
-                    <label value ="@thisUser.User.Email" class="control-label">Email</label>
-                    <input id="email" name="email" value ="@thisUser.User.Email" class="form-control" readonly/>
-                </div>
-                <div class="form-group">
-                    <label value="@thisUser.User.FirstName" class="control-label">First Name</label>
-                    <input id="firstname" name="firstname" value="@thisUser.User.FirstName" class="form-control" />
-
-                </div>
-                <div class="form-group">
-                    <label value="@thisUser.User.LastName" class="control-label">Last Name</label>
-                    <input id="lastname" name="lastname" value="@thisUser.User.LastName" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Faculty</label>
-                    <select id="faculty" name="faculty" class="form-control">
-                        @foreach (var faculty in listFaculty)
-                        {
-                            if (faculty.Name == thisUser.FacultyName)
-                            {
-                                <option value="@faculty.Id" selected>@faculty.Name</option>
-                            }
-                            else
-                            {
-                                <option value="@faculty.Id">@faculty.Name</option>
-                            }
-                        }
-                    </select>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label class="control-label">Role</label>
-                    <select id="role" name="role" class="form-control">
-                        @foreach (var role in listRole)
-                        {
-                            if (role.Name == thisUser.RoleName)
-                            {
-                                <option value="@role.Id" selected>@role.Name</option>
-                            }
-                            else
-                            {
-                                <option value="@role.Id">@role.Name</option>
-                            }
-                        }
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-
-
-            </form>
-        }
+            </div>
+        </div>
     </div>
+    }
+
 </div>
 
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
 
