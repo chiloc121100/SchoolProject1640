@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
+using Novacode;
 
 namespace SchoolProject1640.Controllers
 {
@@ -369,6 +371,34 @@ namespace SchoolProject1640.Controllers
         {
             return (_context.Article?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        [HttpPost]
+        public IActionResult DownloadMultipleFiles(List<string> fileNames)
+        {
+            var memoryStream = new MemoryStream();
+            using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+            {
+                foreach (var fileName in fileNames)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+                    if (!System.IO.File.Exists(filePath))
+                    {
+                        return NotFound();
+                    }
+
+                    var entry = zipArchive.CreateEntry(fileName);
+                    using (var entryStream = entry.Open())
+                    using (var fileStream = new FileStream(filePath, FileMode.Open))
+                    {
+                        fileStream.CopyTo(entryStream);
+                    }
+                }
+            }
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return File(memoryStream, "application/zip", "multiple_files.zip");
+        }
+
+
         public IActionResult DownloadFile(string fileName)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);

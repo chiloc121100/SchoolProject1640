@@ -145,35 +145,29 @@
     
     </div>
 }
-
 @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
 {
-     <div class="p-10 h-[400px] text-black sm:px-0 space-y-5">
-    @foreach (var item in Model)
-    {
-
+    <div class="p-10 h-[400px] text-black sm:px-0 space-y-5">
+        @foreach (var item in Model)
+        {
             <div class="px-5 h-[400px] sm:px-0">
-                <div class=" h-[400px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                <div class="h-[400px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
                     <div class="flex items-center justify-between space-y-2">
                         <div class="font-bold text-[20px]">
                             @if (listNameFac != null)
                             {
                                 foreach (var tempName in listNameFac)
                                 {
-                                    @if (tempName.Id == item.Faculty)
+                                    if (tempName.Id == item.Faculty)
                                     {
                                         @tempName.Name
-                                        ;
                                     }
                                 }
-                                //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
                             }
                         </div>
-                        
                     </div>
-
                     <div class="text-[#494949] text-[15px] -mt-2 mb-2 py-1">
-                        Deadline : @Html.DisplayFor(modelItem => item.ClosureDate)
+                        Deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
                     </div>
                     @if (articles != null)
                     {
@@ -181,6 +175,7 @@
                             <table class="w-full">
                                 <thead>
                                     <tr class="w-full">
+                                        <th class="w-[5%] text-left">Select</th>
                                         <th class="w-[30%] text-left">Title</th>
                                         <th class="w-[20%] text-left">State</th>
                                         <th class="w-[20%] text-left">Public for guest</th>
@@ -189,12 +184,15 @@
                                         <th class="w-[10%] text-left">Action</th>
                                     </tr>
                                 </thead>
-                                @foreach (var art in articles)
-                                {
-                                    if (art.ContributionId == item.Id)
+                                <tbody>
+                                    @foreach (var art in articles)
                                     {
-                                        
+                                        if (art.ContributionId == item.Id)
+                                        {
                                             <tr>
+                                                <td>
+                                                    <input type="checkbox" name="selectedFiles" value="@art.FileName" />
+                                                </td>
                                                 <td>@art.Title</td>
                                                 <td>
                                                     @{
@@ -222,7 +220,7 @@
                                                     }
                                                     <span style="color: @colorCode;">@stateText</span>
                                                 </td>
-                                            <td>@art.isPublicForGuest</td>
+                                                <td>@art.isPublicForGuest</td>
                                                 <td>
                                                     <!-- Form to view the content of the file -->
                                                     <form asp-action="ViewFile" asp-controller="Articles" method="post">
@@ -240,30 +238,52 @@
                                                     </form>
                                                 </td>
                                                 <td class="">
-                                                    
                                                     <form asp-controller="Articles" method="post" asp-action="Delete">
                                                         <input type="hidden" name="id" id="id" value="@art.Id" />
                                                         <button type="submit" value="Delete" class="btn btn-danger text-[#F20000]">
-                                                        <i class="fa fa-trash text-center" aria-hidden="true"></i>
-
+                                                            <i class="fa fa-trash text-center" aria-hidden="true"></i>
                                                         </button>
                                                     </form>
-
                                                 </td>
-                                           </tr>
-                                        
+                                            </tr>
+                                        }
                                     }
-                                }
+                                </tbody>
                             </table>
-
                         </div>
                     }
                 </div>
             </div>
-
-    }
+        }
+        <button id="downloadButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Download Selected Files</button>
     </div>
 }
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#downloadButton').click(function () {
+                var selectedFiles = [];
+                $('input[name="selectedFiles"]:checked').each(function () {
+                    selectedFiles.push($(this).val());
+                });
+
+                // Construct the form to submit the selected files
+                var form = $('<form action="@Url.Action("DownloadMultipleFiles", "Articles")" method="post"></form>');
+                $.each(selectedFiles, function (index, value) {
+                    form.append($('<input type="hidden" name="fileNames" value="' + value + '" />'));
+                });
+
+                // Submit the form to trigger the file download
+                form.appendTo('body').submit().remove();
+            });
+        });
+
+    </script>
+}
+
+
+
 
 @if (User.IsInRole("Coordinator"))
 {
