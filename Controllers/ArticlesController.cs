@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
-using Novacode;
+
 
 namespace SchoolProject1640.Controllers
 {
