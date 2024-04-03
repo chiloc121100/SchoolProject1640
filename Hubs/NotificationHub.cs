@@ -23,7 +23,7 @@ namespace SchoolProject1640.Hubs
         public override async Task OnConnectedAsync()
         {
             var user = await _userManager.GetUserAsync(Context.User);
-            if (user.Id != null)
+            if (user != null && user.Id != null)
             {
                 // Add the connection to a group based on the user's ID
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{user.Id}");
@@ -35,7 +35,7 @@ namespace SchoolProject1640.Hubs
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var user = await _userManager.GetUserAsync(Context.User);
-            if (user.Id != null)
+            if (user != null && user.Id != null)
             {
                 // Remove the connection from the group based on the user's ID
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"user_{user.Id}");

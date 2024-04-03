@@ -173,10 +173,11 @@
                                     <option value="">Select a role</option>
                                     @foreach (var Role in Model.Roles)
                                     {
-                                        @if (Role.Name != "Administrator")
+ @*                                        @if (Role.Name != "Administrator")
                                         {
                                             <option value="@Role.Id">@Role.Name</option>
-                                        }
+                                        } *@
+                                        <option value="@Role.Id">@Role.Name</option>
                                     }
                                 </select>
                                 <div class="absolute w-[40px] h-[40px] bg-[#FD7401] flex items-center justify-center rounded-lg">

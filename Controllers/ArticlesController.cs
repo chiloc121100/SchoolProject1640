@@ -212,6 +212,35 @@ namespace SchoolProject1640.Controllers
             }
             return View(article);
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePublicForGuest(int? id, bool isPublicForGuest)
+        {
+            if (id == null)
+            {
+                return BadRequest("Invalid article ID");
+            }
+
+            var tempArti = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (tempArti == null)
+            {
+                return NotFound();
+            }
+
+            tempArti.isPublicForGuest = isPublicForGuest; 
+
+            try
+            {
+                _context.Update(tempArti);
+                await _context.SaveChangesAsync();
+                return Ok(); 
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, "Internal server error"); 
+            }
+        }
+
 
         // POST: Articles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

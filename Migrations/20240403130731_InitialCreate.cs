@@ -19,13 +19,14 @@ namespace SchoolProject1640.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContributionId = table.Column<int>(type: "int", nullable: true),
                     AccountId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     State = table.Column<int>(type: "int", nullable: true),
+                    isPublicForGuest = table.Column<bool>(type: "bit", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -134,6 +135,23 @@ namespace SchoolProject1640.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ArtID = table.Column<int>(type: "int", nullable: true),
+                    Mess = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -278,12 +296,14 @@ namespace SchoolProject1640.Migrations
                 columns: new[] { "Id", "CreatedAt", "Description", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "1", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3060), "Faculty of Arts", "Arts", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3070) },
-                    { "2", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3072), "Faculty of Business", "Business", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3072) },
-                    { "3", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3074), "Faculty of Engineering", "Engineering", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3074) },
-                    { "4", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3076), "Faculty of Information Technology", "Information Technology", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3076) },
-                    { "5", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3078), "Faculty of Law", "Law", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3078) },
-                    { "6", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3079), "Faculty of Medicine", "Medicine", new DateTime(2024, 3, 26, 9, 48, 57, 590, DateTimeKind.Local).AddTicks(3080) }
+                    { "1", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7170), "Faculty of Arts", "Arts", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7180) },
+                    { "2", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7182), "Faculty of Business", "Business", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7183) },
+                    { "3", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7184), "Faculty of Engineering", "Engineering", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7184) },
+                    { "4", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7186), "Faculty of Information Technology", "Information Technology", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7186) },
+                    { "5", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7187), "Faculty of Law", "Law", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7188) },
+                    { "6", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7189), "Faculty of Medicine", "Medicine", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7189) },
+                    { "7", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7191), "Faculty of Admin", "Admin", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7191) },
+                    { "8", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7192), "Faculty of Manager", "Manager", new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7193) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -360,6 +380,9 @@ namespace SchoolProject1640.Migrations
 
             migrationBuilder.DropTable(
                 name: "Files");
+
+            migrationBuilder.DropTable(
+                name: "Message");
 
             migrationBuilder.DropTable(
                 name: "Notification");

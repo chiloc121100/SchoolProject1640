@@ -183,6 +183,7 @@
                                     <tr class="w-full">
                                         <th class="w-[30%] text-left">Title</th>
                                         <th class="w-[20%] text-left">State</th>
+                                        <th class="w-[20%] text-left">Public for guest</th>
                                         <th class="w-[10%] text-left">View</th>
                                         <th class="w-[10%] text-left">Download</th>
                                         <th class="w-[10%] text-left">Action</th>
@@ -221,7 +222,7 @@
                                                     }
                                                     <span style="color: @colorCode;">@stateText</span>
                                                 </td>
-                                              
+                                            <td>@art.isPublicForGuest</td>
                                                 <td>
                                                     <!-- Form to view the content of the file -->
                                                     <form asp-action="ViewFile" asp-controller="Articles" method="post">
@@ -304,6 +305,7 @@
                                         <tr class="w-full">
                                             <th class="w-[30%] text-left">Title</th>
                                             <th class="w-[20%] text-left">State</th>
+                                            <th class="w-[20%] text-left">Public for guest</th>
                                             <th class="w-[10%] text-left">View</th>
                                             <th class="w-[10%] text-left">Action</th>
                                         </tr>
@@ -341,6 +343,37 @@
                                                         }
                                                         <span style="color: @colorCode;">@stateText</span>
                                                     </td>
+                                                <td>
+                                                    <select id="isPublicForGuestSelect" onchange="updatePublicForGuest(@art.Id)">
+                                                        <option value="true" selected="@(art.isPublicForGuest ?? false ? "selected" : null)">true</option>
+                                                        <option value="false" selected="@(art.isPublicForGuest ?? false ? null : "selected")">false</option>
+                                                    </select>
+                                                </td>
+                                                <script>
+                                                    function updatePublicForGuest(id) {
+                                                        var selectedValue = document.getElementById("isPublicForGuestSelect").value;
+
+                                                        // Make AJAX request to call the UpdatePublicForGuest function
+                                                        fetch('@Url.Action("UpdatePublicForGuest", "YourControllerName")?id=' + id + '&isPublicForGuest=' + selectedValue, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            }
+                                                        })
+                                                            .then(response => {
+                                                                if (!response.ok) {
+                                                                    throw new Error('Network response was not ok');
+                                                                }
+                                                                // Handle successful response if needed
+                                                            })
+                                                            .catch(error => {
+                                                                console.error('There was a problem with the fetch operation:', error);
+                                                            });
+                                                    }
+                                                </script>
+
+
+
                                                     @*                                                     <td>
                         <!-- Form to download the file -->
                         <form asp-action="DownloadFile" asp-controller="Articles" method="post">

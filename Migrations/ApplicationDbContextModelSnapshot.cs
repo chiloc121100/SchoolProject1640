@@ -310,6 +310,7 @@ namespace SchoolProject1640.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FileName")
@@ -322,10 +323,14 @@ namespace SchoolProject1640.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool?>("isPublicForGuest")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -394,66 +399,66 @@ namespace SchoolProject1640.Migrations
                         new
                         {
                             Id = "1",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2409),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7170),
                             Description = "Faculty of Arts",
                             Name = "Arts",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2419)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7180)
                         },
                         new
                         {
                             Id = "2",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2421),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7182),
                             Description = "Faculty of Business",
                             Name = "Business",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2421)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7183)
                         },
                         new
                         {
                             Id = "3",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2423),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7184),
                             Description = "Faculty of Engineering",
                             Name = "Engineering",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2423)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7184)
                         },
                         new
                         {
                             Id = "4",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2424),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7186),
                             Description = "Faculty of Information Technology",
                             Name = "Information Technology",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2425)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7186)
                         },
                         new
                         {
                             Id = "5",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2426),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7187),
                             Description = "Faculty of Law",
                             Name = "Law",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2426)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7188)
                         },
                         new
                         {
                             Id = "6",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2427),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7189),
                             Description = "Faculty of Medicine",
                             Name = "Medicine",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2428)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7189)
                         },
                         new
                         {
                             Id = "7",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2429),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7191),
                             Description = "Faculty of Admin",
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2429)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7191)
                         },
                         new
                         {
                             Id = "8",
-                            CreatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2430),
+                            CreatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7192),
                             Description = "Faculty of Manager",
                             Name = "Manager",
-                            UpdatedAt = new DateTime(2024, 3, 30, 11, 15, 49, 268, DateTimeKind.Local).AddTicks(2431)
+                            UpdatedAt = new DateTime(2024, 4, 3, 20, 7, 31, 423, DateTimeKind.Local).AddTicks(7193)
                         });
                 });
 
