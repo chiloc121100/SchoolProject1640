@@ -184,6 +184,7 @@
                                         <th class="w-[30%] text-left">Title</th>
                                         <th class="w-[20%] text-left">State</th>
                                         <th class="w-[10%] text-left">View</th>
+                                        <th class="w-[10%] text-left">Download</th>
                                         <th class="w-[10%] text-left">Action</th>
                                     </tr>
                                 </thead>
@@ -226,6 +227,15 @@
                                                     <form asp-action="ViewFile" asp-controller="Articles" method="post">
                                                         <input type="hidden" name="fileName" value="@art.FileName" />
                                                         <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <!-- Form to download the file -->
+                                                    <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                                        <button type="submit">
+                                                            <i class="fa fa-download text-[#F20000]" aria-hidden="true"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                                 <td class="">

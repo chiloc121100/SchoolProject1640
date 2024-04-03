@@ -116,9 +116,13 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-
         public async Task OnGetAsync(string returnUrl = null)
         {
+            ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+            if (author == null)
+            {
+                return;
+            }
             Roles = await _context.Roles.ToListAsync();
             Faculties = await _context.Faculty.ToListAsync();
             ReturnUrl = returnUrl;
@@ -127,6 +131,11 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null, List<IFormFile> files = null)
         {
+            ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+            if (author == null)
+            {
+                return NotFound();
+            }
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

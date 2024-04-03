@@ -10,6 +10,7 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SchoolProject1640.Hubs;
+using System.Linq;
 
 namespace SchoolProject1640.Controllers
 {
@@ -28,14 +29,76 @@ namespace SchoolProject1640.Controllers
             _hubContext = hubContext;
             _environment = environment;
         }
+        [Authorize(Roles = "Administrator, Manager")]
+        public IActionResult IndexManager()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Administrator, Manager")]
+        public async Task<IActionResult> IndexManagerValue(string email)
+        {
+            if (!string.IsNullOrEmpty(email))
+            {
+                var listUserWithRoleAndFaculty = _context.User
+                    .Join(_context.UserRoles,
+                        user => user.Id,
+                        userRole => userRole.UserId,
+                        (user, userRole) => new { User = user, UserRole = userRole })
+                    .Join(_context.Roles,
+                        userRole => userRole.UserRole.RoleId,
+                        role => role.Id,
+                        (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                    .Join(_context.Faculty,
+                        userRole => userRole.User.FacultyId,
+                        faculty => faculty.Id,
+                        (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+                    .Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Student" && u.RoleName != "Guest" && u.User.Email.Contains(email))
+                    .OrderByDescending(u => u.User.Email)
+                    .Select(u => new
+                    {
+                        User = u.User,
+                        RoleName = u.RoleName,
+                        FacultyName = u.FacultyName
+                    })
+                    .ToList();
+                return Json(listUserWithRoleAndFaculty);
+            }
+            else
+            {
+                var listUserWithRoleAndFaculty = _context.User
+                     .Join(_context.UserRoles,
+                         user => user.Id,
+                         userRole => userRole.UserId,
+                         (user, userRole) => new { User = user, UserRole = userRole })
+                     .Join(_context.Roles,
+                         userRole => userRole.UserRole.RoleId,
+                         role => role.Id,
+                         (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                     .Join(_context.Faculty,
+                         userRole => userRole.User.FacultyId,
+                         faculty => faculty.Id,
+                         (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+                     .Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Student" && u.RoleName != "Guest")
+                     .OrderByDescending(u => u.User.Email)
+                     .Select(u => new
+                     {
+                         User = u.User,
+                         RoleName = u.RoleName,
+                         FacultyName = u.FacultyName
+                     })
+                     .ToList();
 
-        [Authorize(Roles = "Administrator")]
+                return Json(listUserWithRoleAndFaculty);
+            }
+        }
+
+        [Authorize(Roles = "Administrator, Manager")]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpGet]
         public IActionResult SearchAcount(string email)
         {
@@ -95,7 +158,7 @@ namespace SchoolProject1640.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpGet]
         public async Task<IActionResult> Update(string id)
         {
@@ -221,7 +284,7 @@ namespace SchoolProject1640.Controllers
             }
         }*/
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Manager")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Update(string id, string firstName, string email, string lastName, string role, string faculty, List<IFormFile> files)
@@ -234,7 +297,7 @@ namespace SchoolProject1640.Controllers
 
                 if (user == null)
                 {
-                    return NotFound();
+                    return NotFound();  
                 }
 
                 // Update user properties
@@ -317,7 +380,7 @@ namespace SchoolProject1640.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Manager")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

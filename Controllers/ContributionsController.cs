@@ -12,7 +12,8 @@ using SchoolProject1640.Data;
 using SchoolProject1640.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
-
+using Microsoft.AspNetCore.SignalR;
+using SchoolProject1640.Hubs;
 
 namespace SchoolProject1640.Controllers
 {
@@ -21,12 +22,14 @@ namespace SchoolProject1640.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public ContributionsController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public ContributionsController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
             _logger = logger;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
         // GET: Contributions
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
@@ -139,6 +142,15 @@ namespace SchoolProject1640.Controllers
                     notification.Message = $"{contribution.Title} has been created please join this.";
                     _context.Add(notification);
                     SendGmailAsync(author.Email, user.Email);
+
+                    // notification 
+                    var tempNoti = new SchoolProject1640.Models.Notification();
+                    tempNoti.Message = $"Admin {author.FirstName} {author.LastName} created a new contribution";
+                    tempNoti.UserID = user.Id;
+                    tempNoti.isRead = false;
+                    _context.Notification.Add(tempNoti);
+                     // Show notification to FE
+                    _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", tempNoti, "info");
                 }
                 _context.Add(contribution);
                 await _context.SaveChangesAsync();
@@ -217,6 +229,21 @@ namespace SchoolProject1640.Controllers
                 {
                     contribution.UpdatedAt = DateTime.Now;
                     _context.Update(contribution);
+
+                    ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+                    var listUserNotification = _context.User.Where(m => m.FacultyId == contribution.Faculty).ToList();
+                    foreach (var user in listUserNotification)
+                    {
+                        // notification 
+                        var tempNoti = new SchoolProject1640.Models.Notification();
+                        tempNoti.Message = $"Admin {author.FirstName} {author.LastName} updated contribution {contribution.Title}";
+                        tempNoti.UserID = user.Id;
+                        tempNoti.isRead = false;
+                        _context.Notification.Add(tempNoti);
+                        // Show notification to FE
+                        _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", tempNoti, "info");
+                    }
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
