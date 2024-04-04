@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
 using SchoolProject1640.Models;
+using Xceed.Words.NET;
 
 
 namespace SchoolProject1640.Controllers
@@ -417,8 +418,37 @@ namespace SchoolProject1640.Controllers
 
             return File(memory, "application/octet-stream", Path.GetFileName(filePath));
         }
+        //1
+        private void ConvertToPdf(string docxFilePath, string pdfFilePath)
+        {
+            // Load the document
+            Aspose.Words.Document doc = new Aspose.Words.Document(docxFilePath);
 
+            // Save the document in PDF format
+            doc.Save(pdfFilePath, Aspose.Words.SaveFormat.Pdf);
+        }
         public IActionResult ViewFile(string fileName)
+        {
+            var docxFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+            var pdfFilePath = Path.ChangeExtension(docxFilePath, "pdf"); // PDF file path
+
+            if (!System.IO.File.Exists(pdfFilePath))
+            {
+                // Convert .docx to PDF if the PDF doesn't exist
+                ConvertToPdf(docxFilePath, pdfFilePath);
+            }
+
+            if (!System.IO.File.Exists(pdfFilePath))
+            {
+                // If conversion fails, return not found
+                return NotFound();
+            }
+
+            // Return the PDF file
+            return File(System.IO.File.OpenRead(pdfFilePath), "application/pdf", null);
+        }
+        //2 readpdf file
+        /*public IActionResult ViewFile(string fileName)
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
 
@@ -427,7 +457,37 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
             return File(System.IO.File.OpenRead(filePath), "application/pdf", null);
+        }*/
+        // 3 user view docx
+        /*public string ReadDocxFile(string filePath)
+        {
+            string content = string.Empty;
+
+            // Load the document
+            using (DocX doc = DocX.Load(filePath))
+            {
+                // Extract text from the document
+                content = doc.Text;
+            }
+
+            return content;
         }
+        public IActionResult ViewFile(string fileName)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            string fileContent = ReadDocxFile(filePath);
+
+            // Pass the content to the view
+            ViewBag.FileContent = fileContent;
+
+            return View("ViewDocx");
+        }*/
         [HttpPost]
         public async Task<IActionResult> AcceptArt(int? id)
         {
