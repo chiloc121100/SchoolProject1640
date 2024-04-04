@@ -16,6 +16,7 @@ namespace SchoolProject1640.Models
         public int? ContributionId { get; set; } // Submission
         public string? AccountId { get; set; } // ten nguoi dung
         public int? State { get; set; } = 0;// 1 pending // 2 complete 3 4 ... 
+        public string? Image { get; set; }
         public bool? isPublicForGuest { get; set; } = false;// ten nguoi dung
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }

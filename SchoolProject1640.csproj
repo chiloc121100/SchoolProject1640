@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\imageArticle\" />
     <Folder Include="wwwroot\SubmitDocx\" />
   </ItemGroup>
 
