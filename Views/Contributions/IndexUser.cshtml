@@ -169,6 +169,16 @@
                     <div class="text-[#494949] text-[15px] -mt-2 mb-2 py-1">
                         Deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
                     </div>
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <label class="text-[#494949] text-[15px] py-1">
+                                <input type="checkbox" id="selectAllCheckbox" class="mr-2">
+                                Select All
+                            </label>
+                        </div>
+                        <button id="downloadButton" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">Download Selected Files</button>
+                    </div>
+
                     @if (articles != null)
                     {
                         <div class="py-3 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
@@ -255,13 +265,21 @@
                 </div>
             </div>
         }
-        <button id="downloadButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Download Selected Files</button>
+      
     </div>
 }
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            $('#selectAllCheckbox').click(function () {
+                $('input[name="selectedFiles"]').prop('checked', this.checked);
+            });
+
+            $('input[name="selectedFiles"]').click(function () {
+                $('#selectAllCheckbox').prop('checked', false);
+            });
+
             $('#downloadButton').click(function () {
                 var selectedFiles = [];
                 $('input[name="selectedFiles"]:checked').each(function () {
@@ -278,7 +296,6 @@
                 form.appendTo('body').submit().remove();
             });
         });
-
     </script>
 }
 
@@ -326,7 +343,8 @@
                                             <th class="w-[30%] text-left">Title</th>
                                             <th class="w-[20%] text-left">State</th>
                                             <th class="w-[20%] text-left">Public for guest</th>
-                                            <th class="w-[10%] text-left">View</th>
+                                            <th class="w-[10%] text-left">View Docx</th>
+                                            <th class="w-[10%] text-left">View Image</th>
                                             <th class="w-[10%] text-left">Action</th>
                                         </tr>
                                     </thead>
@@ -374,7 +392,7 @@
                                                         var selectedValue = document.getElementById("isPublicForGuestSelect").value;
 
                                                         // Make AJAX request to call the UpdatePublicForGuest function
-                                                        fetch('@Url.Action("UpdatePublicForGuest", "YourControllerName")?id=' + id + '&isPublicForGuest=' + selectedValue, {
+                                                        fetch('@Url.Action("UpdatePublicForGuest", "Articles")?id=' + id + '&isPublicForGuest=' + selectedValue, {
                                                             method: 'POST',
                                                             headers: {
                                                                 'Content-Type': 'application/json'
@@ -408,11 +426,15 @@
                                                             <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
                                                         </form>
                                                     </td>
-                                                    <td>
-                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
-                                                            <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
-                                                        </a> 
-                                                    </td>
+                                                <td>
+                                                    <img src="/imageArticle/@art.Image" />
+                                                </td>
+                                                <td>
+                                                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                        <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+
                                                 </tr>
                                             
                                         }

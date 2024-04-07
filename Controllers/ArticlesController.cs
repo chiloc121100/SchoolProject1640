@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Aspose.Words.Drawing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -127,36 +128,83 @@ namespace SchoolProject1640.Controllers
         // POST: Articles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /*  [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
+          [HttpPost]
+          public async Task<IActionResult> Create(Article article, int idContri, List<IFormFile> files)
+          {
+              ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+
+              if (files == null || files.Count == 0)
+              {
+                  // Handle this error
+                  ViewBag.MessErro = "You need to choose at least 1 file to upload.";
+
+              }
+
+              foreach (var file in files)
+              {
+                  if (file.Length > 0)
+                  {
+                      // Generate a unique identifier
+                      var uniqueIdentifier = Guid.NewGuid().ToString();
+
+                      // Construct the new file name with the unique identifier appended
+                      var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{uniqueIdentifier}{Path.GetExtension(file.FileName)}";
+
+                      var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+
+                      using (var stream = new FileStream(path, FileMode.Create))
+                      {
+                          await file.CopyToAsync(stream);
+                      }
+                      // Assign the file name and path to the article properties
+                      var newArticle = new Article
+                      {
+                          Title = article.Title,
+                          State = article.State,
+                          Description = article.Description,
+                          ContributionId = idContri,
+                          AccountId = author.Id,
+                          FileName = fileName,
+                          FilePath = path
+                      };
+                      newArticle.ContributionId = idContri;
+                      newArticle.AccountId = author.Id;
+                      newArticle.FileName = fileName;
+                      newArticle.FilePath = path;
+                      _context.Add(newArticle);
+                  }
+              }
+              ViewBag.Success = "Upload Sucessfully!.";
+              await _context.SaveChangesAsync();
+              return RedirectToAction("IndexUser", "Contributions");
+              //return View(article);
+          }*/
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         [HttpPost]
-        public async Task<IActionResult> Create(Article article, int idContri, List<IFormFile> files)
+        public async Task<IActionResult> Create(Article article, int idContri, List<IFormFile> files, IFormFile imageFile)
         {
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
 
-            if (files == null || files.Count == 0)
+            if ((files == null || files.Count == 0) && (imageFile == null))
             {
                 // Handle this error
-                ViewBag.MessErro = "You need to choose at least 1 file to upload.";
-               
+                ViewBag.MessErro = "You need to choose at least 1 file or image to upload.";
+                return RedirectToAction("IndexUser", "Contributions");
             }
 
             foreach (var file in files)
             {
                 if (file.Length > 0)
                 {
-                    // Generate a unique identifier
                     var uniqueIdentifier = Guid.NewGuid().ToString();
-
-                    // Construct the new file name with the unique identifier appended
-                    var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{uniqueIdentifier}{Path.GetExtension(file.FileName)}";
-
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+                    var fileName = $"{uniqueIdentifier}_{Path.GetFileName(file.FileName)}"; // Simplified file name generation
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "SubmitDocx", fileName);
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
                         await file.CopyToAsync(stream);
                     }
-                    // Assign the file name and path to the article properties
                     var newArticle = new Article
                     {
                         Title = article.Title,
@@ -167,18 +215,27 @@ namespace SchoolProject1640.Controllers
                         FileName = fileName,
                         FilePath = path
                     };
-                    newArticle.ContributionId = idContri;
-                    newArticle.AccountId = author.Id;
-                    newArticle.FileName = fileName;
-                    newArticle.FilePath = path;
+                    if (imageFile != null)
+                    {
+                        var uniqueIdentifierImage = Guid.NewGuid().ToString();
+                        var fileNameImage = $"{uniqueIdentifierImage}_{Path.GetFileName(imageFile.FileName)}"; // Simplified image file name generation
+                        var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imageArticle", fileNameImage);
+
+                        using (var stream = new FileStream(pathImage, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+                        newArticle.Image = fileNameImage;
+                    }
                     _context.Add(newArticle);
                 }
             }
-            ViewBag.Success = "Upload Sucessfully!.";
+
+            ViewBag.Success = "Upload Successfully!";
             await _context.SaveChangesAsync();
             return RedirectToAction("IndexUser", "Contributions");
-            //return View(article);
         }
+
 
 
         // GET: Articles/Edit/5
@@ -251,7 +308,7 @@ namespace SchoolProject1640.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Article article, List<IFormFile> files)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Article article, List<IFormFile> files, IFormFile imageFile)
         {
             var tempArti = _context.Article.Where(m => m.Id == article.Id).FirstOrDefault();
 
@@ -295,8 +352,21 @@ namespace SchoolProject1640.Controllers
                     tempArti.Title = article.Title;
                     tempArti.Description = article.Description;
                     tempArti.UpdatedAt = DateTime.Now;
+                    if (imageFile != null)
+                    {
+                        var uniqueIdentifierImage = Guid.NewGuid().ToString();
+                        var fileNameImage = $"{uniqueIdentifierImage}_{Path.GetFileName(imageFile.FileName)}"; // Simplified image file name generation
+                        var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imageArticle", fileNameImage);
+
+                        using (var stream = new FileStream(pathImage, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+                        tempArti.Image = fileNameImage;
+                    }
                     await _context.SaveChangesAsync();
                 }
+                 
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ArticleExists(article.Id))
