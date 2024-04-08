@@ -73,7 +73,10 @@
                             else if (User.IsInRole("Administrator"))
                             {
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Article</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
                                     <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contribution</a>

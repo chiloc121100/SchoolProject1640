@@ -221,7 +221,7 @@
 
 }
 
-@if (User.IsInRole("Administrator") )
+@* @if (User.IsInRole("Administrator") )
 {
     <div class="px-16 py-8 w-full h-[900px] flex text-black  sm:px-1">
         
@@ -317,12 +317,12 @@
             </div>
         </div>
     </div>
-}
+} *@
 
 
 
 
-@if (User.IsInRole("Manager"))
+@if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
 {
     <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
         @foreach (var item in Model)

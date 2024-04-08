@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SchoolProject1640.Hubs;
 using System.Linq;
+using Microsoft.Identity.Client;
+using SchoolProject1640.Models.ModelOfView;
 
 namespace SchoolProject1640.Controllers
 {
@@ -28,6 +30,22 @@ namespace SchoolProject1640.Controllers
             _userManager = userManager;
             _hubContext = hubContext;
             _environment = environment;
+        }
+        public async Task<IActionResult> DashBoardAdmin()
+        {
+            ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+            AdminDashboard tempADDB = new AdminDashboard();
+            tempADDB.TotalFaculty = _context.Faculty.Count().ToString();
+            tempADDB.TotalStudent = _context.UserRoles.Where(m => m.RoleId == "2").Count().ToString(); // 2 mean student
+            tempADDB.TotalArticle = _context.Article.Count().ToString();
+            tempADDB.ArticleAccept = _context.Article.Where(m => m.State == 1).Count().ToString();
+            tempADDB.TotalContribution = _context.Contribution.Count().ToString();
+            tempADDB.UserPostArticleCount = (from article in _context.Article
+                                             group article by article.AccountId into g
+                                             select new { UserId = g.Key, Count = g.Count() })
+                                     .ToDictionary(x => x.UserId, x => x.Count);
+            return View(tempADDB);
+
         }
         [Authorize(Roles = "Administrator, Manager")]
         public IActionResult IndexManager()
