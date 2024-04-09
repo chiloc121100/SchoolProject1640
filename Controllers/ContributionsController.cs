@@ -138,19 +138,11 @@ namespace SchoolProject1640.Controllers
                     notification.FacultyId = contribution.Faculty;
                     notification.isRead = false;
                     notification.UserID = user.Id;
-                    notification.RoleId = "2";
                     notification.Message = $"{contribution.Title} has been created please join this.";
                     _context.Add(notification);
+                    // Show notification to FE
+                    _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", notification, "info");
                     SendGmailAsync(author.Email, user.Email);
-
-                    // notification 
-                    var tempNoti = new SchoolProject1640.Models.Notification();
-                    tempNoti.Message = $"Admin {author.FirstName} {author.LastName} created a new contribution";
-                    tempNoti.UserID = user.Id;
-                    tempNoti.isRead = false;
-                    _context.Notification.Add(tempNoti);
-                     // Show notification to FE
-                    _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", tempNoti, "info");
                 }
                 _context.Add(contribution);
                 await _context.SaveChangesAsync();
@@ -236,7 +228,9 @@ namespace SchoolProject1640.Controllers
                     {
                         // notification 
                         var tempNoti = new SchoolProject1640.Models.Notification();
-                        tempNoti.Message = $"Admin {author.FirstName} {author.LastName} updated contribution {contribution.Title}";
+                        tempNoti.SendBy = author.Email;
+                        tempNoti.FacultyId = contribution.Faculty;
+                        tempNoti.Message = $"{contribution.Title} has been updated.";
                         tempNoti.UserID = user.Id;
                         tempNoti.isRead = false;
                         _context.Notification.Add(tempNoti);

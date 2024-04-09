@@ -22,28 +22,17 @@
 
 @if (User.IsInRole("Student"))
 {
-     <div class="p-10 text-black sm:px-0">
+    <div class="p-10 text-black sm:px-0">
 
-    @foreach (var item in Model)
-    {
-        @if (item.Faculty == getFacultyOfStudent)
+        @foreach (var item in Model)
         {
+            @if (item.Faculty == getFacultyOfStudent)
+            {
                 <div class="px-5 sm:px-0">
-                    <div 
-                    class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+                    <div class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
                         <div class="flex items-center justify-between space-y-2">
                             <div class="font-bold text-[20px]">
-                                @if (listNameFac != null)
-                                {
-                                    foreach (var tempName in listNameFac)
-                                    {
-                                        @if (tempName.Id == item.Faculty)
-                                        {
-                                            @tempName.Name;
-                                        }
-                                    }
-                                    //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
-                                }
+                                @item.Title
                             </div>
                             <form class="bg-[#FD7401] font-bold flex justify-center items-center w-[130px] text-white px-3 py-2 rounded-xl" asp-action="Create" asp-controller="Articles" method="get">
                                 <input type="hidden" name="id" value="@item.Id" />
@@ -54,7 +43,10 @@
                         </div>
 
                         <div class="text-[#494949] text-[15px] -mt-2 mb-2">
-                            Deadline : @Html.DisplayFor(modelItem => item.ClosureDate)
+                            Submit deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
+                        </div>
+                        <div class="text-[#494949] text-[15px] -mt-2 mb-2">
+                            Update deadline: @Html.DisplayFor(modelItem => item.FinalClosureDate)
                         </div>
                         @if (articles != null)
                         {
@@ -102,13 +94,13 @@
                                                         }
                                                         <span style="color: @colorCode;">@stateText</span>
                                                     </td>
-@*                                                     <td>
-                                                        <!-- Form to download the file -->
-                                                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                                            <button type="submit">Download</button>
-                                                        </form>
-                                                    </td> *@
+                                                    @*                                                     <td>
+                        <!-- Form to download the file -->
+                        <form asp-action="DownloadFile" asp-controller="Articles" method="post">
+                        <input type="hidden" name="fileName" value="@art.FileName" />
+                        <button type="submit">Download</button>
+                        </form>
+                        </td> *@
                                                     <td>
                                                         <!-- Form to view the content of the file -->
                                                         <form asp-action="ViewFile" asp-controller="Articles" method="post">
@@ -118,14 +110,14 @@
                                                     </td>
                                                     <td>
                                                         <div class="flex space-x-5">
-                                                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
-                                                            <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
-                                                        </a> 
-                                                        <form asp-controller="Articles" method="post" asp-action="Delete">
+                                                            <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">
+                                                                <i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i>
+                                                            </a>
+                                                            <form asp-controller="Articles" method="post" asp-action="Delete">
                                                                 <input type="hidden" name="id" id="id" value="@art.Id" />
                                                                 <button type="submit" value="Delete" class="btn btn-danger text-[#F20000]"><i class="fa fa-trash text-center " aria-hidden="true"></i></button>
-                                                        </form>
-                                        </div>
+                                                            </form>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             }
@@ -137,12 +129,12 @@
                         }
                     </div>
                 </div>
-            
-        }
-        
-    }
 
-    
+            }
+
+        }
+
+
     </div>
 }
 @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
@@ -265,7 +257,7 @@
                 </div>
             </div>
         }
-      
+
     </div>
 }
 @section scripts {
@@ -304,13 +296,13 @@
 
 @if (User.IsInRole("Coordinator"))
 {
-    
+
     <div class="p-10 text-black sm:px-0">
-    @foreach (var item in Model)
-    {
-        
-        @if (item.Faculty == getFacultyOfStudent)
+        @foreach (var item in Model)
         {
+
+            @if (item.Faculty == getFacultyOfStudent)
+            {
                 <div class="px-5 sm:px-0">
                     <div class="flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
                         <div class="flex items-center justify-between space-y-2">
@@ -328,7 +320,7 @@
                                     //(Juno quên Cách đổi tên ngành ở đây rồi hì:)) =>)
                                 }
                             </div>
-                           
+
                         </div>
 
                         <div class="text-[#494949] text-[15px] -mt-2 mb-2">
@@ -352,35 +344,35 @@
                                     {
                                         if (art.ContributionId == item.Id)
                                         {
-                                            
-                                                <tr>
-                                                    <td>@art.Title</td>
-                                                    <td>
-                                                        @{
-                                                            string stateText;
-                                                            string colorCode;
-                                                            switch (art.State)
-                                                            {
-                                                                case 0:
-                                                                    stateText = "Pending";
-                                                                    colorCode = "orange"; // You can change this to any color you want
-                                                                    break;
-                                                                case 1:
-                                                                    stateText = "Accepted";
-                                                                    colorCode = "green"; // You can change this to any color you want
-                                                                    break;
-                                                                case 2:
-                                                                    stateText = "Rejected";
-                                                                    colorCode = "red"; // You can change this to any color you want
-                                                                    break;
-                                                                default:
-                                                                    stateText = "Unknown";
-                                                                    colorCode = "black"; // You can change this to any color you want
-                                                                    break;
-                                                            }
+
+                                            <tr>
+                                                <td>@art.Title</td>
+                                                <td>
+                                                    @{
+                                                        string stateText;
+                                                        string colorCode;
+                                                        switch (art.State)
+                                                        {
+                                                            case 0:
+                                                                stateText = "Pending";
+                                                                colorCode = "orange"; // You can change this to any color you want
+                                                                break;
+                                                            case 1:
+                                                                stateText = "Accepted";
+                                                                colorCode = "green"; // You can change this to any color you want
+                                                                break;
+                                                            case 2:
+                                                                stateText = "Rejected";
+                                                                colorCode = "red"; // You can change this to any color you want
+                                                                break;
+                                                            default:
+                                                                stateText = "Unknown";
+                                                                colorCode = "black"; // You can change this to any color you want
+                                                                break;
                                                         }
-                                                        <span style="color: @colorCode;">@stateText</span>
-                                                    </td>
+                                                    }
+                                                    <span style="color: @colorCode;">@stateText</span>
+                                                </td>
                                                 <td>
                                                     <select id="isPublicForGuestSelect" onchange="updatePublicForGuest(@art.Id)">
                                                         <option value="true" selected="@(art.isPublicForGuest ?? false ? "selected" : null)">true</option>
@@ -412,20 +404,20 @@
 
 
 
-                                                    @*                                                     <td>
+                                                @*                                                     <td>
                         <!-- Form to download the file -->
                         <form asp-action="DownloadFile" asp-controller="Articles" method="post">
                         <input type="hidden" name="fileName" value="@art.FileName" />
                         <button type="submit">Download</button>
                         </form>
                         </td> *@
-                                                    <td>
-                                                        <!-- Form to view the content of the file -->
-                                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                                            <input type="hidden" name="fileName" value="@art.FileName" />
-                                                            <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                                                        </form>
-                                                    </td>
+                                                <td>
+                                                    <!-- Form to view the content of the file -->
+                                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                                        <button type="submit"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                                    </form>
+                                                </td>
                                                 <td>
                                                     <img src="/imageArticle/@art.Image" />
                                                 </td>
@@ -435,8 +427,8 @@
                                                     </a>
                                                 </td>
 
-                                                </tr>
-                                            
+                                            </tr>
+
                                         }
                                     }
                                 </table>
@@ -445,8 +437,8 @@
                         }
                     </div>
                 </div>
+            }
+
         }
-       
-    }
-        </div>
+    </div>
 }
