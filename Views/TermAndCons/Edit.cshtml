@@ -1,0 +1,36 @@
+﻿@model SchoolProject1640.Models.TermAndCon
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TermAndCon</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TermsAndCondition" class="control-label"></label>
+                <textarea asp-for="TermsAndCondition" class="form-control w-80" rows="12"></textarea>
+                <span asp-validation-for="TermsAndCondition" class="text-danger"></span>
+            </div>
+            <input asp-for="CreatedAt" class="form-control" hidden />
+            <input asp-for="UpdatedAt" class="form-control" hidden/>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -4,7 +4,9 @@
     var contriId = ViewBag.ContributionId;
     var timeEnd = ViewBag.MessErroClose;
     var timeNow = ViewBag.DatetimeNow;
+    var tempAndcon = ViewBag.tempAndCon;
 }
+@tempAndcon;
 @if (ViewBag.MessErro != null && ViewBag.MessErro != "")
 {
     <div class="alert alert-danger">
@@ -76,6 +78,18 @@
                                     </div>
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
+                                <div class="text-[16px] space-y-1 sm:text-[14px]">
+                                    <label class="text-black font-medium text-[18px]">Terms and Conditions</label>
+                                    <div class="h-[100px]">
+                                        <!-- Add your terms and conditions text here -->
+                                        <textarea class="h-[100px] w-[600px] py-2 bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" readonly>@tempAndcon</textarea>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="checkbox" id="acceptTerms" name="acceptTerms" class="form-checkbox h-5 w-5 text-[#FD7401] border-gray-300 rounded">
+                                        <label for="acceptTerms" class="text-black text-[16px]">I accept the terms and conditions</label>
+                                    </div>
+                                    <!-- Add any validation messages if necessary -->
+                                </div>
 
                                 <div class="py-3">
                                     <div class="text-[16px] space-y-1 sm:text-[14px]">
@@ -128,11 +142,19 @@
 
 <script>
     document.getElementById("createForm").addEventListener("submit", function (event) {
+        var acceptTermsCheckbox = document.getElementById("acceptTerms");
+        var imageInput = document.getElementById("imageInput");
         var fileInput = document.getElementById("fileInput");
         var timeEnd = new Date('@timeEnd');
         var timeNow = new Date('@timeNow');
 
-        if (fileInput.files.length === 0) {
+        if (!acceptTermsCheckbox.checked) {
+            event.preventDefault(); // Prevent form submission
+            alert("Please accept the terms and conditions before submitting.");
+        } else if (imageInput.files.length === 0) {
+            event.preventDefault();
+            alert("Please select an image before submitting.");
+        } else if (fileInput.files.length === 0) {
             event.preventDefault();
             alert("Please select a file before submitting.");
         } else if (timeEnd < timeNow) {
@@ -141,4 +163,3 @@
         }
     });
 </script>
-

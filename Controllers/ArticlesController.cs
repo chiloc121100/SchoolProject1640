@@ -122,6 +122,11 @@ namespace SchoolProject1640.Controllers
                 ViewBag.MessErroClose = DateTime.Now;
                 ViewBag.DatetimeNow = DateTime.Now;
             }
+            var tempAndCon = _context.TermAndCon.FirstOrDefault();
+            if (tempAndCon != null)
+            {
+                ViewBag.tempAndCon = tempAndCon.TermsAndCondition;
+            }
             return View();
         }
 
@@ -317,8 +322,7 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+  
                 try
                 {
                     ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
@@ -379,8 +383,7 @@ namespace SchoolProject1640.Controllers
                     }
                 }
                 return RedirectToAction("IndexUser", "Contributions");
-            }
-            return RedirectToAction("IndexUser", "Contributions");
+
         }
 
         // GET: Articles/Delete/5

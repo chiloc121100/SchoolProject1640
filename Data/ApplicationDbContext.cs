@@ -18,6 +18,7 @@ namespace SchoolProject1640.Data
         public DbSet<Notification> Notification { get; set; }
         public DbSet<Article> Article { get; set; }
         public DbSet<Message> Message { get; set; }
+        public DbSet<TermAndCon> TermAndCon { get; set; }
         // public DbSet<Submission> Submission { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
