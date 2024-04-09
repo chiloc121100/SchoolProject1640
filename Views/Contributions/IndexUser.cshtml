@@ -144,31 +144,34 @@
         {
             <div class="px-5 h-[400px] sm:px-0">
                 <div class="h-[400px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
-                    <div class="flex items-center justify-between space-y-2">
-                        <div class="font-bold text-[20px]">
-                            @if (listNameFac != null)
-                            {
-                                foreach (var tempName in listNameFac)
+                    <div class="flex justify-between items-center">
+                        <div class="flex flex-col ">
+                            <div class="font-bold text-[20px]">
+                                @if (listNameFac != null)
                                 {
-                                    if (tempName.Id == item.Faculty)
+                                    foreach (var tempName in listNameFac)
                                     {
-                                        @tempName.Name
+                                        if (tempName.Id == item.Faculty)
+                                        {
+                                            @tempName.Name
+                                        }
                                     }
                                 }
-                            }
+                            </div>
+                            <div class="text-[#494949] text-[15px] ">
+                                Deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
+                            </div>
                         </div>
-                    </div>
-                    <div class="text-[#494949] text-[15px] -mt-2 mb-2 py-1">
-                        Deadline: @Html.DisplayFor(modelItem => item.ClosureDate)
-                    </div>
-                    <div class="flex items-center mb-4">
-                        <div class="mr-4">
-                            <label class="text-[#494949] text-[15px] py-1">
-                                <input type="checkbox" id="selectAllCheckbox" class="mr-2">
-                                Select All
-                            </label>
+
+                        <div class="flex items-center mb-4">
+                            <div class="mr-4">
+                                <label class="text-[#494949] text-[15px] py-1">
+                                    <input type="checkbox" id="selectAllCheckbox" class="mr-2">
+                                    Select All
+                                </label>
+                            </div>
+                            <button id="downloadButton" class="bg-[#FD7401]  text-black font-bold py-2 px-4 rounded">Download</button>
                         </div>
-                        <button id="downloadButton" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">Download Selected Files</button>
                     </div>
 
                     @if (articles != null)
@@ -419,7 +422,7 @@
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <img src="/imageArticle/@art.Image" />
+                                                    <img height="100px" width="100px" src="/imageArticle/@art.Image" />
                                                 </td>
                                                 <td>
                                                     <a asp-controller="Articles" asp-action="Details" asp-route-id="@art.Id">

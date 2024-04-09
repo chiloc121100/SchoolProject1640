@@ -3,69 +3,38 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="p-10 text-black sm:px-0 h-screen">
+    <div class="px-5 sm:px-0 w-full h-full">
+        <div class="w-full h-[700px] flex flex-col bg-[#F2EAE5] mb-10 px-5 rounded-xl py-3">
+            <div class="w-full text-center font-bold text-[50px]">Notifications</div>
 
-<h1>Index</h1>
+            <div class="mt-5 h-[600px] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                <table class="w-full">
+                    <thead>
+                        <tr class="w-full">
+                            <th class="w-[%] text-left text-xl"> Message </th>
+                            <th class="w-[%] text-left text-xl"> SendBy </th>
+                            <th class="w-[%] text-left text-xl"> DateTime </th>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FacultyId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RoleId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SendBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isRead)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FacultyId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SendBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isRead)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="py-2"> @Html.DisplayFor(modelItem => item.Message)</td>
+                                <td>@Html.DisplayFor(modelItem => item.SendBy)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DateTime)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

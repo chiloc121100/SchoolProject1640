@@ -2,8 +2,9 @@
 
 @{
     ViewData["Title"] = "Edit";
-    var timeEnd = ViewBag.MessErroClose;
-    var timeNow = ViewBag.DatetimeNow;
+    var timeEnd = ((DateTime)ViewBag.MessErroClose).Date.ToString("MMMM dd, yyyy");
+    var timeNow = ((DateTime)ViewBag.DatetimeNow).Date.ToString("MMMM dd, yyyy");
+
 }
 <div class="flex justify-center">
     <div class="w-[70%] text-center py-10 2xl:w-[85%] lg:w-[90%] sm:w-[100%] ">
@@ -17,9 +18,10 @@
                             </div>
                         </div>
                         <div class="flex items-center w-[75%] h-[650px] text-left py-10 2xl: lg: sm:py-3 sm:w-full">
-
+                            
                             <form id="editForm" asp-action="Edit" method="post" enctype="multipart/form-data"
                                   class="w-full flex flex-col items-center space-y-4">
+                                <div class="font-bold text-2xl">@timeEnd</div>
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="Id" />
 
@@ -93,7 +95,9 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 <script>
     document.getElementById("editForm").addEventListener("submit", function (event) {

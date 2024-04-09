@@ -15,15 +15,16 @@
 
 
 @* STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT STUDENT *@
-@if ( User.IsInRole("Guest") )
+@if (User.IsInRole("Guest"))
 {
-    <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
         @foreach (var item in Model)
         {
             @if (item.Faculty == getFacultyOfStudent)
             {
-         
-                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5 ">
+
+
+                <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
                     <div class="flex justify-between items-center">
                         <div class="text-2xl font-bold px-3">
                             @foreach (var name in listNameFacuties)
@@ -44,76 +45,33 @@
                     </div>
                     @if (articles != null)
                     {
-                        <div class="px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
-                            <table class="w-full ">
-                                <thead>
-                                    <tr class="w-full">
-                                        <th class="w-[20%] text-left">Title</th>
-                                        <th class="w-[20%] text-left">Author</th>
-                                        <th class="w-[20%] text-left">State</th>
-                                        <th class="w-[10%] text-left">View</th>
-                                    </tr>
-                                </thead>
+                        <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
                                 @foreach (var art in articles)
                                 {
                                     if (art.ContributionId == item.Id)
                                     {
                                         @if (art.isPublicForGuest == true)
                                         {
-                                            <tr>
-                                                <td>@art.Title</td>
-                                                <td>
-                                                    @foreach (var name in listNameUser)
-                                                    {
-                                                        @if (name.Id == art.AccountId)
-                                                        {
-                                                            @name.Email
-                                                        }
-                                                    }
-
-
-                                                </td>
-                                                <td>
-                                                    @{
-                                                        string stateText;
-                                                        switch (art.State)
-                                                        {
-                                                            case 0:
-                                                                stateText = "Pending";
-                                                                break;
-                                                            case 1:
-                                                                stateText = "Accepted";
-                                                                break;
-                                                            case 2:
-                                                                stateText = "Rejected";
-                                                                break;
-                                                            default:
-                                                                stateText = "Unknown";
-                                                                break;
-                                                        }
-                                                    }
-                                                    @stateText
-                                                </td>
-
-
-                                                <td>
-                                                    <!-- Form to view the content of the file -->
-                                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                                        <input type="hidden" name="fileName" value="@art.FileName" />
-                                                        <button type="submit">
-                                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-
-                                            </tr>
+                                            <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                                <input type="hidden" name="fileName" value="@art.FileName" />
+                                                <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                                    <div class="h-[250px] w-[250px] size-fit rounded-2xl "> <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                                    <div class="h-[25%] break-words w-full">
+                                                        <p class=" w-full h-full overflow-ellipsis whitespace-normal">@art.Title</p>
+                                                    </div>
+                                                </button>
+                                            </form>
                                         }
                                     }
                                 }
-                            </table>
+                            </div>
                         </div>
                     }
+
                 </div>
+
+
             }
         }
     </div>
@@ -121,12 +79,12 @@
 }
 @if (User.IsInRole("Student") || User.IsInRole("Coordinator"))
 {
-    <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
         @foreach (var item in Model)
         {
             @if (item.Faculty == getFacultyOfStudent)
             {
-                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5 ">
+                <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
                     <div class="flex justify-between items-center">
                         <div class="text-2xl font-bold px-3">
                             @foreach (var name in listNameFacuties)
@@ -147,74 +105,29 @@
                     </div>
                     @if (articles != null)
                     {
-                        <div class="px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
-                            <table class="w-full ">
-                                <thead>
-                                    <tr class="w-full">
-                                        <th class="w-[20%] text-left">Title</th>
-                                        <th class="w-[20%] text-left">Author</th>
-                                        <th class="w-[20%] text-left">State</th>
-                                        <th class="w-[10%] text-left">View</th>
-                                    </tr>
-                                </thead>
+                        <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                            <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
                                 @foreach (var art in articles)
                                 {
                                     if (art.ContributionId == item.Id)
                                     {
-                                        <tr>
-                                            <td>@art.Title</td>
-                                            <td>
-                                                @foreach (var name in listNameUser)
-                                                {
-                                                    @if (name.Id == art.AccountId)
-                                                    {
-                                                        @name.Email
-                                                    }
-                                                }
-
-
-                                            </td>
-                                            <td>
-                                                @{
-                                                    string stateText;
-                                                    switch (art.State)
-                                                    {
-                                                        case 0:
-                                                            stateText = "Pending";
-                                                            break;
-                                                        case 1:
-                                                            stateText = "Accepted";
-                                                            break;
-                                                        case 2:
-                                                            stateText = "Rejected";
-                                                            break;
-                                                        default:
-                                                            stateText = "Unknown";
-                                                            break;
-                                                    }
-                                                }
-                                                @stateText
-                                            </td>
-
-
-                                            <td>
-                                                <!-- Form to view the content of the file -->
-                                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                                    <button type="submit">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-
-                                        </tr>
-
+                                        <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                            <input type="hidden" name="fileName" value="@art.FileName" />
+                                            <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                                <div class="h-[250px] w-[250px] size-fit rounded-2xl "> <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                                <div class="h-[25%] break-words w-full">
+                                                    <p class=" w-full h-full overflow-ellipsis whitespace-normal">@art.Title</p>
+                                                </div>
+                                            </button>
+                                        </form>
                                     }
                                 }
-                            </table>
+                            </div>
                         </div>
                     }
+
                 </div>
+
             }
         }
     </div>
@@ -224,9 +137,9 @@
 @* @if (User.IsInRole("Administrator") )
 {
     <div class="px-16 py-8 w-full h-[900px] flex text-black  sm:px-1">
-        
+
         <div class="w-full h-full bg-[#EBDFD7] py-5 px-3 ">
-            
+
             <div class="w-full h-[90%] space-y-10 ">
                 <div class="px-5 py-5 w-full h-[200px] grid grid-cols-4 text-black  lg:grid-cols-2 lg:h-[400px] gap-4 ">
                     <div class="w-full h-full bg-[#F2EAE5] flex flex-col space-y-1 px-3 py-3 rounded-xl">
@@ -324,109 +237,54 @@
 
 @if (User.IsInRole("Manager") || User.IsInRole("Administrator"))
 {
-    <div class="grid gap-10 grid-cols-2 p-10 text-black 2xl:grid-cols-1 ">
+    <div class="grid gap-10 grid-cols-1 px-10 py-10 text-black sm:px-0">
         @foreach (var item in Model)
         {
-            
-                <div class="bg-[#F2EAE5] h-[450px] p-2 rounded-2xl space-y-5 ">
-                    <div class="flex justify-between items-center">
-                        <div class="text-2xl font-bold px-3">
-                            @foreach (var name in listNameFacuties)
+
+            <div class="bg-[#F2EAE5] h-[900px] p-2 rounded-2xl space-y-5 ">
+                <div class="flex justify-between items-center">
+                    <div class="text-2xl font-bold px-3">
+                        @foreach (var name in listNameFacuties)
+                        {
+                            @if (@name.Id == item.Faculty)
                             {
-                                @if (@name.Id == item.Faculty)
+                                @name.Name
+                            }
+                        }
+                        - Top
+                    </div>
+                    <div class="text-xl px-3 text-[#F20000]">
+                        <a>
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                        </a>
+                    </div>
+
+                </div>
+                @if (articles != null)
+                {
+                    <div class=" px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
+                        <div class="grid gap-10 grid-cols-4 w-full h-full  lg:grid-cols-2 ">
+                            @foreach (var art in articles)
+                            {
+                                if (art.ContributionId == item.Id)
                                 {
-                                    @name.Name
+                                    <form asp-action="ViewFile" asp-controller="Articles" method="post">
+                                        <input type="hidden" name="fileName" value="@art.FileName" />
+                                        <button type="submit" class="w-[250px] h-[330px]  px-2 py-2 bg-[#EBDFD7] rounded-2xl">
+                                            <div class="h-[250px] w-[250px] size-fit rounded-2xl "> <img width="250px" height="250px" class="w-[230px] h-[250px] rounded-2xl" src="/imageArticle/@art.Image" /></div>
+                                            <div class="h-[25%] break-words w-full">
+                                                <p class=" w-full h-full overflow-ellipsis whitespace-normal">@art.Title</p>
+                                            </div>
+                                        </button>
+                                    </form>
                                 }
                             }
-                            - Top
                         </div>
-                        <div class="text-xl px-3 text-[#F20000]">
-                            <a>
-                                @Html.DisplayFor(modelItem => item.FinalClosureDate)
-                            </a>
-                        </div>
-
                     </div>
-                    @if (articles != null)
-                    {
-                        <div class="px-5 w-full h-[80%] overflow-y-scroll whitespace-nowrap scroll-smooth">
-                            <table class="w-full ">
-                                <thead>
-                                    <tr class="w-full">
-                                        <th class="w-[20%] text-left">Title</th>
-                                        <th class="w-[20%] text-left">Author</th>
-                                        <th class="w-[20%] text-left">State</th>
-                                        <th class="w-[20%] text-left">Dowload</th>
-                                        <th class="w-[10%] text-left">View</th>
-                                    </tr>
-                                </thead>
-                                @foreach (var art in articles)
-                                {
-                                    if (art.ContributionId == item.Id)
-                                    {
-                                        <tr>
-                                            <td>@art.Title</td>
-                                            <td>
-                                                @foreach (var name in listNameUser)
-                                                {
-                                                    @if (name.Id == art.AccountId)
-                                                    {
-                                                        @name.Email
-                                                    }
-                                                }
+                }
 
+            </div>
 
-                                            </td>
-                                            <td>
-                                                @{
-                                                    string stateText;
-                                                    switch (art.State)
-                                                    {
-                                                        case 0:
-                                                            stateText = "Pending";
-                                                            break;
-                                                        case 1:
-                                                            stateText = "Accepted";
-                                                            break;
-                                                        case 2:
-                                                            stateText = "Rejected";
-                                                            break;
-                                                        default:
-                                                            stateText = "Unknown";
-                                                            break;
-                                                    }
-                                                }
-                                                @stateText
-                                            </td>
-                                        <td>
-                                            <!-- Form to download the file -->
-                                            <form asp-action="DownloadFile" asp-controller="Articles" method="post">
-                                                <input type="hidden" name="fileName" value="@art.FileName" />
-                                                <button type="submit">
-                                                    <i class="fa fa-download text-[#F20000]" aria-hidden="true"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-
-                                        <td>
-                                                <!-- Form to view the content of the file -->
-                                                <form asp-action="ViewFile" asp-controller="Articles" method="post">
-                                                    <input type="hidden" name="fileName" value="@art.FileName" />
-                                                    <button type="submit">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                                    </button>
-                                                </form>
-                                        </td>
-
-                                        </tr>
-
-                                    }
-                                }
-                            </table>
-                        </div>
-                    }
-                </div>
-            
         }
     </div>
 }

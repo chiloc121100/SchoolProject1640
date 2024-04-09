@@ -2,8 +2,8 @@
 @{
     ViewData["Title"] = "Create";
     var contriId = ViewBag.ContributionId;
-    var timeEnd = ViewBag.MessErroClose;
-    var timeNow = ViewBag.DatetimeNow;
+    var timeEnd = ((DateTime)ViewBag.MessErroClose).Date.ToString("MMMM dd, yyyy");
+    var timeNow = ((DateTime)ViewBag.DatetimeNow).Date.ToString("MMMM dd, yyyy");
     var tempAndcon = ViewBag.tempAndCon;
 }
 @tempAndcon;
@@ -17,17 +17,18 @@
     <div class="w-[70%] text-center py-10 2xl:w-[85%] lg:w-[90%] sm:w-[100%] ">
         <div class="flex w-full">
             <div class="w-full text-black space-y-5">
-                <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[650px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[680px]">
-                    <div class="w-full h-[650px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
-                        <div class="w-[25%] h-[650px] text-left bg-[#474341] rounded-l-xl flex items-center justify-center 2xl: lg: sm:w-full sm:rounded-lg sm:h-[200px]">
+                <div class="bg-[#F2EAE5] rounded-l-xl w-full h-[900px] space-y-4 2xl: lg: sm:rounded-t-lg sm:h-[850px]">
+                    <div class="w-full h-[900px] flex 2xl: lg: sm:flex-col sm:h-[700px]">
+                        <div class="w-[25%] h-[900px] text-left bg-[#474341] rounded-l-xl flex items-center justify-center 2xl: lg: sm:w-full sm:rounded-lg sm:h-[200px]">
                             <div class="-rotate-90 text-white font-bold text-[60px] 2xl: lg: sm:rotate-0 sm:text-[50px]">
                                 <div class="w-[500px] text-center">Add Articles</div>
                             </div>
                         </div>
-                        <div class="flex items-center w-[75%] h-[650px] text-left py-10 2xl: lg: sm:py-3 sm:w-full">
+                        <div class="flex items-center w-[75%] h-[900px] text-left mt-10 2xl: lg: sm:py-3 sm:w-full">
 
                             <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data"
                                   class="w-full flex flex-col items-center space-y-4">
+                                <div class="font-bold text-2xl">@timeEnd</div>
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                 <div class="text-[16px] space-y-1 sm:text-[14px]">
@@ -50,9 +51,9 @@
                                             <input id="idContri" name="idContri" value="@contriId" hidden />
                                         </div>
                                     </div>
+                                    <div id="imagePreviewContainer" class=""></div>
                                 </div>
 
-                                <div id="imagePreviewContainer" class="w-120 h-120"></div>
 
                                 <div class="text-[16px] space-y-1 sm:text-[14px]">
                                     <label for="formFile"
@@ -130,7 +131,7 @@
                 reader.onload = function (e) {
                     var img = document.createElement('img');
                     img.src = e.target.result;
-                    img.classList.add('max-w-full', 'max-h-full', 'my-2', 'rounded-lg', 'border', 'border-solid', 'border-neutral-300');
+                    img.classList.add('max-w-full', 'max-h-full', 'my-2', 'rounded-lg', 'border', 'border-solid', 'border-neutral-300', 'w-20', 'h-20');
                     imagePreviewContainer.appendChild(img);
                 }
 
