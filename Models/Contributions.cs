@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolProject1640.Models
 {
@@ -9,8 +8,6 @@ namespace SchoolProject1640.Models
         [Key]
         public int Id { get; set; }
         public string? Title { get; set; }
-        [ForeignKey("FacFContri")]
-        public virtual Faculty? Facultya { get; set; }
         public string? Faculty { get; set; }
         public string? AcademicYear { get; set; }
         public DateTime StartDate { get; set; }
