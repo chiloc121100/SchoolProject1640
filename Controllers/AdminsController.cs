@@ -175,6 +175,71 @@ namespace SchoolProject1640.Controllers
                 return Json(listUserWithRoleAndFaculty);
             }
         }
+        [Authorize(Roles = "Administrator, Manager,Coordinator")]
+        public IActionResult IndexCoor()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator, Manager,Coordinator")]
+        [HttpGet]
+        public IActionResult SearchAcountCoor(string email)
+        {
+            if (!string.IsNullOrEmpty(email))
+            {
+                var listUserWithRoleAndFaculty = _context.User
+                    .Join(_context.UserRoles,
+                        user => user.Id,
+                        userRole => userRole.UserId,
+                        (user, userRole) => new { User = user, UserRole = userRole })
+                    .Join(_context.Roles,
+                        userRole => userRole.UserRole.RoleId,
+                        role => role.Id,
+                        (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                    .Join(_context.Faculty,
+                        userRole => userRole.User.FacultyId,
+                        faculty => faculty.Id,
+                        (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+.Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" && u.User.Email.Contains(email))
+                    .OrderByDescending(u => u.User.Email)
+                    .Select(u => new
+                    {
+                        User = u.User,
+                        RoleName = u.RoleName,
+                        FacultyName = u.FacultyName
+                    })
+                    .ToList();
+
+                return Json(listUserWithRoleAndFaculty);
+            }
+            else
+            {
+                var listUserWithRoleAndFaculty = _context.User
+                     .Join(_context.UserRoles,
+                         user => user.Id,
+                         userRole => userRole.UserId,
+                         (user, userRole) => new { User = user, UserRole = userRole })
+                     .Join(_context.Roles,
+                         userRole => userRole.UserRole.RoleId,
+                         role => role.Id,
+                         (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                     .Join(_context.Faculty,
+                         userRole => userRole.User.FacultyId,
+                         faculty => faculty.Id,
+                         (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+.Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" )
+                     .OrderByDescending(u => u.User.Email)
+                     .Select(u => new
+                     {
+                         User = u.User,
+                         RoleName = u.RoleName,
+                         FacultyName = u.FacultyName
+                     })
+                     .ToList();
+
+                return Json(listUserWithRoleAndFaculty);
+            }
+        }
 
         [Authorize(Roles = "Administrator, Manager")]
         [HttpGet]
