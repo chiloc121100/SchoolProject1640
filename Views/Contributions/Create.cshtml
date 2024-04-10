@@ -57,7 +57,7 @@
                                 </div>
 
                                 <div class="text-[16px] space-y-1 sm:text-[14px]">
-                                    <label asp-for="StartDate" class="text-black font-medium text-[18px]">StartDate</label>
+                                    <label asp-for="StartDate" class="text-black font-medium text-[18px]">Start Date</label>
                                     <div class="flex items-center justify-end">
                                         <input asp-for="StartDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
                                                 />
@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="text-[16px] space-y-1 sm:text-[14px]">
-                                    <label asp-for="ClosureDate" class="text-black font-medium text-[18px]">StartDate</label>
+                                    <label asp-for="ClosureDate" class="text-black font-medium text-[18px]">Closure Date</label>
                                     <div class="flex items-center justify-end">
                                         <input asp-for="ClosureDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
                                     </div>
@@ -74,7 +74,7 @@
                                 </div>
 
                                 <div class="text-[16px] space-y-1 sm:text-[14px]">
-                                    <label asp-for="FinalClosureDate" class="text-black font-medium text-[18px]">StartDate</label>
+                                    <label asp-for="FinalClosureDate" class="text-black font-medium text-[18px]">Final Closure Date</label>
                                     <div class="flex items-center justify-end">
                                         <input asp-for="FinalClosureDate" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]" />
                                     </div>
@@ -105,7 +105,7 @@
     </div>
 </div>
 
-<h1>Create</h1>
+@* <h1>Create</h1>
 
 <h4>Contribution</h4>
 <hr />
@@ -160,7 +160,7 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+ *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
