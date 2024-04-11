@@ -23,9 +23,9 @@
                 <table class="w-full">
                     <thead>
                         <tr class="w-full">
-                            <th class="w-[%] text-left text-xl"> Terms And Condition </th>
-                            <th class="w-[%] text-left text-xl"> Date Update </th>
-                            <th class="w-[%] text-left text-xl"> Active </th>
+                            <th class="w-[50%] text-left text-xl"> Terms And Condition </th>
+                            <th class="w-[20%] text-left text-xl"> Date Update </th>
+                            <th class="w-[10%] text-left text-xl"> Active </th>
 
                         </tr>
                     </thead>
@@ -33,7 +33,7 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="py-2"> @Html.DisplayFor(modelItem => item.TermsAndCondition) </td>
+                                <td class="py-2 overflow-ellipsis whitespace-normal"> @Html.DisplayFor(modelItem => item.TermsAndCondition) </td>
                                 <td>  @Html.DisplayFor(modelItem => item.CreatedAt)</td>
                                 <td> <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o text-[#E65F2B]" aria-hidden="true"></i></a>   </td>
                             </tr>
