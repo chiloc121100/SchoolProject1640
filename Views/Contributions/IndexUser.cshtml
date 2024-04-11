@@ -166,11 +166,11 @@
                         <div class="flex items-center mb-4">
                             <div class="mr-4">
                                 <label class="text-[#494949] text-[15px] py-1">
-                                    <input type="checkbox" id="selectAllCheckbox" class="mr-2">
+                                    <input type="checkbox" id="selectAllCheckbox_@item.Id" class="selectAllCheckbox mr-2">
                                     Select All
                                 </label>
                             </div>
-                            <button id="downloadButton" class="bg-[#FD7401]  text-black font-bold py-2 px-4 rounded">Download</button>
+                            <button class="downloadButton bg-[#FD7401] text-black font-bold py-2 px-4 rounded">Download</button>
                         </div>
                     </div>
 
@@ -196,7 +196,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" name="selectedFiles" value="@art.FileName" />
+                                                    <input type="checkbox" name="selectedFiles_@item.Id" value="@art.FileName" />
                                                 </td>
                                                 <td>@art.Title</td>
                                                 <td>
@@ -267,17 +267,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#selectAllCheckbox').click(function () {
-                $('input[name="selectedFiles"]').prop('checked', this.checked);
+            $('.selectAllCheckbox').click(function () {
+                var itemId = $(this).attr('id').split('_')[1];
+                $('input[name="selectedFiles_' + itemId + '"]').prop('checked', this.checked);
             });
 
-            $('input[name="selectedFiles"]').click(function () {
-                $('#selectAllCheckbox').prop('checked', false);
-            });
-
-            $('#downloadButton').click(function () {
+            $('.downloadButton').click(function () {
+                var itemId = $(this).closest('.flex').find('.selectAllCheckbox').attr('id').split('_')[1];
                 var selectedFiles = [];
-                $('input[name="selectedFiles"]:checked').each(function () {
+                $('input[name="selectedFiles_' + itemId + '"]:checked').each(function () {
                     selectedFiles.push($(this).val());
                 });
 
@@ -293,7 +291,6 @@
         });
     </script>
 }
-
 
 
 

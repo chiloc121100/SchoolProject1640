@@ -13,6 +13,7 @@ using SchoolProject1640.Hubs;
 using System.Linq;
 using Microsoft.Identity.Client;
 using SchoolProject1640.Models.ModelOfView;
+using System.Security.Cryptography;
 
 namespace SchoolProject1640.Controllers
 {
@@ -183,8 +184,10 @@ namespace SchoolProject1640.Controllers
 
         [Authorize(Roles = "Administrator, Manager,Coordinator")]
         [HttpGet]
-        public IActionResult SearchAcountCoor(string email)
+        public async Task<IActionResult> SearchAcountCoorAsync(string email)
         {
+
+            ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
             if (!string.IsNullOrEmpty(email))
             {
                 var listUserWithRoleAndFaculty = _context.User
@@ -199,8 +202,8 @@ namespace SchoolProject1640.Controllers
                     .Join(_context.Faculty,
                         userRole => userRole.User.FacultyId,
                         faculty => faculty.Id,
-                        (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
-.Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" && u.User.Email.Contains(email))
+                        (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name, facultyNew = faculty })
+.Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" && u.User.Email.Contains(email) && u.facultyNew.Id == author.FacultyId)
                     .OrderByDescending(u => u.User.Email)
                     .Select(u => new
                     {
@@ -215,30 +218,31 @@ namespace SchoolProject1640.Controllers
             else
             {
                 var listUserWithRoleAndFaculty = _context.User
-                     .Join(_context.UserRoles,
-                         user => user.Id,
-                         userRole => userRole.UserId,
-                         (user, userRole) => new { User = user, UserRole = userRole })
-                     .Join(_context.Roles,
-                         userRole => userRole.UserRole.RoleId,
-                         role => role.Id,
-                         (userRole, role) => new { User = userRole.User, RoleName = role.Name })
-                     .Join(_context.Faculty,
-                         userRole => userRole.User.FacultyId,
-                         faculty => faculty.Id,
-                         (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
-.Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" )
-                     .OrderByDescending(u => u.User.Email)
-                     .Select(u => new
-                     {
-                         User = u.User,
-                         RoleName = u.RoleName,
-                         FacultyName = u.FacultyName
-                     })
-                     .ToList();
+                    .Join(_context.UserRoles,
+                        user => user.Id,
+                        userRole => userRole.UserId,
+                        (user, userRole) => new { User = user, UserRole = userRole })
+                    .Join(_context.Roles,
+                        userRole => userRole.UserRole.RoleId,
+                        role => role.Id,
+                        (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                    .Join(_context.Faculty,
+                        userRole => userRole.User.FacultyId,
+                        faculty => faculty.Id,
+                        (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name, facultyNew = faculty })
+                    .Where(u => u.RoleName != "Administrator" && u.RoleName != "Manager" && u.RoleName != "Coordinator" && u.RoleName != "Guest" && u.facultyNew.Id == author.FacultyId)
+                    .OrderByDescending(u => u.User.Email)
+                    .Select(u => new
+                    {
+                        User = u.User,
+                        RoleName = u.RoleName,
+                        FacultyName = u.FacultyName
+                    })
+                    .ToList();
 
                 return Json(listUserWithRoleAndFaculty);
             }
+
         }
 
         [Authorize(Roles = "Administrator, Manager")]
