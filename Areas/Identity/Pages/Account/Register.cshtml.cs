@@ -106,13 +106,13 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
 
             [Required(ErrorMessage = "Password is required")]
             [DataType(DataType.Password)]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2}.", MinimumLength = 6)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm Password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "The pw and cpw do not match.")]
             public string ConfirmPassword { get; set; }
         }
 
