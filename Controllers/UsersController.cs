@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using SchoolProject1640.Models.ModelOfView;
+using SkiaSharp;
+using NuGet.Protocol.Plugins;
 
 namespace SchoolProject1640.Controllers
 {
@@ -28,7 +31,20 @@ namespace SchoolProject1640.Controllers
             _userManager = userManager;
             Environment = hostingEnvironment;
         }
+        public async Task<IActionResult> DashBoardStudent()
+        {
+            ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+            StudentDashboard tempADDB = new StudentDashboard();
 
+            // query bai cua khoa
+            tempADDB.TotalArticleStudent = _context.Article.Where(m=> m.AccountId == author.Id).Count().ToString();
+            tempADDB.ArticleRejectedStudent = _context.Article.Where(m => m.State == 2).Count().ToString();
+            tempADDB.ArticleAcceptStudent = _context.Article.Where(m => m.State == 1).Count().ToString();
+            tempADDB.ArticlePendingStudent = _context.Article.Where(m => m.State == 0).Count().ToString();
+
+            return View(tempADDB);
+
+        }
         public async Task<IActionResult> IndexAsync()
         {
             ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
