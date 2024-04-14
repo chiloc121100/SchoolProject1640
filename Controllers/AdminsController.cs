@@ -390,6 +390,9 @@ namespace SchoolProject1640.Controllers
                 // Update user properties
                 user.FirstName = firstName;
                 user.Email = email;
+                user.NormalizedEmail = email.ToUpper();
+                user.UserName = email;
+                user.NormalizedUserName = email.ToUpper();
                 user.LastName = lastName;
                 user.FacultyId = faculty; // Assuming FacultyId is the correct property to assign
                 user.LastModifiedDate = DateTime.Now;

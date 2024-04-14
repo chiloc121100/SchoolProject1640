@@ -139,6 +139,31 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+            // Check if the coordinator for a faculty already exists
+            var role = await _context.Roles.FirstOrDefaultAsync(role => role.Id == Input.Role);
+            if (role.Name == "Coordinator")
+            {
+                var tempUser = await _context.User
+                        .Join(_context.UserRoles,
+                            user => user.Id,
+                            userRole => userRole.UserId,
+                            (user, userRole) => new { User = user, UserRole = userRole })
+                        .Join(_context.Roles,
+                            userRole => userRole.UserRole.RoleId,
+                            role => role.Id,
+                            (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                        .Join(_context.Faculty,
+                            userRole => userRole.User.FacultyId,
+                            faculty => faculty.Id,
+                            (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+                        .FirstOrDefaultAsync(user => user.User.FacultyId == Input.Faculty && user.RoleName == "Coordinator");
+                
+                if (tempUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Coordinator for this faculty already exists.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();

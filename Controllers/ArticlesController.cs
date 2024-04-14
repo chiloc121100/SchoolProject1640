@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Threading.Tasks;
+using Aspose.Words.Bibliography;
 using Aspose.Words.Drawing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject1640.Data;
+using SchoolProject1640.Hubs;
 using SchoolProject1640.Models;
 using Xceed.Words.NET;
 //Install-Package Aspose.Words
@@ -22,12 +27,14 @@ namespace SchoolProject1640.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         IWebHostEnvironment _environment;
-        public ArticlesController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IWebHostEnvironment environment)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public ArticlesController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IWebHostEnvironment environment, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
             _logger = logger;
             _userManager = userManager;
             _environment = environment;
+            _hubContext = hubContext;
         }
         // GET: Articles
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
@@ -233,6 +240,36 @@ namespace SchoolProject1640.Controllers
                         newArticle.Image = fileNameImage;
                     }
                     _context.Add(newArticle);
+
+                    // Add notification and show to coordinator
+                    var coordinator = await _context.User
+                        .Join(_context.UserRoles,
+                            user => user.Id,
+                            userRole => userRole.UserId,
+                            (user, userRole) => new { User = user, UserRole = userRole })
+                        .Join(_context.Roles,
+                            userRole => userRole.UserRole.RoleId,
+                            role => role.Id,
+                            (userRole, role) => new { User = userRole.User, RoleName = role.Name })
+                        .Join(_context.Faculty,
+                            userRole => userRole.User.FacultyId,
+                            faculty => faculty.Id,
+                            (userRole, faculty) => new { User = userRole.User, RoleName = userRole.RoleName, FacultyName = faculty.Name })
+                        .FirstOrDefaultAsync(user => user.User.FacultyId == author.FacultyId && user.RoleName == "Coordinator");
+                    var contribution = await _context.Contribution.FirstOrDefaultAsync(m => m.Id == idContri);
+                    if (coordinator != null && contribution != null)
+                    {
+                        var notification = new Notification();
+                        notification.SendBy = author.Email;
+                        notification.FacultyId = author.FacultyId;
+                        notification.isRead = false;
+                        notification.UserID = coordinator.User.Id;
+                        notification.Message = $"{author.FirstName} {author.LastName} has submitted an article for {contribution.Title}. Please review within 14 days!";
+                        _context.Add(notification);
+                        // Show notification to FE
+                        await _hubContext.Clients.Group($"user_{coordinator.User.Id}").SendAsync("ReceiveNotification", notification, "info");
+                        await SendGmailAsync(author.FirstName + " " + author.LastName, coordinator.User.Email);
+                    }
                 }
             }
 
@@ -241,13 +278,45 @@ namespace SchoolProject1640.Controllers
             return RedirectToAction("IndexUser", "Contributions");
         }
 
+        public async Task SendGmailAsync(string? user, string? userrec)
+        {
+            if (user == null)
+            { return; }
+            try
+            {
+                // Create a new MailMessage
+                using (var message = new MailMessage())
+                {
+                    message.From = new MailAddress("duongchilocmail@gmail.com");
+                    message.To.Add(userrec);
+                    message.Subject = "New Article Submitted";
+                    message.Body = $"{user} has submitted an article. Please review within 14 days!";
 
+                    // Create a new SMTP client
+                    using (var smtpClient = new SmtpClient())
+                    {
+                        smtpClient.Host = "smtp.gmail.com";
+                        smtpClient.Port = 587;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = new NetworkCredential("duongchilocmail@gmail.com", "sallqsnernrfmxkw");
+
+                        // Send the email
+                        await smtpClient.SendMailAsync(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
 
         // GET: Articles/Edit/5
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
-           
+
 
             if (id == null || _context.Article == null)
             {
@@ -292,17 +361,17 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
 
-            tempArti.isPublicForGuest = isPublicForGuest; 
+            tempArti.isPublicForGuest = isPublicForGuest;
 
             try
             {
                 _context.Update(tempArti);
                 await _context.SaveChangesAsync();
-                return Ok(); 
+                return Ok();
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(500, "Internal server error"); 
+                return StatusCode(500, "Internal server error");
             }
         }
 
@@ -322,67 +391,67 @@ namespace SchoolProject1640.Controllers
                 return NotFound();
             }
 
-  
-                try
+
+            try
+            {
+                ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+                foreach (var file in files)
                 {
-                    ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
-                    foreach (var file in files)
+                    if (file.Length > 0)
                     {
-                        if (file.Length > 0)
+                        // Generate a unique identifier
+                        var uniqueIdentifier = Guid.NewGuid().ToString();
+
+                        // Construct the new file name with the unique identifier appended
+                        var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{uniqueIdentifier}{Path.GetExtension(file.FileName)}";
+
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
+
+                        using (var stream = new FileStream(path, FileMode.Create))
                         {
-                            // Generate a unique identifier
-                            var uniqueIdentifier = Guid.NewGuid().ToString();
-
-                            // Construct the new file name with the unique identifier appended
-                            var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{uniqueIdentifier}{Path.GetExtension(file.FileName)}";
-
-                            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/SubmitDocx", fileName);
-
-                            using (var stream = new FileStream(path, FileMode.Create))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-
-                            if (System.IO.File.Exists(tempArti.FilePath))
-                            {
-                                System.IO.File.Delete(tempArti.FilePath);
-                            }
-
-                            tempArti.FileName = fileName;
-                            tempArti.FilePath = path;
-                            _context.Update(tempArti);
+                            await file.CopyToAsync(stream);
                         }
-                    }
-                    tempArti.Title = article.Title;
-                    tempArti.Description = article.Description;
-                    tempArti.UpdatedAt = DateTime.Now;
-                    if (imageFile != null)
-                    {
-                        var uniqueIdentifierImage = Guid.NewGuid().ToString();
-                        var fileNameImage = $"{uniqueIdentifierImage}_{Path.GetFileName(imageFile.FileName)}"; // Simplified image file name generation
-                        var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imageArticle", fileNameImage);
 
-                        using (var stream = new FileStream(pathImage, FileMode.Create))
+                        if (System.IO.File.Exists(tempArti.FilePath))
                         {
-                            await imageFile.CopyToAsync(stream);
+                            System.IO.File.Delete(tempArti.FilePath);
                         }
-                        tempArti.Image = fileNameImage;
-                    }
-                    await _context.SaveChangesAsync();
-                }
-                 
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArticleExists(article.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+
+                        tempArti.FileName = fileName;
+                        tempArti.FilePath = path;
+                        _context.Update(tempArti);
                     }
                 }
-                return RedirectToAction("IndexUser", "Contributions");
+                tempArti.Title = article.Title;
+                tempArti.Description = article.Description;
+                tempArti.UpdatedAt = DateTime.Now;
+                if (imageFile != null)
+                {
+                    var uniqueIdentifierImage = Guid.NewGuid().ToString();
+                    var fileNameImage = $"{uniqueIdentifierImage}_{Path.GetFileName(imageFile.FileName)}"; // Simplified image file name generation
+                    var pathImage = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imageArticle", fileNameImage);
+
+                    using (var stream = new FileStream(pathImage, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(stream);
+                    }
+                    tempArti.Image = fileNameImage;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ArticleExists(article.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("IndexUser", "Contributions");
 
         }
 
@@ -564,19 +633,39 @@ namespace SchoolProject1640.Controllers
         [HttpPost]
         public async Task<IActionResult> AcceptArt(int? id)
         {
+            ApplicationUser coordinator = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            Article tempArt = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+            var tempArt = await _context.Article
+                .Join(_context.User,
+                    article => article.AccountId,
+                    user => user.Id,
+                    (article, user) => new { Article = article, User = user })
+                .FirstOrDefaultAsync(m => m.Article.Id == id);
 
             if (tempArt == null)
             {
                 return NotFound();
             }
 
-            tempArt.State = 1;
+            tempArt.Article.State = 1;
+
+            // Send notification to the student
+            var notification = new Notification();
+            notification.SendBy = coordinator.Email;
+            notification.FacultyId = coordinator.FacultyId;
+            notification.isRead = false;
+            notification.UserID = tempArt.User.Id;
+            notification.Message = $"Your article {tempArt.Article.Title} has been accepted!";
+            _context.Add(notification);
+            // Show notification to FE
+            await _hubContext.Clients.Group($"user_{tempArt.User.Id}").SendAsync("ReceiveNotification", notification, "info");
+            // Send email to the student
+            await SendGmailWithMessageAsync(tempArt.User.Email, notification.Message, "Article Accepted");
 
             await _context.SaveChangesAsync();
 
@@ -585,24 +674,77 @@ namespace SchoolProject1640.Controllers
         [HttpPost]
         public async Task<IActionResult> RejectArt(int? id)
         {
+            ApplicationUser coordinator = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            Article tempArt = await _context.Article.FirstOrDefaultAsync(m => m.Id == id);
+            var tempArt = await _context.Article
+                .Join(_context.User,
+                    article => article.AccountId,
+                    user => user.Id,
+                    (article, user) => new { Article = article, User = user })
+                .FirstOrDefaultAsync(m => m.Article.Id == id);
 
             if (tempArt == null)
             {
                 return NotFound();
             }
 
-            tempArt.State = 2;
+            tempArt.Article.State = 2;
+
+            // Send notification to the student
+            var notification = new Notification();
+            notification.SendBy = coordinator.Email;
+            notification.FacultyId = coordinator.FacultyId;
+            notification.isRead = false;
+            notification.UserID = tempArt.User.Id;
+            notification.Message = $"Your article {tempArt.Article.Title} has been rejected!";
+            _context.Add(notification);
+            // Show notification to FE
+            await _hubContext.Clients.Group($"user_{tempArt.User.Id}").SendAsync("ReceiveNotification", notification, "info");
+            // Send email to the student
+            await SendGmailWithMessageAsync(tempArt.User.Email, notification.Message, "Article Rejected");
 
             await _context.SaveChangesAsync();
 
             return RedirectToAction("IndexUser", "Contributions");
         }
 
+        public async Task SendGmailWithMessageAsync(string? userrec, string? content, string? subject)
+        {
+            if (userrec == null)
+            { return; }
+            try
+            {
+                // Create a new MailMessage
+                using (var message = new MailMessage())
+                {
+                    message.From = new MailAddress("duongchilocmail@gmail.com");
+                    message.To.Add(userrec);
+                    message.Subject = subject;
+                    message.Body = content;
+
+                    // Create a new SMTP client
+                    using (var smtpClient = new SmtpClient())
+                    {
+                        smtpClient.Host = "smtp.gmail.com";
+                        smtpClient.Port = 587;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = new NetworkCredential("duongchilocmail@gmail.com", "sallqsnernrfmxkw");
+
+                        // Send the email
+                        await smtpClient.SendMailAsync(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
     }
 }

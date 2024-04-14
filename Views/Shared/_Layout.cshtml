@@ -55,10 +55,13 @@
                             else if (User.IsInRole("Manager"))
                             {
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Contributions</a>
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexManager">Accounts</a>
                                 </li>
                             }
                             else if (User.IsInRole("Coordinator"))
@@ -70,7 +73,7 @@
                                     <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Mark</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexCoor">Account</a>
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="IndexCoor">Accounts</a>
                                 </li>
                             }
                             else if (User.IsInRole("Administrator"))
@@ -79,20 +82,19 @@
                                     <a class="" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Article</a>
+                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contribution</a>
-                                </li>
-
-                                <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">Article</a>
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Admins" asp-action="Index">Account</a>
+                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="TermAndCons" asp-action="Index">Term</a>
+                                    <a class="" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
                                 </li>
                             }
                         </ul>
