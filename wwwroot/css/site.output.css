@@ -1845,6 +1845,12 @@ body {
     width: 85%;
   }
 
+  .\32xl\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(1.25rem * var(--tw-space-x-reverse));
+    margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
   .\32xl\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
@@ -1853,6 +1859,11 @@ body {
   .\32xl\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+  }
+
+  .\32xl\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
