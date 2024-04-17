@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="text-white">
-                        <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 xl:hidden  ">
+                        <ul class="flex space-x-10 text-2xl font-bold lg:text-xl lg:px-10 xl:hidden 2xl:space-x-5 ">
                             @if (User.IsInRole("Guest"))
                             {
                                 <li class="hover:text-[#FD7401]">
@@ -128,22 +128,22 @@
                             else if (User.IsInRole("Administrator"))
                             {
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="DashBoardAdmin">Dashboard</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Home" asp-action="Index">Selected Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="Index">Contributions</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Contributions" asp-action="IndexUser">All Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="Admins" asp-action="Index">Accounts</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
-                                    <a class="" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
+                                    <a class="2xl:text-xl" asp-area="" asp-controller="TermAndCons" asp-action="Index">Terms</a>
                                 </li>
                             }
                         </ul>
