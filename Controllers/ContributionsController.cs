@@ -125,31 +125,62 @@ namespace SchoolProject1640.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator,Student,Coordinator,Manager")]
-        public async Task<IActionResult> Create([Bind("Id,Title,Faculty,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
+        public async Task<IActionResult> Create([Bind("Id,Title,AcademicYear,StartDate,ClosureDate,FinalClosureDate,CreatedAt,UpdatedAt")] Contribution contribution)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
-                var listUserNotification = _context.User.Where(m => m.FacultyId == contribution.Faculty).ToList();
-                foreach(var user in listUserNotification)
+                var author = await _userManager.GetUserAsync(HttpContext.User) ?? new ApplicationUser();
+                var listfaculty = _context.Faculty.ToList();
+
+                foreach (var tempfaculty in listfaculty)
                 {
-                    var notification = new SchoolProject1640.Models.Notification();
-                    notification.SendBy = author.Email;
-                    notification.FacultyId = contribution.Faculty;
-                    notification.isRead = false;
-                    notification.UserID = user.Id;
-                    notification.Message = $"{contribution.Title} has been created please join this.";
-                    _context.Add(notification);
-                    // Show notification to FE
-                    _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", notification, "info");
-                    SendGmailAsync(author.Email, user.Email);
+                    // Check if the faculty is neither Admin nor Manager
+                    if (tempfaculty.Name != "Admin" && tempfaculty.Name != "Manager")
+                    {
+                        var listUserNotification = _context.User.Where(m => m.FacultyId == tempfaculty.Id).ToList();
+
+                        // Create a new contribution for this faculty
+                        var newContribution = new Contribution
+                        {
+                            Title = contribution.Title,
+                            AcademicYear = contribution.AcademicYear,
+                            StartDate = contribution.StartDate,
+                            ClosureDate = contribution.ClosureDate,
+                            FinalClosureDate = contribution.FinalClosureDate,
+                            CreatedAt = contribution.CreatedAt,
+                            UpdatedAt = contribution.UpdatedAt,
+                            Faculty = tempfaculty.Id // Assign the faculty to the contribution
+                        };
+
+                        _context.Add(newContribution);
+
+                        foreach (var user in listUserNotification)
+                        {
+                            var notification = new SchoolProject1640.Models.Notification
+                            {
+                                SendBy = author.Email,
+                                FacultyId = tempfaculty.Id,
+                                isRead = false,
+                                UserID = user.Id,
+                                Message = $"{newContribution.Title} has been created please join this."
+                            };
+
+                            _context.Add(notification);
+                            // Show notification to FE
+                            _hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", notification, "info");
+                            SendGmailAsync(author.Email, user.Email);
+                        }
+                    }
                 }
-                _context.Add(contribution);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(contribution);
         }
+
+
+
         public async Task SendGmailAsync(string? user, string? userrec)
         {
             if (user == null)

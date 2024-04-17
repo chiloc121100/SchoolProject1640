@@ -31,11 +31,11 @@
                                     <span asp-validation-for="Title" class="text-danger"></span>
                                 </div>
 
-                                <div class="text-[16px] space-y-1 sm:text-[14px]">
-                                    <label asp-for ="Faculty" class="text-black font-medium text-[18px]">
+                                <div class="hidden text-[16px] space-y-1 sm:text-[14px]">
+                                    <label hidden asp-for ="Faculty" class="text-black font-medium text-[18px]">
                                         Faculty</label>
                                     <div class="flex items-center justify-end">
-                                        <select asp-for="Faculty" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
+                                        <select hidden asp-for="Faculty" class="h-[45px] w-[600px] bg-[#B0B0B0] px-5 rounded-lg text-black placeholder-black 2xl:w-[400px] lg:w-[400px] sm:w-[350px]"
                                                type="text" >
                                             <option value="">Select Faculty</option>
                                             @foreach (var faculty in listFaculty)

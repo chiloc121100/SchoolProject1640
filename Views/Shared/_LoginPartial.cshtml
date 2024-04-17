@@ -4,12 +4,12 @@
 @{
     string firstName = User.Identity?.Name?.Split(' ')?.FirstOrDefault();
 }
-<ul class=" text-amber-600 flex items-center space-x-2 pr-5 sm:pr-0">
+<ul class="sm:hidden text-amber-600 flex items-center space-x-2 pr-5">
     @if (SignInManager.IsSignedIn(User))
     {
         var currentUser = await UserManager.GetUserAsync(User);
 
-        <li class="px-4 xl:hidden">
+        <li class="px-4">
             <a class="nav-link btn btn-link text-dark" asp-controller="Notifications" asp-action="Index">
                 <i class="fa-regular fa-bell fa-2xl" style="color: #d47711;"></i>
             </a>
@@ -17,7 +17,7 @@
 
         <li class="">
 
-            <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3 w-[200px] " asp-action="Index" asp-controller="Users" title="Manage">
+            <a class="flex bg-white px-5 py-2 rounded-3xl space-x-3" asp-action="Index" asp-controller="Users" title="Manage">
                 @if (@currentUser != null)
                 {
                     <img width="50px" height="50px" class="rounded-full" src="/imageUser/@currentUser.Image" />
@@ -60,7 +60,7 @@
             <!-- <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a> -->
         </li>
 
-        <li class="px-4 sm:px-0">
+        <li class="px-4">
             <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button type="submit" class="nav-link btn btn-link text-dark">
                     <i class="fa fa-sign-out fa-2xl" aria-hidden="true"></i>
