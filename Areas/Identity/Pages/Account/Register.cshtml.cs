@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.Mail;
-using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -130,42 +128,6 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
-        public async Task SendEmail2Async(string? user, string? userrec, string generatedPassword)
-        {
-            if (user == null)
-            { return; }
-            try
-            {
-                // Create a new MailMessage
-                using (var message = new MailMessage())
-                {
-                    message.From = new MailAddress("schoolproject1640@gmail.com");
-                    message.To.Add(user);
-                    message.Subject = "Your Temporary Password";
-                    message.Body = $"Dear {user},\n\n" +
-                                   $"Your temporary password is: {generatedPassword}.\n\n" +
-                                   $"Please log in and change your password immediately.\n\n" +
-                                   $"Thank you.";
-
-                    // Create a new SMTP client
-                    using (var smtpClient = new SmtpClient())
-                    {
-                        smtpClient.Host = "smtp.gmail.com";
-                        smtpClient.Port = 587;
-                        smtpClient.EnableSsl = true;
-                        smtpClient.UseDefaultCredentials = false;
-                        smtpClient.Credentials = new NetworkCredential("schoolproject1640@gmail.com", "ctiebrgkegpqnqev");
-
-                        // Send the email
-                        await smtpClient.SendMailAsync(message);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-        }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null, List<IFormFile> files = null)
         {
@@ -202,7 +164,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                 }
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
@@ -243,16 +205,9 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                string generatedPassword = GenerateRandomPassword();
 
+                var result = await _userManager.CreateAsync(user, Input.Password);
 
-                var result = await _userManager.CreateAsync(user, generatedPassword);
-
-                await SendEmail2Async(Input.Email, "Your Temporary Password",
-$"Dear {user.FirstName},<br><br>" +
-$"Your temporary password is: <strong>{generatedPassword}</strong>.<br><br>" +
-$"Please log in and change your password immediately.<br><br>" +
-$"Thank you.<br>");
                 if (result.Succeeded)
                 {
                     var tempUserRole = new IdentityUserRole<string>();
@@ -300,17 +255,6 @@ $"Thank you.<br>");
             Roles = await _context.Roles.ToListAsync();
             Faculties = await _context.Faculty.ToListAsync();
             return RedirectToAction("Index", "Admins");
-        }
-        private string GenerateRandomPassword()
-        {
-            // Generate a random password
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var random = new Random();
-            var randomPassword = new string(Enumerable.Repeat(chars, 8)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-
-            // Append "@123" to the random password
-            return randomPassword + "@@123";
         }
 
         private ApplicationUser CreateUser()
