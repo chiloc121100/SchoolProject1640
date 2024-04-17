@@ -172,6 +172,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                 user.EmailConfirmed = true;
                 user.FacultyId = Input.Faculty;
 
+
                 string defaultImagePath = "ImageDefaultUser.png";
 
                 if (files != null && files.Any())
@@ -228,18 +229,17 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (!_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
+                    //    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    //}
+                    //else
+                    //{
+                    //    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //    return LocalRedirect(returnUrl);
+                    //}
                 }
                 else
                 {
@@ -254,7 +254,7 @@ namespace SchoolProject1640.Areas.Identity.Pages.Account
             // Populate required data again for re-displaying the form
             Roles = await _context.Roles.ToListAsync();
             Faculties = await _context.Faculty.ToListAsync();
-            return Page();
+            return RedirectToAction("Index", "Admins");
         }
 
         private ApplicationUser CreateUser()
