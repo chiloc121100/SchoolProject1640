@@ -145,6 +145,9 @@
                             else if (User.IsInRole("Student"))
                             {
                                 <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Users" asp-action="DashBoardStudent">Dashboard</a>
+                                </li>
+                                <li class="hover:text-[#FD7401]">
                                     <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
                                 </li>
                                 <li class="hover:text-[#FD7401]">
@@ -227,6 +230,9 @@
                             }
                             else if (User.IsInRole("Student"))
                             {
+                                <li class="hover:text-[#FD7401]">
+                                    <a class="" asp-area="" asp-controller="Users" asp-action="DashBoardStudent">Dashboard</a>
+                                </li>
                                 <li class="hover:text-[#FD7401]">
                                     <a class="" asp-area="" asp-controller="Home" asp-action="Index">All Articles</a>
                                 </li>
