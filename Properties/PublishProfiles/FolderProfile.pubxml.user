@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\GreenWich\1640\git\public</_PublishTargetUrl>
+    <History>True|2024-04-24T01:35:59.4573403Z;True|2024-04-24T08:31:28.8042936+07:00;True|2024-04-18T14:08:07.1205890+07:00;True|2024-04-18T14:01:45.9216980+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="SchoolProject1640.Data.ApplicationDbContext">
+      <Value>data source=103.216.113.32%3binitial catalog=duongchi_school1640%3buser id=duongchi_school1640%3bpassword=2s2d3Z8c!%3bIntegrated Security=False%3bTrustServerCertificate=True%3bMultipleActiveResultSets=True%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
